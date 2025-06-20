@@ -8,6 +8,9 @@ public class PlayerMovement_MoveToward : MonoBehaviour
    public float movespeed = 5f;
    private Rigidbody2D rb2d;
    private Vector2 moveDirection;
+   private Animator animator;
+   private float horizontalInput;
+   private float verticalInput;
 
 
    void Start()
@@ -17,14 +20,32 @@ public class PlayerMovement_MoveToward : MonoBehaviour
       {
          enabled = false;
       }
+      animator = GetComponent<Animator>(); 
+      if (animator == null)
+      {
+         enabled = false;
+      }
    }
 
    private void Update()
    {
-      float horizontal = Input.GetAxis("Horizontal");
-      float vertical = Input.GetAxis("Vertical");
+      horizontalInput = Input.GetAxis("Horizontal");
+      verticalInput = Input.GetAxis("Vertical");
       
-      moveDirection = new Vector2(horizontal, vertical).normalized;
+      moveDirection = new Vector2(horizontalInput, verticalInput).normalized;
+      
+      if (animator != null)
+      {
+         animator.SetFloat("Speed", moveDirection.magnitude * movespeed); 
+      }
+      if (horizontalInput < 0) 
+      {
+         transform.localScale = new Vector3(-1f, 1f, 1f);
+      }
+      else if (horizontalInput > 0) 
+      {
+         transform.localScale = new Vector3(1f, 1f, 1f);
+      }
    }
 
    void FixedUpdate()

@@ -8,6 +8,9 @@ public class PlayerMovement_Lerp_Velocity : MonoBehaviour
     public float accelerationRate = 5f; 
     private Rigidbody2D rb;
     private Vector2 desiredVelocity;
+    private Animator animator;
+    private float horizontalInput;
+    private float verticalInput;
 
     void Start()
     {
@@ -16,16 +19,35 @@ public class PlayerMovement_Lerp_Velocity : MonoBehaviour
         {
             enabled = false;
         }
+        animator = GetComponent<Animator>(); 
+        if (animator == null)
+        {
+            enabled = false;
+        }
     }
 
     void Update()
     {
         
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
+         horizontalInput = Input.GetAxis("Horizontal");
+         verticalInput = Input.GetAxis("Vertical");
 
        
         desiredVelocity = new Vector2(horizontalInput, verticalInput).normalized * moveSpeed;
+        
+        if (animator != null)
+        {
+            animator.SetFloat("Speed", rb.velocity.magnitude); 
+        }
+        
+        if (horizontalInput < 0) 
+        {
+            transform.localScale = new Vector3(-1f, 1f, 1f);
+        }
+        else if (horizontalInput > 0) 
+        {
+            transform.localScale = new Vector3(1f, 1f, 1f);
+        }
     }
 
     void FixedUpdate()
