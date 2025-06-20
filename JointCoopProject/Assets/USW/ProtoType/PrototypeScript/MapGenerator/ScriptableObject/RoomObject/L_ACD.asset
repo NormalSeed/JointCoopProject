@@ -9,9 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36ac6ae761c46c243a04cd6799de4dac, type: 3}
-  m_Name: SimpleRandomWalkParameters_BigDungeon
+  m_Script: {fileID: 11500000, guid: 74485e10603aca848abca271fc26f9b6, type: 3}
+  m_Name: L_ACD
   m_EditorClassIdentifier: 
-  iterations: 10
-  walkLength: 10
-  startRandomlyEachIteration: 1
+  roomType: 0
+  roomShape: 4
+  occupiedTiles: 000000000a0000000b000000
+  roomVariations:
+  - {fileID: 21300000, guid: 42fe080fd0cdf5c41957517518dc5834, type: 3}
