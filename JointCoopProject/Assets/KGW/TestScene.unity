@@ -421,7 +421,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10b9e8280e222564a8e87925c76493f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isaacStatus: {fileID: 965443949}
+  _tearPrefab: {fileID: 5494932106409676983, guid: 68bd5dae829129a45999e61ef86a2e76, type: 3}
+  _shotDelay: 0.3
 --- !u!114 &965443949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -436,7 +437,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   accelerationSpeed: 20
-  DecelerationSpeed: 25
+  decelerationSpeed: 20
+  tearDamage: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

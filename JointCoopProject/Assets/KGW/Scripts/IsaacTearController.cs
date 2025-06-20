@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class IsaacTearController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] float _tearLifeTime = 3f;
+    [SerializeField][Range(1, 3)] int _tearDamage = 1;
+
+    private void Start()
     {
-        
+        Destroy(gameObject, _tearLifeTime);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            Destroy(gameObject);
+        }
     }
 }
