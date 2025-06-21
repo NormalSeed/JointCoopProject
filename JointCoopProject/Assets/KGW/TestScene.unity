@@ -422,7 +422,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tearPrefab: {fileID: 5494932106409676983, guid: 68bd5dae829129a45999e61ef86a2e76, type: 3}
-  _shotDelay: 1
+  _swordPrefab: {fileID: 7245640990072495586, guid: fd8bd6a4731d10c459ecfaac62fc50e4, type: 3}
+  _tearAttackDelay: 0.3
+  _swordAttackDelay: 0.5
+  _isMeleeWeapon: 0
 --- !u!114 &965443949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -435,10 +438,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f022a6c3a534974fa430895e5f01079, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 7
-  accelerationSpeed: 20
-  decelerationSpeed: 20
-  shotSpeed: 15
+  moveSpeed: 5
+  accelerationSpeed: 25
+  decelerationSpeed: 25
+  dashSpeed: 15
+  dashDurationTime: 0.3
+  dashCoolTime: 1
+  shotSpeed: 10
+  attackSpeed: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

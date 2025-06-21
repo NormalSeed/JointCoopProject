@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerTearController : MonoBehaviour
 {
     [SerializeField] float _tearLifeTime = 3f;
-    //[SerializeField][Range(1, 3)] int _tearDamage = 1;
+    [SerializeField][Range(1, 3)] int _tearDamage = 1;
 
     private void Start()
     {
@@ -14,7 +14,7 @@ public class PlayerTearController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
             Destroy(gameObject);
         }

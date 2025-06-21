@@ -5,20 +5,27 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Player Weapon Status")]
     [SerializeField] GameObject _tearPrefab;
-    //[SerializeField] float _attackDelay = 0.3f;
+    [SerializeField] GameObject _swordPrefab;
+    [SerializeField] float _tearAttackDelay = 0.3f;
+    [SerializeField] float _swordAttackDelay = 0.5f;
 
     PlayerStatus _playerStatus;
+    PlayerTearController _tearController;
+    PlayerSwordController _swordController;
     Rigidbody2D _playerRigid;
 
     Vector2 _moveInput;
     Vector2 _targetVelocity;
     Vector2 _curVelocity;
-    Vector2 _shotDirection;
+    Vector2 _attackDirection;
     Vector2 _dashDirection;
 
     float _shotTimer;
+    float _wieldTimer;
     bool _isDash = false;
+    public bool _isMeleeWeapon = true;
     float _dashProgressTime;
     float _dashCoolTime;
 
@@ -36,14 +43,12 @@ public class PlayerMovement : MonoBehaviour
             Movement();
             ShotInput();
             DashInput();
+            Attack();
         }
         else
         {
             MoveDash();
         }
-        
-           
-        //ShotTear();
     }
 
     // First Initialize
@@ -51,6 +56,8 @@ public class PlayerMovement : MonoBehaviour
     {
         _playerRigid = GetComponent<Rigidbody2D>();
         _playerStatus = GetComponent<PlayerStatus>();
+        _tearController = GetComponent<PlayerTearController>();
+        _swordController = GetComponent<PlayerSwordController>();
     }
 
     // Player Move Input
@@ -110,38 +117,50 @@ public class PlayerMovement : MonoBehaviour
     private void ShotInput()
     {
         // Direction Zero Setting
-        _shotDirection = Vector2.zero;
+        _attackDirection = Vector2.zero;
 
-        if(Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.UpArrow))
         {
-            _shotDirection += Vector2.up;
+            _attackDirection += Vector2.up;
         }
-        if(Input.GetKey(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.DownArrow))
         {
-            _shotDirection += Vector2.down;
+            _attackDirection += Vector2.down;
         }
-        if(Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow))
         {
-            _shotDirection += Vector2.left;
+            _attackDirection += Vector2.left;
         }
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            _shotDirection += Vector2.right;
+            _attackDirection += Vector2.right;
         }
 
-        _shotDirection = _shotDirection.normalized;
+        _attackDirection = _attackDirection.normalized;
     }
 
-    // TODO : 플레이어의 눈물공격은 일단 보류
-    // Player Shoot Tear
-    //private void ShotTear()
-    //{
-    //    if(_shotDirection != Vector2.zero && _shotTimer <= 0f)
-    //    {
-    //        GameObject tearGeneration = Instantiate(_tearPrefab, transform.position, Quaternion.identity);
-    //        tearGeneration.GetComponent<Rigidbody2D>().velocity = _shotDirection * _isaacStatus._shotSpeed;
-    //        _shotTimer = _attackDelay;
-    //    }
-    //    _shotTimer -= Time.deltaTime;
-    //}
+    private void Attack()
+    {
+        if(_isMeleeWeapon)
+        {
+            if (_attackDirection != Vector2.zero && _wieldTimer <= 0f)
+            {
+                //Quaternion swordRotation = Quaternion.FromToRotation(Vector3.right, _attackDirection);
+                GameObject sword = Instantiate(_swordPrefab, transform.position, Quaternion.identity);
+                sword.GetComponent<PlayerSwordController>().Init(transform, _attackDirection);
+                _wieldTimer = _swordAttackDelay;
+            }
+            _wieldTimer -= Time.deltaTime;
+        }
+        else
+        {
+            if (_attackDirection != Vector2.zero && _shotTimer <= 0f)
+            {
+                GameObject tearGeneration = Instantiate(_tearPrefab, transform.position, Quaternion.identity);
+                tearGeneration.GetComponent<Rigidbody2D>().velocity = _attackDirection * _playerStatus._shotSpeed;
+                _shotTimer = _tearAttackDelay;
+            }
+            _shotTimer -= Time.deltaTime;
+        }
+    }
 }
