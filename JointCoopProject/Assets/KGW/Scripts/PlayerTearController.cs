@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IsaacTearController : MonoBehaviour
+public class PlayerTearController : MonoBehaviour
 {
     [SerializeField] float _tearLifeTime = 3f;
-    [SerializeField][Range(1, 3)] int _tearDamage = 1;
+    //[SerializeField][Range(1, 3)] int _tearDamage = 1;
 
     private void Start()
     {
