@@ -36,9 +36,6 @@ public class PlayerSkillManager : MonoBehaviour
 
    public void AddSkill(SkillDataSO newSkill)
    {
-      // 여기에다가 contains 써서 ? 
-      // add newskill 느낌으로다가 리스트에 집어넣어주는거지
-      // 어쩌피 뺼것도 아니라서 대충 짜도 되려나 
       if (!ownedSkills.Contains(newSkill))
       {
          ownedSkills.Add(newSkill);
