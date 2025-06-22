@@ -29,8 +29,10 @@ public class PlayerStatus : MonoBehaviour
     [SerializeField][Range(0, 2)] float dashCoolTime;
     public float _dashCoolTime { get { return dashCoolTime; } set { dashCoolTime = value; } }
 
-    // Player Tear Shot Speed
+    // Player Shot Speed
     [SerializeField] float shotSpeed;
     public float _shotSpeed { get { return shotSpeed; } set { shotSpeed = value; } }
 
+    [SerializeField] float attackSpeed;
+    public float _attackSpeed { get { return attackSpeed; } set { attackSpeed = value; } }
 }
