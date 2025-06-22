@@ -147,8 +147,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 //Quaternion swordRotation = Quaternion.FromToRotation(Vector3.right, _attackDirection);
                 GameObject sword = Instantiate(_swordPrefab, transform.position, Quaternion.identity);
-                sword.GetComponent<PlayerSwordController>().Init(transform, _attackDirection);
-                _wieldTimer = _swordAttackDelay;
+                sword.GetComponent<PlayerSwordController>().Init(transform, _attackDirection, _playerStatus._attackSpeed);
+                _wieldTimer = _swordAttackDelay / _playerStatus._attackSpeed;
             }
             _wieldTimer -= Time.deltaTime;
         }
