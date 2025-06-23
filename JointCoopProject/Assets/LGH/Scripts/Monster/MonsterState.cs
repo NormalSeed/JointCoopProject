@@ -44,7 +44,6 @@ public class Monster_Idle : MonsterState
         base.Update();
         if (_controller._movement._canMove)
         {
-            Debug.Log("Patrol로 상태전이");
             _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Patrol]);
         }
     }
