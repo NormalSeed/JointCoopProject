@@ -33,6 +33,12 @@ public class PlayerStatus : MonoBehaviour
     [SerializeField] float shotSpeed;
     public float _shotSpeed { get { return shotSpeed; } set { shotSpeed = value; } }
 
+    // Player Attack Speed
     [SerializeField] float attackSpeed;
     public float _attackSpeed { get { return attackSpeed; } set { attackSpeed = value; } }
+
+    // Player Dash Ability Check
+    [SerializeField] bool canDash = false;
+    public bool _canDash { get { return canDash; } set { canDash = value; } }
+    
 }
