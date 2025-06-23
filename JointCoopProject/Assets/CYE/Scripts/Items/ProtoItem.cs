@@ -5,46 +5,15 @@ using UnityEngine.Events;
 
 public abstract class ProtoItem : MonoBehaviour
 {
-    /* ¾ÆÀÌÅÛ ¿ä±¸»çÇ×
-     * Á¾·ù: active/passive/one time/weapon(deprecated)
-     * 
-     * Item - weapon(deprecated)
-     * È¹µæ ÈÄ playerÀÇ °ø°İ ¹æ½Ä º¯°æ
-     *  -> º¯°æÇÒ °ø°İ ¹æ½Ä
-     * 
-     * Item - active (Ãß°¡ ½ºÅ³ »ı¼º)
-     * È¹µæ ÈÄ Æ¯Á¤ Å°ÀÔ·Â(space)À» ÅëÇØ »ç¿ë
-     *  -> ¾ÆÀÌÅÛº°·Î »ç¿ë½Ã ¹ß»ıÇÏ´Â È¿°ú Á¸Àç
-     *  -> »ç¿ëÀ» À§ÇÑ °ÔÀÌÁö(º¯°æ °¡´É¼º ÀÖÀ½)ÀÇ °æ¿ì inventory¿¡¼­ °ü¸®
-     *  -> È¹µæÇÒ¶§ À¯ÁöÇÒÁö ±³Ã¼ÇÒÁö ¼±ÅÃÇÏ´Â ±â´É ÇÊ¿ä
-     *  e.g. Ä³¸¯ÅÍ È¸ÇÇ ±â´É, ¹İ»ç µî
-     * 
-     * Item - passive(3 types)
-     *  type AT - attack passive(°¹¼ö Á¦ÇÑ ÀÖÀ½/±³Ã¼¿¡ ´ëÇÑ ³»¿ëÀº ±¸»óÁß)
-     *  ±âº» °ø°İ °­È­(°ø°İ ¹æ½Ä Ãß°¡)
-     *  type AU - auto passive
-     *   -> player attack½Ã ¹ßµ¿/°³º° cooldown Á¸Àç(È°¼ºÈ­µÈ ¾ÆÀÌÅÛ 1°³¿¡ ÇÑÇÏ¿©)
-     *   -> °³º° cooldown¸¶´Ù ¹ßµ¿(È°¼ºÈ­µÈ ¾ÆÀÌÅÛ n°³¿¡ ÇÑÇÏ¿©)
-     *   
-     * Item - one time
-     * coin µî ¼Ò¸ğ¼º ÀçÈ­¿¡ ´ëÇÑ ¼öÄ¡ º¯°æ //playerÀÇ hp³ª max hp,
-     *  -> È¹µæ½Ã ¼Ò¸ê(ÀÎº¥Åä¸®¿¡ ³²Áö ¾ÊÀ½)
-     * 
-     * npc(»óÀÎ)°¡ ÇÃ·¹ÀÌ¾î statsÀÇ Çâ¼§À» °èÈ¹/¾ÆÀÌÅÛ
-     * type ST - stats change
-     *   -> µÎ°¡Áö ±¸Çö¹æ½Ä °¡´É(ÀÏÈ¸¼º: È¹µæ ´ç½ÃÀÇ statsÀ» ±â¹İÀ¸·Î ½ºÅÈ º¯È­ ÈÄ Á¾·á/Áö¼ÓÇü: È¹µæ ÈÄ playerÀÇ stats¿¡ Áö¼ÓÀûÀ¸·Î ¿µÇâÀ» ³¢Ä§(playerÀÇ Çàµ¿½Ã ¸¶´Ù ¼öÄ¡¸¦ Àç°è»êÇÏ¿© °¡Á®¿À°Ô µÊ/ÀÌ°æ¿ì ¾ÆÀÌÅÛÀÇ È¿°ú ¹İ¿µ¿¡ ´ëÇÑ ¿ì¼±¼øÀ§°¡ ÇÊ¿äÇÔ))
-     *   -> ÀÎº¥Åä¸® º¸À¯½Ã playerÀÇ ½ºÅÈ(attack point, range, speed µî)¿¡ ¿µÇâÀ» ÁÜ
-     */
-
-    #region // Item Status
-    [SerializeField] private string _itemName; // ¾ÆÀÌÅÛ ÀÌ¸§
-    [SerializeField] private string _itemDescription; // ¾ÆÀÌÅÛ ¼³¸í
-    private Sprite _itemSprite; // ¾ÆÀÌÅÛ ¸ğ¾ç    
+    #region // Item Info
+    [SerializeField] private string _itemName; // ì•„ì´í…œ ì´ë¦„
+    [SerializeField] private string _itemDescription; // ì•„ì´í…œ ì„¤ëª…
+    private Sprite _itemSprite; // ì•„ì´í…œ Icon
     #endregion
 
     #region // Events
-    [HideInInspector] public UnityEvent OnUsed; // ¾Æ¾ÆÅÛ »ç¿ë½Ã ¹ß»ı
-    [HideInInspector] public UnityEvent OnAcquired; // ¾ÆÀÌÅÛ È¹µæ½Ã ¹ß»ı
+    // [HideInInspector] public UnityEvent OnUsed; // ì•„ì´í…œ ì‚¬ìš©ì‹œ ë°œìƒ
+    [HideInInspector] public UnityEvent OnAcquired; // ì•„ì´í…œ íšë“ì‹œ ë°œìƒ
     #endregion
 
     #region // Properties
@@ -55,9 +24,7 @@ public abstract class ProtoItem : MonoBehaviour
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         ItemSprite = spriteRenderer.sprite;
     }
-
-
-    protected abstract void Use();
+    
     protected abstract void Acquire();
 
 }
