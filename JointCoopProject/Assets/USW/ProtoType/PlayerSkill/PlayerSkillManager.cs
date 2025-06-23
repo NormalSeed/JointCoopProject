@@ -61,9 +61,10 @@ public class PlayerSkillManager : MonoBehaviour
    /// <param name="skillName">발동하고자 하는 스킬 이름</param>
    public void UseSkill(string skillName)
    {
+
       // 보유 스킬 목록에서 이름이 일치하는 스킬을 찾음.
       var skill = ownedSkills.Find(s=>s.skillName == skillName);
-
+      
       if (skill != null)
       {
          // 만약에 Input 넣으면 ? useskill 로 문자열찾고 그다음에 발동위치 넘겨준다는 마인드인데 ? 왜 transform 이 안되지 ? 
