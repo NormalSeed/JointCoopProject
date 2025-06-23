@@ -35,6 +35,7 @@ Footer(바닥글)"
 - refactor : 기능의 변화가 아닌 코드 리팩터링 ex) 변수 이름 변경
 - test : 테스트 코드 추가/수정
 - release : 버전 릴리즈
+- daily : 매일 main에 한번 merge하기
 
 ### Body
 - Header에서 표현하지 못한 상세 내용을 적는다.
