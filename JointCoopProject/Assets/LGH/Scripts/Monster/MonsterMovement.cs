@@ -12,9 +12,6 @@ public abstract class MonsterMovement : MonoBehaviour
     private float _moveTimer;
     protected float _moveSpd = 2f;
     private float _changeInterval = 1.5f;
-    private Coroutine _coPatrolDelay;
-    private WaitForSeconds _patrolDelay;
-    private float _delaySec = 1.5f;
 
     private void Awake() => Init();
 
@@ -23,7 +20,6 @@ public abstract class MonsterMovement : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _canMove = false;
         _moveTimer = 0f;
-        _patrolDelay = new WaitForSeconds(_delaySec);
     }
 
     public void Patrol()
@@ -35,7 +31,6 @@ public abstract class MonsterMovement : MonoBehaviour
         {
             ChangeDir();
             _moveTimer = 0f;
-            _coPatrolDelay = StartCoroutine(CoPatrolDelay());
         }
     }
 
@@ -46,11 +41,6 @@ public abstract class MonsterMovement : MonoBehaviour
         {
             ChangeDir();
         }
-    }
-
-    private IEnumerator CoPatrolDelay()
-    {
-        yield return _patrolDelay;
     }
 
     protected void ChangeDir()
