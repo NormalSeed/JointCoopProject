@@ -26,3 +26,22 @@ public class OrcState : BaseState
 
     }
 }
+
+public class Orc_Attack1 : OrcState
+{
+    public Orc_Attack1(OrcController controller) : base(controller)
+    {
+        _hasPhysics = false;
+    }
+
+    public override void Enter()
+    {
+        // Attack1 애니메이션 재생
+    }
+
+    public override void Update()
+    {
+        base.Update();
+
+    }
+}
