@@ -8,13 +8,15 @@ public class PlayerMovement : MonoBehaviour
     [Header("Player Weapon Status")]
     [SerializeField] GameObject _tearPrefab;
     [SerializeField] GameObject _swordPrefab;
-    [SerializeField] float _tearAttackDelay = 0.3f;
-    [SerializeField] float _swordAttackDelay = 0.5f;
+    [SerializeField] float _tearAttackDelay = 0.3f;     // 눈물 공격 딜레이
+    [SerializeField] float _swordAttackDelay = 0.5f;    // 근접 공격 딜레이
 
     PlayerStatus _playerStatus;
     PlayerTearController _tearController;
     PlayerSwordController _swordController;
+    SpriteRenderer _PlayerSprite;
     Rigidbody2D _playerRigid;
+    Animator _playerAnimator;
 
     Vector2 _moveInput;
     Vector2 _targetVelocity;
@@ -24,10 +26,13 @@ public class PlayerMovement : MonoBehaviour
 
     float _shotTimer;
     float _wieldTimer;
+    bool _isMeleeWeapon;
     bool _isDash = false;
-    public bool _isMeleeWeapon = true;
     float _dashProgressTime;
     float _dashCoolTime;
+
+    readonly int IDLE_HASH = Animator.StringToHash("PlayerIdle");
+    readonly int WALK_HASH = Animator.StringToHash("PlayerWalk");
 
     private void Awake()
     {
@@ -38,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
     {
         MoveInput();
 
-        if (!_isDash)
+        if (!_playerStatus._canDash)
         {
             Movement();
             ShotInput();
@@ -47,7 +52,18 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            MoveDash();
+            if(!_isDash)
+            {
+                Movement();
+                ShotInput();
+                DashInput();
+                Attack();
+            }
+            else
+            {
+                MoveDash();
+            }
+            
         }
     }
 
@@ -58,6 +74,9 @@ public class PlayerMovement : MonoBehaviour
         _playerStatus = GetComponent<PlayerStatus>();
         _tearController = GetComponent<PlayerTearController>();
         _swordController = GetComponent<PlayerSwordController>();
+        _playerAnimator = GetComponent<Animator>();
+        _PlayerSprite = GetComponent<SpriteRenderer>();
+        _isMeleeWeapon = true;
     }
 
     // Player Move Input
@@ -77,18 +96,31 @@ public class PlayerMovement : MonoBehaviour
         float moveSpeed = (_targetVelocity.magnitude > _curVelocity.magnitude) ? _playerStatus._accelerationSpeed : _playerStatus._decelerationSpeed;
         _curVelocity = Vector2.MoveTowards(_curVelocity, _targetVelocity, moveSpeed * Time.deltaTime);
         transform.position += (Vector3)_curVelocity * Time.deltaTime;
-        
-        if(_curVelocity.magnitude < 0.01f && _moveInput == Vector2.zero)
+          
+        if (_curVelocity.magnitude < 0.01f && _moveInput == Vector2.zero)
         {
+            _playerAnimator.Play(IDLE_HASH);
             _curVelocity = Vector2.zero;
         }
+        else
+        {
+            _playerAnimator.Play(WALK_HASH);
+            if (_moveInput.x < 0)
+            {
+                _PlayerSprite.flipX = true;
 
+            }
+            else
+            {
+                _PlayerSprite.flipX = false;
+            }
+        }  
     }
 
     // Player Dash Input
     private void DashInput()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             if (_moveInput != Vector2.zero && _dashCoolTime <= 0f )
             {
@@ -148,7 +180,7 @@ public class PlayerMovement : MonoBehaviour
                 //Quaternion swordRotation = Quaternion.FromToRotation(Vector3.right, _attackDirection);
                 GameObject sword = Instantiate(_swordPrefab, transform.position, Quaternion.identity);
                 sword.GetComponent<PlayerSwordController>().Init(transform, _attackDirection, _playerStatus._attackSpeed);
-                _wieldTimer = _swordAttackDelay / _playerStatus._attackSpeed;
+                _wieldTimer = _swordAttackDelay / _playerStatus._attackSpeed;   // 공격속도에 비례하여 근접 공격 쿨타임 계산
             }
             _wieldTimer -= Time.deltaTime;
         }
