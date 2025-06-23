@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class BaseState
 {
-    public bool HasPhysics;
+    public bool _hasPhysics;
 
     public abstract void Enter();
     public abstract void Update();
@@ -14,5 +14,5 @@ public abstract class BaseState
 
 public enum EState
 {
-    Idle, Run, Jump, Patrol, CantControll, Attack, SpAttack1, SpAttack2, Detect, Terrorized
+    Idle, Patrol, Attack1, Attack2
 }
