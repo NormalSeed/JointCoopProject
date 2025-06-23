@@ -37,6 +37,7 @@ public class Orc_Attack1 : OrcState
     public override void Enter()
     {
         // Attack1 애니메이션 재생
+        // Attack1 기능 실행
     }
 
     public override void Update()
