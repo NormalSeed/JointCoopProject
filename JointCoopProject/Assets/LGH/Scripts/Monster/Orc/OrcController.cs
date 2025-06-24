@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class OrcController : MonsterBase
 {
-    private bool isAttacking;
+    public readonly int ATTACK1_HASH = Animator.StringToHash("OrcAttack1");
+
 
     protected override void StateMachineInit()
     {
@@ -12,7 +13,12 @@ public class OrcController : MonsterBase
         _stateMachine._stateDic.Add(EState.Attack1, new Orc_Attack1(this));
     }
 
-    private void Attack1()
+    protected override void Update()
+    {
+        base.Update();
+    }
+
+    protected override void Attack1()
     {
         // ¿¸πÊ¿∏∑Œ µµ≥¢∏¶ »÷µŒ∏• »ƒ 1√  ∏ÿ√„
         // 1√  ∏ÿ√Áæﬂ «œπ«∑Œ Coroutine ªÁøÎ « ø‰

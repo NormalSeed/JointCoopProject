@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MonsterState : BaseState
@@ -37,14 +38,20 @@ public class Monster_Idle : MonsterState
     public override void Enter()
     {
         // TODO: view에서 Idle 애니메이션 재생
+        _controller._view.PlayAnimation(_controller.IDLE_HASH);
     }
 
     public override void Update()
     {
         base.Update();
-        if (_controller._movement._canMove)
+        if (_controller._movement._isPatrol)
         {
             _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Patrol]);
+        }
+
+        if (_controller._movement._isTrace)
+        {
+            _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Trace]);
         }
     }
 }
@@ -58,13 +65,14 @@ public class Monster_Patrol : MonsterState
 
     public override void Enter()
     {
-        // TODO: view에서 Patrol 애니메이션 재생
+        // TODO: view에서 Walk 애니메이션 재생
+        _controller._view.PlayAnimation(_controller.MOVE_HASH);
     }
 
     public override void Update()
     {
         base.Update();
-        if (!_controller._movement._canMove)
+        if (!_controller._movement._isTrace && !_controller._movement._isPatrol)
         {
             _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Idle]);
         }
@@ -73,5 +81,29 @@ public class Monster_Patrol : MonsterState
     public override void FixedUpdate()
     {
         _controller._movement.Patrol();
+    }
+}
+
+public class Monster_Trace : MonsterState
+{
+    public Monster_Trace(MonsterBase controller) : base(controller)
+    {
+        _hasPhysics = true;
+    }
+
+    public override void Enter()
+    {
+        // TODO : view에서 Move 애니메이션 재생
+        _controller._view.PlayAnimation(_controller.MOVE_HASH);
+    }
+
+    public override void Update()
+    {
+        base.Update();
+    }
+
+    public override void FixedUpdate()
+    {
+        _controller._movement.Trace();
     }
 }
