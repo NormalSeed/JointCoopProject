@@ -5,6 +5,7 @@ using UnityEngine;
 public interface IDamagable
 {
     // Take Damage
-    public void TakeDamage(int damage);
+    public void TakeDamage(int damage, Vector2 targetPos);
 
 }
+
