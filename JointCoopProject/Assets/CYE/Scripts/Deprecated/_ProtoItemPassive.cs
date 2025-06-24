@@ -3,24 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ProtoItemPassive : ProtoSkilledItem
-{   
+{
 
     private void Awake()
     {
         InitItemBase();
-    }
-
-    protected override void Use()
-    {
-        Cast();
+        InitSkilledItem();
     }
 
     protected override void Acquire()
     {
         OnAcquired?.Invoke();
-    }
-    protected override void Cast()
-    {
-        OnCasted?.Invoke();
     }
 }
