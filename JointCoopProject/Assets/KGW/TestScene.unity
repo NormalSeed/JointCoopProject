@@ -270,8 +270,8 @@ GameObject:
   - component: {fileID: 119893275}
   - component: {fileID: 119893274}
   - component: {fileID: 119893273}
-  - component: {fileID: 119893276}
   - component: {fileID: 119893277}
+  - component: {fileID: 119893276}
   m_Layer: 7
   m_Name: Circle
   m_TagString: Untagged
@@ -393,6 +393,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7807fba1f16a3c84b8cb414df51325e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _knockBackForce: 1.5
+  _knockBackTime: 0.5
 --- !u!50 &119893277
 Rigidbody2D:
   serializedVersion: 4
@@ -405,7 +407,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 10
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -419,7 +421,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!1 &170907824 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2253911629886400664, guid: c109c8d168f6a194fa0c4d14aad308b3, type: 3}
@@ -446,6 +448,8 @@ MonoBehaviour:
   _swordPrefab: {fileID: 7245640990072495586, guid: fd8bd6a4731d10c459ecfaac62fc50e4, type: 3}
   _tearAttackDelay: 0.3
   _swordAttackDelay: 0.5
+  _playerRigid: {fileID: 0}
+  _curVelocity: {x: 0, y: 0}
 --- !u!114 &170907829
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,15 +462,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f022a6c3a534974fa430895e5f01079, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerHp: 3
   moveSpeed: 5
-  accelerationSpeed: 25
-  decelerationSpeed: 25
+  accelerationSpeed: 20
+  decelerationSpeed: 20
   dashSpeed: 15
-  dashDurationTime: 0.3
+  dashDurationTime: 0.2
   dashCoolTime: 1
   shotSpeed: 7
   attackSpeed: 1
-  canDash: 0
+  canDash: 1
+  playerLuck: 0
+  _playerMove: {fileID: 170907828}
+  _animator: {fileID: 170907832}
+  _hitCoolTime: 0.5
+  _knockBackForce: 3
+  _knockBackTime: 0.2
+  _isAlive: 0
+  _isKnockBack: 0
 --- !u!70 &170907830
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -529,6 +542,11 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!95 &170907832 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1160356261127867848, guid: c109c8d168f6a194fa0c4d14aad308b3, type: 3}
+  m_PrefabInstance: {fileID: 498164005}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &498164005
 PrefabInstance:
   m_ObjectHideFlags: 0

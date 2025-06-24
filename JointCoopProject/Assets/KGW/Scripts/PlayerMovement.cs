@@ -3,36 +3,35 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, IDamagable
 {
     [Header("Player Weapon Status")]
     [SerializeField] GameObject _tearPrefab;
     [SerializeField] GameObject _swordPrefab;
     [SerializeField] float _tearAttackDelay = 0.3f;     // 눈물 공격 딜레이
     [SerializeField] float _swordAttackDelay = 0.5f;    // 근접 공격 딜레이
+    [SerializeField] bool _isMeleeWeapon;
 
     PlayerStatus _playerStatus;
-    PlayerTearController _tearController;
-    PlayerSwordController _swordController;
     SpriteRenderer _PlayerSprite;
-    Rigidbody2D _playerRigid;
+    public Rigidbody2D _playerRigid;
     Animator _playerAnimator;
 
     Vector2 _moveInput;
     Vector2 _targetVelocity;
-    Vector2 _curVelocity;
+    public Vector2 _curVelocity;
     Vector2 _attackDirection;
     Vector2 _dashDirection;
 
     float _shotTimer;
-    float _wieldTimer;
-    bool _isMeleeWeapon;
+    float _wieldTimer;   
     bool _isDash = false;
+    bool _isDamaged = false;
     float _dashProgressTime;
     float _dashCoolTime;
 
     readonly int IDLE_HASH = Animator.StringToHash("PlayerIdle");
-    readonly int WALK_HASH = Animator.StringToHash("PlayerWalk");
+    readonly int DASH_HASH = Animator.StringToHash("PlayerDash");
 
     private void Awake()
     {
@@ -41,29 +40,25 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        MoveInput();
+        if (_playerStatus._isAlive)
+        {
+            MoveInput();
 
-        if (!_playerStatus._canDash)
-        {
-            Movement();
-            ShotInput();
-            DashInput();
-            Attack();
-        }
-        else
-        {
-            if(!_isDash)
+            if (_playerStatus._canDash && _isDash)
+            {
+                MoveDash();
+            }
+            else
             {
                 Movement();
                 ShotInput();
                 DashInput();
                 Attack();
             }
-            else
-            {
-                MoveDash();
-            }
-            
+        }
+        else
+        {
+            _playerStatus.PlayerDeath();
         }
     }
 
@@ -72,16 +67,17 @@ public class PlayerMovement : MonoBehaviour
     {
         _playerRigid = GetComponent<Rigidbody2D>();
         _playerStatus = GetComponent<PlayerStatus>();
-        _tearController = GetComponent<PlayerTearController>();
-        _swordController = GetComponent<PlayerSwordController>();
         _playerAnimator = GetComponent<Animator>();
         _PlayerSprite = GetComponent<SpriteRenderer>();
         _isMeleeWeapon = true;
+        _playerStatus._isAlive = true;
     }
 
     // Player Move Input
     private void MoveInput()
     {
+        if (_playerStatus._isKnockBack) return;
+
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
         _moveInput = new Vector2(horizontal, vertical).normalized;
@@ -90,25 +86,27 @@ public class PlayerMovement : MonoBehaviour
     // Player Movement
     private void Movement()
     {
+        if (_playerStatus._isKnockBack) return;
+
         _targetVelocity = _moveInput * _playerStatus._moveSpeed;
 
         // Acceleration & Deceleration Speed Choice
         float moveSpeed = (_targetVelocity.magnitude > _curVelocity.magnitude) ? _playerStatus._accelerationSpeed : _playerStatus._decelerationSpeed;
         _curVelocity = Vector2.MoveTowards(_curVelocity, _targetVelocity, moveSpeed * Time.deltaTime);
         transform.position += (Vector3)_curVelocity * Time.deltaTime;
-          
+        _playerAnimator.SetFloat("PlayerWalk", _curVelocity.magnitude);
+
         if (_curVelocity.magnitude < 0.01f && _moveInput == Vector2.zero)
         {
-            _playerAnimator.Play(IDLE_HASH);
+            _playerAnimator.SetFloat("PlayerWalk", _curVelocity.magnitude);
             _curVelocity = Vector2.zero;
         }
         else
         {
-            _playerAnimator.Play(WALK_HASH);
+            
             if (_moveInput.x < 0)
             {
                 _PlayerSprite.flipX = true;
-
             }
             else
             {
@@ -120,6 +118,8 @@ public class PlayerMovement : MonoBehaviour
     // Player Dash Input
     private void DashInput()
     {
+        if (_playerStatus._isKnockBack) return;
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (_moveInput != Vector2.zero && _dashCoolTime <= 0f )
@@ -136,11 +136,17 @@ public class PlayerMovement : MonoBehaviour
     // Player Move Dash
     private void MoveDash()
     {
+        if (_playerStatus._isKnockBack) return;
+
+        _playerAnimator.Play(DASH_HASH);
+        gameObject.layer = 8;   // Player Layer Change
         transform.position += (Vector3)_dashDirection * _playerStatus._dashSpeed * Time.deltaTime;
         _dashProgressTime -= Time.deltaTime;
 
         if (_dashProgressTime <= 0f)
         {
+            _playerAnimator.Play(IDLE_HASH);
+            gameObject.layer = 6;   // Player Layer Change
             _isDash = false;
         }
     }
@@ -173,11 +179,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void Attack()
     {
-        if(_isMeleeWeapon)
+        if (_playerStatus._isKnockBack) return;
+
+        if (_isMeleeWeapon)
         {
             if (_attackDirection != Vector2.zero && _wieldTimer <= 0f)
             {
-                //Quaternion swordRotation = Quaternion.FromToRotation(Vector3.right, _attackDirection);
                 GameObject sword = Instantiate(_swordPrefab, transform.position, Quaternion.identity);
                 sword.GetComponent<PlayerSwordController>().Init(transform, _attackDirection, _playerStatus._attackSpeed);
                 _wieldTimer = _swordAttackDelay / _playerStatus._attackSpeed;   // 공격속도에 비례하여 근접 공격 쿨타임 계산
@@ -194,5 +201,32 @@ public class PlayerMovement : MonoBehaviour
             }
             _shotTimer -= Time.deltaTime;
         }
+    }
+
+    public void TakeDamage(int damage, Vector2 targetPos)
+    {
+        if (_isDamaged)
+        {
+            return;
+        }
+
+        _isDamaged = true;   
+
+        _playerAnimator.SetTrigger("PlayerHurt");
+        _playerStatus.HealthDown(damage);
+
+        // Player Layer Change
+        gameObject.layer = 8;
+
+        // Player Hit KnockBack
+        _playerStatus.PlayerKnockBack(targetPos);
+        Invoke("OffDamage", _playerStatus._hitCoolTime);
+    }
+
+    private void OffDamage()
+    {
+        // Player Layer Change
+        gameObject.layer = 6;
+        _isDamaged = false;
     }
 }

@@ -4,5 +4,8 @@ using UnityEngine;
 
 public interface IDamagable
 {
-    public void TakeDamage(int damage);
+    // Take Damage
+    public void TakeDamage(int damage, Vector2 targetPos);
+
 }
+

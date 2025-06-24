@@ -49,7 +49,7 @@ public class PlayerSwordController : MonoBehaviour
             IDamagable damagable = collision.GetComponent<IDamagable>();
             if (damagable != null)
             {
-                damagable.TakeDamage(_swordDamage);
+                damagable.TakeDamage(_swordDamage, transform.position);
             }
         }
     }

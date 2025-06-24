@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Laser Skill System/Skill Data")]
+[CreateAssetMenu(menuName = "Skills/Passive/Laser Skill")]
 public class LaserSkillSO : SkillDataSO
 {
     public float duration = 0.5f;

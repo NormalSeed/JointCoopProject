@@ -37,6 +37,9 @@ public class Orc_Attack1 : OrcState
     public override void Enter()
     {
         // Attack1 애니메이션 재생
+        _controller._view.PlayAnimation(_controller.ATTACK1_HASH);
+        // Attack1 기능 실행
+        _controller.Attack1();
     }
 
     public override void Update()
