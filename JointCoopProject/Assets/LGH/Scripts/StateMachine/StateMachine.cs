@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class StateMachine
 {
+    // State들을 Dictionary에 담아서 관리
     public Dictionary<EState, BaseState> _stateDic;
     public BaseState _curState;
     public StateMachine()
