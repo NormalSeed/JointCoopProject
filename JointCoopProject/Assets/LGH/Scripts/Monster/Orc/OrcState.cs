@@ -45,6 +45,9 @@ public class Orc_Attack1 : OrcState
     public override void Update()
     {
         base.Update();
-
+        if (_controller._movement._isTrace && !_controller._isAttack1)
+        {
+            _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Trace]);
+        }
     }
 }

@@ -19,6 +19,7 @@ public abstract class MonsterBase : MonoBehaviour
     public MonsterModel _model;
     public MonsterView _view;
     public StateMachine _stateMachine;
+    public GameObject _player;
     public bool _isAttack1;
 
     public readonly int IDLE_HASH = Animator.StringToHash("Idle");
@@ -31,6 +32,7 @@ public abstract class MonsterBase : MonoBehaviour
         _model = GetComponent<MonsterModel>();
         _movement = GetComponent<MonsterMovement>();
         _view = GetComponent<MonsterView>();
+        _player = GameObject.Find("Player");
 
         StateMachineInit();
     }
