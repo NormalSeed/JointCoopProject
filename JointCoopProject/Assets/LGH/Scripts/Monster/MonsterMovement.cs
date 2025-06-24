@@ -1,41 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class MonsterMovement : MonoBehaviour
 {
     // 상하좌우로 자동으로 움직이는 간단한 AI 구현 필요
     // 움직이지 않는 몬스터도 있을 수 있으므로 canMove bool값으로 온오프 가능
-    public bool _canMove;
+    public bool _isPatrol;
+    public bool _isTrace;
+    private SpriteRenderer _sprRend;
     private Rigidbody2D _rb;
     private Vector2 _patrolDir;
     private float _moveTimer;
     protected float _moveSpd = 2f;
     private float _changeInterval = 1.5f;
-    private Coroutine _coPatrolDelay;
-    private WaitForSeconds _patrolDelay;
-    private float _delaySec = 1.5f;
 
     private void Awake() => Init();
 
     private void Init()
     {
+        _sprRend = GetComponent<SpriteRenderer>();
         _rb = GetComponent<Rigidbody2D>();
-        _canMove = false;
+        _isPatrol = false;
         _moveTimer = 0f;
-        _patrolDelay = new WaitForSeconds(_delaySec);
+    }
+
+    public void Trace()
+    {
+        GameObject player = GameObject.Find("Player");
+        if (player == null) return;
+
+        Vector2 currentPos = _rb.position;
+        Vector2 targetPos = player.transform.position;
+        _patrolDir = targetPos - currentPos;
+        Vector2 newPos = Vector2.MoveTowards(currentPos, targetPos, _moveSpd * Time.fixedDeltaTime);
+
+        UpdateSpriteDir();
+
+        _rb.MovePosition(newPos);
     }
 
     public void Patrol()
     {
         // timer 시간 동안 이동
         _rb.MovePosition(_rb.position + _patrolDir * _moveSpd * Time.fixedDeltaTime);
+        UpdateSpriteDir();
         _moveTimer += Time.fixedDeltaTime;
         if (_moveTimer >= _changeInterval)
         {
             ChangeDir();
             _moveTimer = 0f;
-            _coPatrolDelay = StartCoroutine(CoPatrolDelay());
         }
     }
 
@@ -46,11 +61,6 @@ public abstract class MonsterMovement : MonoBehaviour
         {
             ChangeDir();
         }
-    }
-
-    private IEnumerator CoPatrolDelay()
-    {
-        yield return _patrolDelay;
     }
 
     protected void ChangeDir()
@@ -65,5 +75,13 @@ public abstract class MonsterMovement : MonoBehaviour
             case 3: _patrolDir = Vector2.right; break;
             case 4: _patrolDir = Vector2.zero; break;
         }
+    }
+
+    protected void UpdateSpriteDir()
+    {
+        if (_patrolDir.x < 0)
+            _sprRend.flipX = true;
+        else if( _patrolDir.x > 0)
+            _sprRend.flipX = false;
     }
 }
