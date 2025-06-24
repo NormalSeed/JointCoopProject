@@ -19,7 +19,10 @@ public class MonsterState : BaseState
 
     public override void Update()
     {
-        
+        if (!_controller._movement._isPatrol && _controller._isAttack1)
+        {
+            _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Attack1]);
+        }
     }
 
     public override void Exit()

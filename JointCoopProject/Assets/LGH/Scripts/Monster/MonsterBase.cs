@@ -16,6 +16,7 @@ public abstract class MonsterBase : MonoBehaviour
     private float _activeDelay;
     public bool _isActivated;
     public MonsterMovement _movement;
+    public MonsterModel _model;
     public MonsterView _view;
     public StateMachine _stateMachine;
     public bool _isAttack1;
@@ -27,6 +28,7 @@ public abstract class MonsterBase : MonoBehaviour
 
     protected virtual void Init()
     {
+        _model = GetComponent<MonsterModel>();
         _movement = GetComponent<MonsterMovement>();
         _view = GetComponent<MonsterView>();
 
@@ -65,15 +67,5 @@ public abstract class MonsterBase : MonoBehaviour
     private void FixedUpdate()
     {
         _stateMachine.FixedUpdate();
-    }
-
-    protected virtual void Attack1()
-    {
-
-    }
-
-    protected virtual void Attack2()
-    {
-
     }
 }
