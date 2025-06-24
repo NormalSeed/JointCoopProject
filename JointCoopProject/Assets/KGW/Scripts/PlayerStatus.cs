@@ -45,15 +45,62 @@ public class PlayerStatus : MonoBehaviour
     [SerializeField] bool canDash = false;
     public bool _canDash { get { return canDash; } set { canDash = value; } }
 
-    // ------------------------------------------------------------------------------------------------------
+    // Player Luck
+    [SerializeField] float playerLuck;
+    public float _playerLuck { get { return playerLuck; } set { playerLuck = value; } }
 
-    public void HealthDown()
+    // ------------------------------------------------------------------------------------------------------
+    [Header("Reference List")]
+    [SerializeField] PlayerMovement _playerMove;
+    [SerializeField] Animator _animator;
+    [SerializeField] public float _hitCoolTime = 0.4f;
+    [SerializeField] float _knockBackForce = 1.5f;
+    [SerializeField] float _knockBackTime = 0.2f;
+
+    public bool _isAlive;
+    public bool _isKnockBack = false;
+
+    // Player Hp Down
+    public void HealthDown(int damage)
     {
         if ( _playerHp > 1)
         {
-            _playerHp--;
-
+            _playerHp -= damage;
+            Debug.Log($"플레이어의 체력이 {_playerHp} 입니다.");
+            // TODO : 플레이어 피격 사운드
+        }
+        else
+        {
+            Debug.Log("플레이어가 사망했습니다.");
+            // Player Death
+            _isAlive = false;
         }
     }
 
+    // Player Death
+    public void PlayerDeath()
+    {
+        _animator.SetBool("PlayerDeath", true);
+        Destroy(gameObject, 8f);
+        // TODO : UI 추가
+    }
+    
+    // Player KnockBack
+    public void PlayerKnockBack(Vector2 targetPos)
+    {
+        _isKnockBack = true;
+        Vector2 hitDirection = ((Vector2)transform.position - targetPos).normalized;
+        _playerMove._playerRigid.velocity = Vector2.zero;
+        _playerMove._playerRigid.AddForce(hitDirection * _knockBackForce , ForceMode2D.Impulse);
+
+        Invoke("StopKnockBack", _knockBackTime);
+    }
+
+    private void StopKnockBack()
+    {
+        _playerMove._playerRigid.velocity = Vector2.zero;
+        _playerMove._curVelocity = Vector2.zero;
+        _isKnockBack = false;
+    }
+    
 }
