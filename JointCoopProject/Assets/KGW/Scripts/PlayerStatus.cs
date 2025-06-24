@@ -5,6 +5,10 @@ using UnityEngine;
 public class PlayerStatus : MonoBehaviour
 {
     [Header("Player Status")]
+    // Player HP
+    [SerializeField] int playerHp = 3;
+    public int _playerHp { get { return playerHp; } set { playerHp = value; } }
+
     // Player Move Speed
     [SerializeField][Range(0, 10)] float moveSpeed;
     public float _moveSpeed { get { return moveSpeed; } set { moveSpeed = value; } }
@@ -40,5 +44,16 @@ public class PlayerStatus : MonoBehaviour
     // Player Dash Ability Check
     [SerializeField] bool canDash = false;
     public bool _canDash { get { return canDash; } set { canDash = value; } }
-    
+
+    // ------------------------------------------------------------------------------------------------------
+
+    public void HealthDown()
+    {
+        if ( _playerHp > 1)
+        {
+            _playerHp--;
+
+        }
+    }
+
 }

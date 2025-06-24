@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, IDamagable
 {
     [Header("Player Weapon Status")]
     [SerializeField] GameObject _tearPrefab;
@@ -12,8 +12,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float _swordAttackDelay = 0.5f;    // 근접 공격 딜레이
 
     PlayerStatus _playerStatus;
-    PlayerTearController _tearController;
-    PlayerSwordController _swordController;
     SpriteRenderer _PlayerSprite;
     Rigidbody2D _playerRigid;
     Animator _playerAnimator;
@@ -32,7 +30,8 @@ public class PlayerMovement : MonoBehaviour
     float _dashCoolTime;
 
     readonly int IDLE_HASH = Animator.StringToHash("PlayerIdle");
-    readonly int WALK_HASH = Animator.StringToHash("PlayerWalk");
+    readonly int DASH_HASH = Animator.StringToHash("PlayerDash");
+    readonly int DEATH_HASH = Animator.StringToHash("PlayerDeath");
 
     private void Awake()
     {
@@ -52,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            if(!_isDash)
+            if (!_isDash)
             {
                 Movement();
                 ShotInput();
@@ -62,8 +61,7 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 MoveDash();
-            }
-            
+            }            
         }
     }
 
@@ -72,8 +70,6 @@ public class PlayerMovement : MonoBehaviour
     {
         _playerRigid = GetComponent<Rigidbody2D>();
         _playerStatus = GetComponent<PlayerStatus>();
-        _tearController = GetComponent<PlayerTearController>();
-        _swordController = GetComponent<PlayerSwordController>();
         _playerAnimator = GetComponent<Animator>();
         _PlayerSprite = GetComponent<SpriteRenderer>();
         _isMeleeWeapon = true;
@@ -96,19 +92,19 @@ public class PlayerMovement : MonoBehaviour
         float moveSpeed = (_targetVelocity.magnitude > _curVelocity.magnitude) ? _playerStatus._accelerationSpeed : _playerStatus._decelerationSpeed;
         _curVelocity = Vector2.MoveTowards(_curVelocity, _targetVelocity, moveSpeed * Time.deltaTime);
         transform.position += (Vector3)_curVelocity * Time.deltaTime;
-          
+        _playerAnimator.SetFloat("PlayerWalk", _curVelocity.magnitude);
+
         if (_curVelocity.magnitude < 0.01f && _moveInput == Vector2.zero)
         {
-            _playerAnimator.Play(IDLE_HASH);
+            _playerAnimator.SetFloat("PlayerWalk", _curVelocity.magnitude);
             _curVelocity = Vector2.zero;
         }
         else
         {
-            _playerAnimator.Play(WALK_HASH);
+            
             if (_moveInput.x < 0)
             {
                 _PlayerSprite.flipX = true;
-
             }
             else
             {
@@ -136,11 +132,13 @@ public class PlayerMovement : MonoBehaviour
     // Player Move Dash
     private void MoveDash()
     {
+        _playerAnimator.Play(DASH_HASH);
         transform.position += (Vector3)_dashDirection * _playerStatus._dashSpeed * Time.deltaTime;
         _dashProgressTime -= Time.deltaTime;
 
         if (_dashProgressTime <= 0f)
         {
+            _playerAnimator.Play(IDLE_HASH);
             _isDash = false;
         }
     }
@@ -177,7 +175,6 @@ public class PlayerMovement : MonoBehaviour
         {
             if (_attackDirection != Vector2.zero && _wieldTimer <= 0f)
             {
-                //Quaternion swordRotation = Quaternion.FromToRotation(Vector3.right, _attackDirection);
                 GameObject sword = Instantiate(_swordPrefab, transform.position, Quaternion.identity);
                 sword.GetComponent<PlayerSwordController>().Init(transform, _attackDirection, _playerStatus._attackSpeed);
                 _wieldTimer = _swordAttackDelay / _playerStatus._attackSpeed;   // 공격속도에 비례하여 근접 공격 쿨타임 계산
@@ -194,5 +191,11 @@ public class PlayerMovement : MonoBehaviour
             }
             _shotTimer -= Time.deltaTime;
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        _playerAnimator.SetTrigger("PlayerHurt");
+        Debug.Log("플레이어가 데미지를 받았습니다.");
     }
 }
