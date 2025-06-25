@@ -80,8 +80,9 @@ public class PlayerStatus : MonoBehaviour
     // Player Death
     public void PlayerDeath()
     {
-        _animator.SetBool("PlayerDeath", true);
-        Destroy(gameObject, 8f);
+        _animator.SetBool("IsDeath", true);
+        GetComponent<CapsuleCollider2D>().enabled = false;
+        Destroy(gameObject, 9f);
         // TODO : UI Ãß°¡
     }
     
