@@ -2,11 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum SkillItemType
-{ 
-    active, passive, trait
-}
-
 public class SkillItem : MonoBehaviour
 {
     [SerializeField] private string _itemName;
