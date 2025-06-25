@@ -130,6 +130,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
 
     public void UnactivateSelf()
     {
+        //TODO: 비활성화하며 동시에 아이템 또는 재화를 드롭하는 기능 구현 필요
         gameObject.SetActive(false);
     }
 }
