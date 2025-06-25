@@ -28,7 +28,7 @@ public class OrcController : MonsterBase
     protected override void Update()
     {
         base.Update();
-        if (Vector2.Distance(transform.position, _player.transform.position) <= _model._attackRange)
+        if (Vector2.Distance(transform.position, _player.transform.position) <= _model._attackRange && !_isDamaged)
         {
             _movement._isTrace = false;
             _isAttack1 = true;

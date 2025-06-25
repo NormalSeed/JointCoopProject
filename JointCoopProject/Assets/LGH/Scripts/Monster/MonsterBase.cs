@@ -98,6 +98,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         if (_isDamaged) return;
 
         _movement._isTrace = false;
+        _isAttack1 = false;
         _isDamaged = true;
         _model._curHP.Value -= damage;
 
