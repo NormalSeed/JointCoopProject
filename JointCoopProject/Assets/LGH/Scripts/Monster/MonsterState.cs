@@ -89,7 +89,7 @@ public class Monster_Patrol : MonsterState
 
     public override void FixedUpdate()
     {
-        _controller._movement.Patrol();
+        _controller._movement.Patrol(_controller._model._moveSpd);
     }
 }
 
@@ -113,7 +113,7 @@ public class Monster_Trace : MonsterState
 
     public override void FixedUpdate()
     {
-        _controller._movement.Trace();
+        _controller._movement.Trace(_controller._model._moveSpd);
     }
 }
 

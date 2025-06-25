@@ -15,6 +15,7 @@ public class OrcController : MonsterBase
         base.Init();
         _model._maxHP = 30;
         _model._curHP.Value = _model._maxHP;
+        _model._moveSpd = 2f;
         _model._attack1Damage = 1;
         _model._attackRange = 1f;
     }
