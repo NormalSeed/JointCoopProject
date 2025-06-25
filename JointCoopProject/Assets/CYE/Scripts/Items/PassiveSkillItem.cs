@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PassiveSkillItem : SkillItem, IPickable
+public class PassiveSkillItem : MonoBehaviour//, IPickable // SkillItem
 {
-    private bool _IsActivated;
+    public ItemDataSO _itemData;
 
+    #region // Unity Message Function
     void Awake()
     {
         Init();
@@ -17,21 +18,16 @@ public class PassiveSkillItem : SkillItem, IPickable
             PickedUp();
         }
     }
+    #endregion
 
     #region // funciton
     private void Init()
     {
-        _itemType = SkillItemType.passive;
 
+    }
+    private void PickedUp()
+    {
+        _itemData.PickedUp();
     }
     #endregion
-
-    // 아이템 주움
-    public void PickedUp()
-    {
-        Destroy(gameObject, 0.1f);
-    }
-    
-    // 아이템 떨굼
-    public void Drop(Transform itemPos) { }
 }

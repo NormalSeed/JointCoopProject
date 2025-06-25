@@ -14,6 +14,8 @@ public class MonsterView : MonoBehaviour
 
     public void PlayAnimation(int hash)
     {
-        _animator.Play(hash);
+        _animator.Rebind();
+        _animator.Update(0f);
+        _animator.Play(hash, 0, 0f);
     }
 }

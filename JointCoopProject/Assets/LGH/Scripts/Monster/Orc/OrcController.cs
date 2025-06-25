@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class OrcController : MonsterBase
 {
+    [SerializeField] private Collider2D _attackCollider;
     private Coroutine _coAttack1;
+    private readonly WaitForSeconds _attackDelay = new WaitForSeconds(1f);
 
     public readonly int ATTACK1_HASH = Animator.StringToHash("OrcAttack1");
 
@@ -13,7 +15,9 @@ public class OrcController : MonsterBase
         base.Init();
         _model._maxHP = 30;
         _model._curHP.Value = _model._maxHP;
-        _model._attackRange = 2f;
+        _model._moveSpd = 2f;
+        _model._attack1Damage = 1;
+        _model._attackRange = 1f;
     }
 
     protected override void StateMachineInit()
@@ -25,21 +29,52 @@ public class OrcController : MonsterBase
     protected override void Update()
     {
         base.Update();
+        if (Vector2.Distance(transform.position, _player.transform.position) <= _model._attackRange && !_isDamaged)
+        {
+            _movement._isTrace = false;
+            _isAttack1 = true;
+        }
+
+        // TakeDamage ≈◊Ω∫∆Æ
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            TakeDamage(10, transform.position);
+        }
     }
 
     public void Attack1()
     {
-        // ¿¸πÊ¿∏∑Œ µµ≥¢∏¶ »÷µŒ∏• »ƒ 1√  ∏ÿ√„
-        // 1√  ∏ÿ√Áæﬂ «œπ«∑Œ Coroutine ªÁøÎ « ø‰
-        _coAttack1 = StartCoroutine(CoAttack1());
+        Vector2 attackDir = _player.transform.position - transform.position;
+        float xDir = attackDir.x;
+
+        if (xDir < 0f)
+        {
+            _attackCollider.transform.position = transform.position + new Vector3(-1f, 0);
+        }
+        else if (xDir > 0f)
+        {
+            _attackCollider.transform.position = transform.position + new Vector3(1f, 0);
+        }
+
+            // ¿¸πÊ¿∏∑Œ µµ≥¢∏¶ »÷µŒ∏• »ƒ 1√  ∏ÿ√„
+            // 1√  ∏ÿ√Áæﬂ «œπ«∑Œ Coroutine ªÁøÎ « ø‰
+            _coAttack1 = StartCoroutine(CoAttack1());
     }
 
     private IEnumerator CoAttack1()
     {
-        _movement._isTrace = false;
-        _isAttack1 = true;
-        yield return new WaitForSeconds(1f);
+        yield return _attackDelay;
         _movement._isTrace = true;
         _isAttack1 = false;
+    }
+
+    public void EnableAttackCollider()
+    {
+        _attackCollider.enabled = true;
+    }
+
+    public void DisableAttackCollider()
+    {
+        _attackCollider.enabled = false;
     }
 }
