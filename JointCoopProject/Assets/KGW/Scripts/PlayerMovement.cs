@@ -30,8 +30,8 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     float _dashProgressTime;
     float _dashCoolTime;
 
-    readonly int IDLE_HASH = Animator.StringToHash("PlayerIdle");
     readonly int DASH_HASH = Animator.StringToHash("PlayerDash");
+    readonly int Attack_HASH = Animator.StringToHash("PlayerAttack");
 
     private void Awake()
     {
@@ -94,25 +94,29 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         float moveSpeed = (_targetVelocity.magnitude > _curVelocity.magnitude) ? _playerStatus._accelerationSpeed : _playerStatus._decelerationSpeed;
         _curVelocity = Vector2.MoveTowards(_curVelocity, _targetVelocity, moveSpeed * Time.deltaTime);
         transform.position += (Vector3)_curVelocity * Time.deltaTime;
-        _playerAnimator.SetFloat("PlayerWalk", _curVelocity.magnitude);
+
+        Vector2 roundedMove = new Vector2(
+            Mathf.Abs(_moveInput.x) < 0.1f ? 0 : Mathf.Sign(_moveInput.x),
+            Mathf.Abs(_moveInput.y) < 0.1f ? 0 : Mathf.Sign(_moveInput.y)
+        );
 
         if (_curVelocity.magnitude < 0.01f && _moveInput == Vector2.zero)
         {
-            _playerAnimator.SetFloat("PlayerWalk", _curVelocity.magnitude);
             _curVelocity = Vector2.zero;
+        }
+
+        if (_moveInput != Vector2.zero)
+        {
+            _playerAnimator.SetBool("IsMoving", true);
+            _playerAnimator.SetBool("IsDeath", false);
+            _playerAnimator.SetFloat("MoveX", roundedMove.x);
+            _playerAnimator.SetFloat("MoveY", roundedMove.y);
         }
         else
         {
-            
-            if (_moveInput.x < 0)
-            {
-                _PlayerSprite.flipX = true;
-            }
-            else
-            {
-                _PlayerSprite.flipX = false;
-            }
-        }  
+            _playerAnimator.SetBool("IsMoving", false);
+            _playerAnimator.SetBool("IsDeath", false);
+        }
     }
 
     // Player Dash Input
@@ -142,12 +146,13 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         gameObject.layer = 8;   // Player Layer Change
         transform.position += (Vector3)_dashDirection * _playerStatus._dashSpeed * Time.deltaTime;
         _dashProgressTime -= Time.deltaTime;
+        _PlayerSprite.color = new Color(0.5f, 0.5f, 0.5f, 0.7f);
 
         if (_dashProgressTime <= 0f)
         {
-            _playerAnimator.Play(IDLE_HASH);
             gameObject.layer = 6;   // Player Layer Change
             _isDash = false;
+            _PlayerSprite.color = new Color(1, 1, 1, 1);
         }
     }
 
@@ -210,10 +215,13 @@ public class PlayerMovement : MonoBehaviour, IDamagable
             return;
         }
 
-        _isDamaged = true;   
-
-        _playerAnimator.SetTrigger("PlayerHurt");
+        _isDamaged = true;
+        
+        // Player Hp Down
         _playerStatus.HealthDown(damage);
+
+        // Player hit Reaction
+        _PlayerSprite.color = new Color(1, 0.4f, 0.1f, 0.7f);
 
         // Player Layer Change
         gameObject.layer = 8;
@@ -228,5 +236,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         // Player Layer Change
         gameObject.layer = 6;
         _isDamaged = false;
+        _PlayerSprite.color = new Color(1, 1, 1, 1);
     }
+    
 }
