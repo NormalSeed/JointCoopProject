@@ -55,12 +55,18 @@ public class OrcController : MonsterBase
     {
         _movement._isTrace = false;
         _isAttack1 = true;
-        yield return new WaitForSeconds(0.45f);
-        _attackCollider.enabled = true;
-        yield return new WaitForSeconds(0.35f);
-        _attackCollider.enabled = false;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(1f);
         _movement._isTrace = true;
         _isAttack1 = false;
+    }
+
+    public void EnableAttackCollider()
+    {
+        _attackCollider.enabled = true;
+    }
+
+    public void DisableAttackCollider()
+    {
+        _attackCollider.enabled = false;
     }
 }
