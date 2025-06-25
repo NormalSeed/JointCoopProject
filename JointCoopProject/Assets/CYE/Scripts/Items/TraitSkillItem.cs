@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TraitSkill : SkillItem, IPickable
+public class TraitSkill : MonoBehaviour//, IPickable // SkillItem
 {
-    private int grade;
-    public int _grade { get { return grade; } private set { value = _grade; } }
+    public ItemDataSO _itemData;
 
+    #region // Unity Message Function
     void Awake()
     {
         Init();
@@ -18,29 +18,16 @@ public class TraitSkill : SkillItem, IPickable
             PickedUp();
         }
     }
+    #endregion
 
     #region // funciton
     private void Init()
     {
-        _itemType = SkillItemType.trait;
-        _grade = 0;
-    }
 
-    private void UpgradeSkillGrade()
+    }
+    private void PickedUp()
     {
-        _grade++;
-        if (_grade > 5) { _grade = 5; }
-        
+        _itemData.PickedUp();
     }
     #endregion
-
-    // 아이템 주움
-    public void PickedUp()
-    {
-        // player
-        Destroy(gameObject, 0.1f);
-    }
-    
-    // 아이템 떨굼
-    public void Drop(Transform itemPos) { }
 }

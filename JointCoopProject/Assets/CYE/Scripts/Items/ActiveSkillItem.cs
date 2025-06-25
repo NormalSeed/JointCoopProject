@@ -2,8 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActiveSkillItem : SkillItem, IPickable
+public class ActiveSkillItem : MonoBehaviour //, IPickable // SkillItem
 {
+    public ItemDataSO _itemData;
+
+    #region // Unity Message Function
     void Awake()
     {
         Init();
@@ -15,22 +18,16 @@ public class ActiveSkillItem : SkillItem, IPickable
             PickedUp();
         }
     }
+    #endregion
 
     #region // funciton
     private void Init()
     {
-        _itemType = SkillItemType.active;
-    }
-    #endregion
 
-    #region // IPickable
-    // 아이템 주움
-    public void PickedUp()
+    }
+    private void PickedUp()
     {
-        Destroy(gameObject, 0.1f);
+        _itemData.PickedUp();
     }
-
-    // 아이템 떨굼
-    public void Drop(Transform itemPos) { }
     #endregion
 }

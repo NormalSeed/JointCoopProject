@@ -2,18 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NonAbilityItem : MonoBehaviour, IPickable
+public class NonAbilityItem : MonoBehaviour//, IPickable // SkillItem
 {
-    private string _itemName;
-    private string _itemDesc;
+    public ItemDataSO _itemData;
 
-    private string _varianceTarget; // string은 임시
-    private float _varianceValue;
+    #region // Unity Message Function
+    void Awake()
+    {
+        Init();
+    }
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            PickedUp();
+        }
+    }
+    #endregion
 
-    // 아이템 주움
-    public void PickedUp() { }
+    #region // funciton
+    private void Init()
+    {
 
-    // 아이템 떨굼
-    public void Drop(Transform itemPos) { }
-    
+    }
+    private void PickedUp()
+    {
+        _itemData.PickedUp();
+    }
+    #endregion
 }
