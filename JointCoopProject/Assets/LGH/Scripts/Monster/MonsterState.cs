@@ -28,6 +28,11 @@ public class MonsterState : BaseState
         {
             _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Damaged]);
         }
+
+        if (_controller._isDead)
+        {
+            _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Dead]);
+        }
     }
 
     public override void Exit()
@@ -131,5 +136,23 @@ public class Monster_Damaged : MonsterState
         {
             _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Idle]);
         }
+    }
+}
+
+public class Monster_Dead : MonsterState
+{
+    public Monster_Dead(MonsterBase controller) : base(controller)
+    {
+        _hasPhysics = false;
+    }
+
+    public override void Enter()
+    {
+        _controller._view.PlayAnimation(_controller.DEAD_HASH);
+    }
+
+    public override void Update()
+    {
+        
     }
 }

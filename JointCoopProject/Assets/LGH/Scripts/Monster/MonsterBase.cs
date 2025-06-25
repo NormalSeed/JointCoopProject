@@ -15,6 +15,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     // 방에 들어갔을 때 SetActive(true) 되고 Start에서 1초 대기를 걸어주면 된다.
     // 데미지를 받을 수 있고 줄 수 있음
     // curHP가 0이 되면 사망 처리
+    // TODO: 사망시 랜덤 확률로 재화 또는 아이템 드롭
     private float _activeDelay;
     public bool _isActivated;
     public MonsterMovement _movement;
@@ -25,12 +26,15 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     public bool _isAttack1;
     public bool _isAttack2;
     public bool _isDamaged;
+    public bool _isDead;
     private Coroutine _coOffDamage;
     private WaitForSeconds _damageDelay = new WaitForSeconds(1f);
 
     public readonly int IDLE_HASH = Animator.StringToHash("Idle");
     public readonly int MOVE_HASH = Animator.StringToHash("Walk");
     public readonly int DAMAGED_HASH = Animator.StringToHash("Damaged");
+    public readonly int DEAD_HASH = Animator.StringToHash("Dead");
+
 
     private void Awake() => Init();
 
@@ -52,6 +56,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _stateMachine._stateDic.Add(EState.Patrol, new Monster_Patrol(this));
         _stateMachine._stateDic.Add(EState.Trace, new Monster_Trace(this));
         _stateMachine._stateDic.Add(EState.Damaged, new Monster_Damaged(this));
+        _stateMachine._stateDic.Add(EState.Dead, new Monster_Dead(this));
 
         _stateMachine._curState = _stateMachine._stateDic[EState.Idle];
     }
@@ -63,6 +68,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _isAttack1 = false;
         _isAttack2 = false;
         _isDamaged = false;
+        _isDead = false;
     }
 
     protected virtual void Update()
@@ -102,6 +108,11 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _isDamaged = true;
         _model._curHP.Value -= damage;
 
+        if (_model._curHP.Value <= 0)
+        {
+            Die();
+        }
+
         _coOffDamage = StartCoroutine(CoOffDamage());
     }
 
@@ -110,5 +121,15 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         yield return _damageDelay;
         _movement._isTrace = true;
         _isDamaged = false;
+    }
+
+    public void Die()
+    {
+        _isDead = true;
+    }
+
+    public void UnactivateSelf()
+    {
+        gameObject.SetActive(false);
     }
 }

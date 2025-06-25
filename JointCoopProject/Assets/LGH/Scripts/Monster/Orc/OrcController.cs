@@ -37,7 +37,7 @@ public class OrcController : MonsterBase
         // TakeDamage Å×½ºÆ®
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            TakeDamage(1, transform.position);
+            TakeDamage(10, transform.position);
         }
     }
 

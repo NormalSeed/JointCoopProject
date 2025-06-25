@@ -14,5 +14,5 @@ public abstract class BaseState
 
 public enum EState
 {
-    Idle, Patrol, Trace, Attack1, Attack2, Damaged
+    Idle, Patrol, Trace, Attack1, Attack2, Damaged, Dead
 }
