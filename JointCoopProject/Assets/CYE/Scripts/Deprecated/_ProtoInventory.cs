@@ -23,10 +23,9 @@ public class ProtoInventory : MonoBehaviour
     {
         
     }
-    
+
     protected void AddSkillDataList()
     { 
-        // player -> PlayerSkillManager -> autoskills (contains check) add
-
+        
     }
 }
