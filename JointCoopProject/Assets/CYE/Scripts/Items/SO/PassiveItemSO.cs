@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 사용자가 임의로 사용이 불가능하며, 대신 활성화할 경우 자동으로 효과가 발동하는 아이템
 /// </summary>
-[CreateAssetMenu(menuName = "Scriptable Objects/Item/Passive Item")]
+[CreateAssetMenu(menuName = "Items/Passive Item", order = 1)]
 public class PassiveItemSO : ItemDataSO
 {
     
@@ -27,8 +27,8 @@ public class PassiveItemSO : ItemDataSO
         _itemTimer = 0f;
         _skillTimer = 0f;
     }    
-    public override void Act(Transform usePos)
+    public override void Act(Transform currentPosition)
     {
-        _skillData.UseSkill(usePos);
+        _skillData.UseSkill(currentPosition);
     }
 }

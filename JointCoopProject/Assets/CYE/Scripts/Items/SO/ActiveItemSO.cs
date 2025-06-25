@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 사용자가 키 입력을 통해 능동적으로 사용할 수 있는 아이템
 /// </summary>
-[CreateAssetMenu(menuName = "Scriptable Objects/Item/Active Item")]
+[CreateAssetMenu(menuName = "Items/Active Item", order = 0)]
 public class ActiveItemSO : ItemDataSO
 {
     [Header("Skill Settings")]
@@ -23,8 +23,8 @@ public class ActiveItemSO : ItemDataSO
         _itemTimer = 0f;
         _skillTimer = 0f;
     }
-    public override void Act(Transform usePos)
+    public override void Act(Transform currentPosition)
     {
-        _skillData.UseSkill(usePos);
+        _skillData.UseSkill(currentPosition);
     }
 }

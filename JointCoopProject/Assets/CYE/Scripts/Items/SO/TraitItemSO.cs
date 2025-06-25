@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 획득시 단계별로 사용자의 기본 공격을 강화하는 아이템
 /// </summary>
-[CreateAssetMenu(menuName = "Scriptable Objects/Item/Trait Item")]
+[CreateAssetMenu(menuName = "Items/Trait Item", order = 2)]
 public class TraitItemSO : ItemDataSO
 {
     [Header("Skill Settings")]
@@ -18,8 +18,8 @@ public class TraitItemSO : ItemDataSO
     {
         
     }
-    public override void Act(Transform usePos)
+    public override void Act(Transform currentPosition)
     {
-        _skillData.UseSkill(usePos);
+        _skillData.UseSkill(currentPosition);
     }
 }
