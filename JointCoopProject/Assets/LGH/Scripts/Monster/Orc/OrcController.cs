@@ -6,6 +6,7 @@ public class OrcController : MonsterBase
 {
     [SerializeField] private Collider2D _attackCollider;
     private Coroutine _coAttack1;
+    private readonly WaitForSeconds _attackDelay = new WaitForSeconds(1f);
 
     public readonly int ATTACK1_HASH = Animator.StringToHash("OrcAttack1");
 
@@ -14,6 +15,8 @@ public class OrcController : MonsterBase
         base.Init();
         _model._maxHP = 30;
         _model._curHP.Value = _model._maxHP;
+        _model._moveSpd = 2f;
+        _model._attack1Damage = 1;
         _model._attackRange = 1f;
     }
 
@@ -26,9 +29,16 @@ public class OrcController : MonsterBase
     protected override void Update()
     {
         base.Update();
-        if (Vector2.Distance(transform.position, _player.transform.position) <= _model._attackRange)
+        if (Vector2.Distance(transform.position, _player.transform.position) <= _model._attackRange && !_isDamaged)
         {
+            _movement._isTrace = false;
             _isAttack1 = true;
+        }
+
+        // TakeDamage Å×½ºÆ®
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            TakeDamage(10, transform.position);
         }
     }
 
@@ -53,14 +63,18 @@ public class OrcController : MonsterBase
 
     private IEnumerator CoAttack1()
     {
-        _movement._isTrace = false;
-        _isAttack1 = true;
-        yield return new WaitForSeconds(0.45f);
-        _attackCollider.enabled = true;
-        yield return new WaitForSeconds(0.35f);
-        _attackCollider.enabled = false;
-        yield return new WaitForSeconds(0.2f);
+        yield return _attackDelay;
         _movement._isTrace = true;
         _isAttack1 = false;
+    }
+
+    public void EnableAttackCollider()
+    {
+        _attackCollider.enabled = true;
+    }
+
+    public void DisableAttackCollider()
+    {
+        _attackCollider.enabled = false;
     }
 }

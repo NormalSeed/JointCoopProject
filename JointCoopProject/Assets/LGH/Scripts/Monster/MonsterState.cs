@@ -19,9 +19,19 @@ public class MonsterState : BaseState
 
     public override void Update()
     {
-        if (!_controller._movement._isPatrol && _controller._isAttack1)
+        if (_controller._isAttack1 && !_controller._isDamaged)
         {
             _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Attack1]);
+        }
+
+        if (_controller._isDamaged)
+        {
+            _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Damaged]);
+        }
+
+        if (_controller._isDead)
+        {
+            _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Dead]);
         }
     }
 
@@ -75,15 +85,11 @@ public class Monster_Patrol : MonsterState
     public override void Update()
     {
         base.Update();
-        if (!_controller._movement._isTrace && !_controller._movement._isPatrol)
-        {
-            _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Idle]);
-        }
     }
 
     public override void FixedUpdate()
     {
-        _controller._movement.Patrol();
+        _controller._movement.Patrol(_controller._model._moveSpd);
     }
 }
 
@@ -107,6 +113,46 @@ public class Monster_Trace : MonsterState
 
     public override void FixedUpdate()
     {
-        _controller._movement.Trace();
+        _controller._movement.Trace(_controller._model._moveSpd);
+    }
+}
+
+public class Monster_Damaged : MonsterState
+{
+    public Monster_Damaged(MonsterBase controller) : base(controller)
+    {
+        _hasPhysics = false;
+    }
+
+    public override void Enter()
+    {
+        _controller._view.PlayAnimation(_controller.DAMAGED_HASH);
+    }
+
+    public override void Update()
+    {
+        base.Update();
+        if (!_controller._isDamaged)
+        {
+            _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Idle]);
+        }
+    }
+}
+
+public class Monster_Dead : MonsterState
+{
+    public Monster_Dead(MonsterBase controller) : base(controller)
+    {
+        _hasPhysics = false;
+    }
+
+    public override void Enter()
+    {
+        _controller._view.PlayAnimation(_controller.DEAD_HASH);
+    }
+
+    public override void Update()
+    {
+        
     }
 }

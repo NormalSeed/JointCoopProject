@@ -49,5 +49,9 @@ public class Orc_Attack1 : OrcState
         {
             _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Trace]);
         }
+        else if (!_controller._isAttack1 && _controller._isDamaged) 
+        {
+            _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Damaged]);
+        }
     }
 }

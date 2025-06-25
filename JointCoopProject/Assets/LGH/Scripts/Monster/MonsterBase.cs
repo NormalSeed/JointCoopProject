@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class MonsterBase : MonoBehaviour
+public abstract class MonsterBase : MonoBehaviour, IDamagable
 {
     // FSM을 통해 움직이는 Monster들의 기본
     // StateMachine을 받아오고
@@ -13,6 +13,9 @@ public abstract class MonsterBase : MonoBehaviour
     // view는 몬스터 애니메이션, 체력 UI 등 사용자가 직접 눈으로 볼 수 있는 요소들
     // 모든 몬스터는 플레이어가 방에 처음 진입했을 때 1초의 딜레이를 갖고 활성화된다.
     // 방에 들어갔을 때 SetActive(true) 되고 Start에서 1초 대기를 걸어주면 된다.
+    // 데미지를 받을 수 있고 줄 수 있음
+    // curHP가 0이 되면 사망 처리
+    // TODO: 사망시 랜덤 확률로 재화 또는 아이템 드롭
     private float _activeDelay;
     public bool _isActivated;
     public MonsterMovement _movement;
@@ -21,9 +24,17 @@ public abstract class MonsterBase : MonoBehaviour
     public StateMachine _stateMachine;
     public GameObject _player;
     public bool _isAttack1;
+    public bool _isAttack2;
+    public bool _isDamaged;
+    public bool _isDead;
+    private Coroutine _coOffDamage;
+    private WaitForSeconds _damageDelay = new WaitForSeconds(1f);
 
     public readonly int IDLE_HASH = Animator.StringToHash("Idle");
     public readonly int MOVE_HASH = Animator.StringToHash("Walk");
+    public readonly int DAMAGED_HASH = Animator.StringToHash("Damaged");
+    public readonly int DEAD_HASH = Animator.StringToHash("Dead");
+
 
     private void Awake() => Init();
 
@@ -44,6 +55,8 @@ public abstract class MonsterBase : MonoBehaviour
         _stateMachine._stateDic.Add(EState.Idle, new Monster_Idle(this));
         _stateMachine._stateDic.Add(EState.Patrol, new Monster_Patrol(this));
         _stateMachine._stateDic.Add(EState.Trace, new Monster_Trace(this));
+        _stateMachine._stateDic.Add(EState.Damaged, new Monster_Damaged(this));
+        _stateMachine._stateDic.Add(EState.Dead, new Monster_Dead(this));
 
         _stateMachine._curState = _stateMachine._stateDic[EState.Idle];
     }
@@ -53,6 +66,9 @@ public abstract class MonsterBase : MonoBehaviour
         _activeDelay = 1f;
         _isActivated = false;
         _isAttack1 = false;
+        _isAttack2 = false;
+        _isDamaged = false;
+        _isDead = false;
     }
 
     protected virtual void Update()
@@ -69,5 +85,52 @@ public abstract class MonsterBase : MonoBehaviour
     private void FixedUpdate()
     {
         _stateMachine.FixedUpdate();
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            IDamagable damagable = collision.gameObject.GetComponent<IDamagable>();
+            if (damagable != null)
+            {
+                damagable.TakeDamage(1, transform.position);
+            }
+        }
+    }
+
+    public void TakeDamage(int damage, Vector2 targetPos)
+    {
+        if (_isDamaged) return;
+
+        _movement._isTrace = false;
+        _isAttack1 = false;
+        _isDamaged = true;
+        _model._curHP.Value -= damage;
+
+        if (_model._curHP.Value <= 0)
+        {
+            Die();
+        }
+
+        _coOffDamage = StartCoroutine(CoOffDamage());
+    }
+
+    private IEnumerator CoOffDamage()
+    {
+        yield return _damageDelay;
+        _movement._isTrace = true;
+        _isDamaged = false;
+    }
+
+    public void Die()
+    {
+        _isDead = true;
+    }
+
+    public void UnactivateSelf()
+    {
+        //TODO: 비활성화하며 동시에 아이템 또는 재화를 드롭하는 기능 구현 필요
+        gameObject.SetActive(false);
     }
 }

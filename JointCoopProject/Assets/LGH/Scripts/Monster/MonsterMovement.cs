@@ -13,7 +13,6 @@ public abstract class MonsterMovement : MonoBehaviour
     private Rigidbody2D _rb;
     private Vector2 _patrolDir;
     private float _moveTimer;
-    protected float _moveSpd = 2f;
     private float _changeInterval = 1.5f;
 
     private void Awake() => Init();
@@ -26,7 +25,7 @@ public abstract class MonsterMovement : MonoBehaviour
         _moveTimer = 0f;
     }
 
-    public void Trace()
+    public void Trace(float moveSpd)
     {
         GameObject player = GameObject.Find("Player");
         if (player == null) return;
@@ -34,17 +33,17 @@ public abstract class MonsterMovement : MonoBehaviour
         Vector2 currentPos = _rb.position;
         Vector2 targetPos = player.transform.position;
         _patrolDir = targetPos - currentPos;
-        Vector2 newPos = Vector2.MoveTowards(currentPos, targetPos, _moveSpd * Time.fixedDeltaTime);
+        Vector2 newPos = Vector2.MoveTowards(currentPos, targetPos, moveSpd * Time.fixedDeltaTime);
 
         UpdateSpriteDir();
 
         _rb.MovePosition(newPos);
     }
 
-    public void Patrol()
+    public void Patrol(float moveSpd)
     {
         // timer 시간 동안 이동
-        _rb.MovePosition(_rb.position + _patrolDir * _moveSpd * Time.fixedDeltaTime);
+        _rb.MovePosition(_rb.position + _patrolDir * moveSpd * Time.fixedDeltaTime);
         UpdateSpriteDir();
         _moveTimer += Time.fixedDeltaTime;
         if (_moveTimer >= _changeInterval)
