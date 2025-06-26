@@ -9,28 +9,28 @@ public class PlayerSwordController : MonoBehaviour
     Transform _playerPos;
 
     int _swordDamage = 1;
-    Vector2 _wieldDirection;        // ÈÖµÎ¸£´Â ¹æÇâ º¤ÅÍ
-    float _wieldAngle = 90f;       // ¹«±âÀÇ ÈÖµÎ¸§ ¹İ°æ
-    float _rotationSpeed = 420f;    // È¸Àü ¼Óµµ (°ªÀÌ ³ôÀ» ¼ö·Ï »¡¸® È¸ÀüÇÑ´Ù)
-    float _wieldRadius = 0.3f;      // ¹«±â È¸Àü ¹İ°æ
-    float _currentAngle = 0;       // ÇöÀç °¢µµ
-    float _startAngle = 0;         // ½ÃÀÛ °¢µµ
-    float _wieldSpeed;              // ÇÃ·¹ÀÌ¾îÀÇ °ø°İ ¼Óµµ
+    Vector2 _wieldDirection;        // íœ˜ë‘ë¥´ëŠ” ë°©í–¥ ë²¡í„°
+    float _wieldAngle = 90f;       // ë¬´ê¸°ì˜ íœ˜ë‘ë¦„ ë°˜ê²½
+    float _rotationSpeed = 420f;    // íšŒì „ ì†ë„ (ê°’ì´ ë†’ì„ ìˆ˜ë¡ ë¹¨ë¦¬ íšŒì „í•œë‹¤)
+    float _wieldRadius = 0.3f;      // ë¬´ê¸° íšŒì „ ë°˜ê²½
+    float _currentAngle = 0;       // í˜„ì¬ ê°ë„
+    float _startAngle = 0;         // ì‹œì‘ ê°ë„
+    float _wieldSpeed;              // í”Œë ˆì´ì–´ì˜ ê³µê²© ì†ë„
 
     private void Update()
     {
-        if (_playerPos == null) // ÇÃ·¹ÀÌ¾î°¡ ¹«±â¸¦ ¼ÒÁöÇÏÁö ¾ÊÀ¸¸é µğ½ºÆ®·ÎÀÌ
+        if (_playerPos == null) // í”Œë ˆì´ì–´ê°€ ë¬´ê¸°ë¥¼ ì†Œì§€í•˜ì§€ ì•Šìœ¼ë©´ ë””ìŠ¤íŠ¸ë¡œì´
         {
             Destroy(gameObject);
             return;
         }
 
-        float angle = _rotationSpeed * _wieldSpeed * Time.deltaTime;    // È¸Àü½ºÇÇµå°¡ ÇÃ·¹ÀÌ¾îÀÇ °ø°İ½ºÇÇµå¿¡ ¿µÇâÀ» ¹Ş¾Æ »¡¸® ÈÖµÎ¸§
+        float angle = _rotationSpeed * _wieldSpeed * Time.deltaTime;    // íšŒì „ìŠ¤í”¼ë“œê°€ í”Œë ˆì´ì–´ì˜ ê³µê²©ìŠ¤í”¼ë“œì— ì˜í–¥ì„ ë°›ì•„ ë¹¨ë¦¬ íœ˜ë‘ë¦„
         _currentAngle -= angle;
    
-        // ÇöÀç °¢µµ·Î À§Ä¡¸¦ ÇÃ·¹ÀÌ¾îÀÇ Áß½ÉÀ» ±âÁØÀ¸·Î Àç°è»ê
+        // í˜„ì¬ ê°ë„ë¡œ ìœ„ì¹˜ë¥¼ í”Œë ˆì´ì–´ì˜ ì¤‘ì‹¬ì„ ê¸°ì¤€ìœ¼ë¡œ ì¬ê³„ì‚°
         float radian = (_currentAngle + _startAngle) * Mathf.Deg2Rad;
-        Vector3 posOffset = new Vector3(Mathf.Cos(radian), Mathf.Sin(radian), 0f) * _wieldRadius;   // ÇöÀçÀÇ °¢µµ¿Í ½ÃÀÛ°¢µµ¸¦ ´õÇÑ °ª¿¡ È¸Àü ¹İ°æÀ» °öÇØ¼­ À§Ä¡ ¿É¼Â ¼¼ÆÃ
+        Vector3 posOffset = new Vector3(Mathf.Cos(radian), Mathf.Sin(radian), 0f) * _wieldRadius;   // í˜„ì¬ì˜ ê°ë„ì™€ ì‹œì‘ê°ë„ë¥¼ ë”í•œ ê°’ì— íšŒì „ ë°˜ê²½ì„ ê³±í•´ì„œ ìœ„ì¹˜ ì˜µì…‹ ì„¸íŒ…
         transform.position = _playerPos.position + posOffset;
 
         transform.rotation = Quaternion.Euler(0, 0, _currentAngle + _startAngle + 90f);
@@ -45,7 +45,7 @@ public class PlayerSwordController : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-            Debug.Log("ÀûÀ» °ø°İÇß½À´Ï´Ù.");
+            Debug.Log("ì ì„ ê³µê²©í–ˆìŠµë‹ˆë‹¤.");
             IDamagable damagable = collision.GetComponent<IDamagable>();
             if (damagable != null)
             {
