@@ -41,6 +41,9 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
 
     private void Awake() => Init();
 
+    /// <summary>
+    /// 각 monster controller마다 _monsterID 갱신 필요
+    /// </summary>
     protected virtual void Init()
     {
         _model = GetComponent<MonsterModel>();
@@ -53,7 +56,10 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         StateMachineInit();
     }
 
-    // 모든 Monster들이 공통적으로 가질 Idle, Patrol
+    /// <summary>
+    /// 모든 Monster들이 가지는 기본 상태 포함.
+    /// 각 monster controller에서 상태 추가해 사용
+    /// </summary>
     protected virtual void StateMachineInit()
     {
         _stateMachine = new StateMachine();
@@ -66,7 +72,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _stateMachine._curState = _stateMachine._stateDic[EState.Idle];
     }
 
-    protected virtual void Start()
+    protected void Start()
     {
         _activeDelay = 1f;
         _isActivated = false;
@@ -75,6 +81,12 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _isAttack3 = false;
         _isDamaged = false;
         _isDead = false;
+
+        if (_dataDic.TryGetValue(_monsterID, out MonsterData data))
+        {
+            _model.ApplyData(data);
+        }
+        _model._curHP.Value = _model._maxHP;
     }
 
     private void LoadCSV(string path)
@@ -107,6 +119,9 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         }
     }
 
+    /// <summary>
+    /// 각 monster가 갖고 있는 공격 패턴(Attack1, Attack2 등)에 따른 사거리 계산 필요
+    /// </summary>
     protected virtual void Update()
     {
         _activeDelay -= Time.deltaTime;
