@@ -27,7 +27,7 @@ public class NonAbilityItem : MonoBehaviour//, IPickable // SkillItem
     }
     private void PickedUp()
     {
-        _itemData.PickedUp();
+        
     }
     #endregion
 }

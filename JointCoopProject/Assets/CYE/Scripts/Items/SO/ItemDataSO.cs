@@ -16,21 +16,12 @@ public class ItemDataSO : ScriptableObject
     public string _itemDesc;
     #endregion
 
-    public virtual void PickedUp()
+    public virtual void PickedUp(GameObject player)
     {
         // 주워짐
-    }
-    public virtual void Dropped(Transform currentPosition)
-    {
-        // 버려짐
-        Instantiate(_itemPrefab, currentPosition.position, Quaternion.identity);
     }
     public virtual void Act(Transform currentPosition)
     {
         // 동작함
-    }
-    public virtual void Interact()
-    { 
-        // 상호작용함
     }
 }

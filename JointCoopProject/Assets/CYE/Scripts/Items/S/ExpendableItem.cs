@@ -27,7 +27,7 @@ public class ExpendableItem : MonoBehaviour
     }
     private void PickedUp()
     {
-        _itemData.PickedUp();
+        
     }
     #endregion
 }
