@@ -8,8 +8,8 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     [Header("Player Weapon Status")]
     [SerializeField] GameObject _tearPrefab;
     [SerializeField] GameObject _swordPrefab;
-    [SerializeField] float _tearAttackDelay = 0.3f;     // ´«¹° °ø°İ µô·¹ÀÌ
-    [SerializeField] float _swordAttackDelay = 0.5f;    // ±ÙÁ¢ °ø°İ µô·¹ÀÌ
+    [SerializeField] float _tearAttackDelay = 0.3f;     // ëˆˆë¬¼ ê³µê²© ë”œë ˆì´
+    [SerializeField] float _swordAttackDelay = 0.5f;    // ê·¼ì ‘ ê³µê²© ë”œë ˆì´
     [SerializeField] bool _isMeleeWeapon;
 
     PlayerStatus _playerStatus;
@@ -187,7 +187,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
             {
                 GameObject sword = Instantiate(_swordPrefab, transform.position, Quaternion.identity);
                 sword.GetComponent<PlayerSwordController>().Init(transform, _attackDirection, _playerStatus._attackSpeed);
-                _wieldTimer = _swordAttackDelay / _playerStatus._attackSpeed;   // °ø°İ¼Óµµ¿¡ ºñ·ÊÇÏ¿© ±ÙÁ¢ °ø°İ ÄğÅ¸ÀÓ °è»ê
+                _wieldTimer = _swordAttackDelay / _playerStatus._attackSpeed;   // ê³µê²©ì†ë„ì— ë¹„ë¡€í•˜ì—¬ ê·¼ì ‘ ê³µê²© ì¿¨íƒ€ì„ ê³„ì‚°
             }
             _wieldTimer -= Time.deltaTime;
         }
