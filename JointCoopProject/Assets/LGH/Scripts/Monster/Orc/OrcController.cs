@@ -13,6 +13,7 @@ public class OrcController : MonsterBase
     protected override void Init()
     {
         base.Init();
+        // csv 파일로 데이터를 받아오는 기능 구현 시도
         _model._maxHP = 30;
         _model._curHP.Value = _model._maxHP;
         _model._moveSpd = 2f;
