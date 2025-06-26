@@ -8,8 +8,8 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     [Header("Player Weapon Status")]
     [SerializeField] GameObject _tearPrefab;
     [SerializeField] GameObject _swordPrefab;
-    [SerializeField] float _tearAttackDelay = 0.3f;     // ÎààÎ¨º Í≥µÍ≤© ÎîúÎ†àÏù¥
-    [SerializeField] float _swordAttackDelay = 0.5f;    // Í∑ºÏ†ë Í≥µÍ≤© ÎîúÎ†àÏù¥
+    [SerializeField] float _tearAttackDelay = 0.3f;     // ¥´π∞ ∞¯∞› µÙ∑π¿Ã
+    [SerializeField] float _swordAttackDelay = 0.5f;    // ±Ÿ¡¢ ∞¯∞› µÙ∑π¿Ã
     [SerializeField] bool _isMeleeWeapon;
 
     PlayerStatus _playerStatus;
@@ -29,6 +29,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     bool _isDamaged = false;
     float _dashProgressTime;
     float _dashCoolTime;
+    string _selectAttackDir;
 
     readonly int DASH_HASH = Animator.StringToHash("PlayerDash");
     readonly int DOWN_ATTACK_HASH = Animator.StringToHash("Player_Down_Attack");
@@ -167,22 +168,22 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         if (Input.GetKey(KeyCode.UpArrow))
         {
             _attackDirection += Vector2.up;
-            _playerAnimator.Play(UP_ATTACK_HASH);
+            _selectAttackDir = "Up";
         }
         if (Input.GetKey(KeyCode.DownArrow))
         {
             _attackDirection += Vector2.down;
-            _playerAnimator.Play(DOWN_ATTACK_HASH);
+            _selectAttackDir = "Down";
         }
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             _attackDirection += Vector2.left;
-            _playerAnimator.Play(LEFT_ATTACK_HASH);
+            _selectAttackDir = "Left";
         }
         if (Input.GetKey(KeyCode.RightArrow))
         {
             _attackDirection += Vector2.right;
-            _playerAnimator.Play(RIGHT_ATTACK_HASH);
+            _selectAttackDir = "Right";
         }
 
         _attackDirection = _attackDirection.normalized;
@@ -197,8 +198,11 @@ public class PlayerMovement : MonoBehaviour, IDamagable
             if (_attackDirection != Vector2.zero && _wieldTimer <= 0f)
             {
                 GameObject sword = Instantiate(_swordPrefab, transform.position, Quaternion.identity);
-                sword.GetComponent<PlayerSwordController>().Init(transform, _attackDirection, _playerStatus._attackSpeed);
-                _wieldTimer = _swordAttackDelay / _playerStatus._attackSpeed;   // Í≥µÍ≤©ÏÜçÎèÑÏóê ÎπÑÎ°ÄÌïòÏó¨ Í∑ºÏ†ë Í≥µÍ≤© Ïø®ÌÉÄÏûÑ Í≥ÑÏÇ∞
+                sword.GetComponent<PlayerSwordControllerTest>().Init(transform, _attackDirection, _playerStatus._attackSpeed);
+                // ∞¯∞›º”µµø° ∫Ò∑ «œø© ±Ÿ¡¢ ∞¯∞› ƒ≈∏¿” ∞ËªÍ
+                _playerAnimator.speed = _playerStatus._attackSpeed;
+                AttackDirection(_selectAttackDir);
+                _wieldTimer = _swordAttackDelay / _playerStatus._attackSpeed;   
             }
             _wieldTimer -= Time.deltaTime;
         }
@@ -211,6 +215,28 @@ public class PlayerMovement : MonoBehaviour, IDamagable
                 _shotTimer = _tearAttackDelay;
             }
             _shotTimer -= Time.deltaTime;
+        }
+        _playerAnimator.speed = 1f;
+    }
+
+    private void AttackDirection(string attackDir)
+    {
+        switch (attackDir)
+        {
+            case "Up":
+                _playerAnimator.Play(UP_ATTACK_HASH);
+                break;
+            case "Down":
+                _playerAnimator.Play(DOWN_ATTACK_HASH);
+                break;
+            case "Left":
+                _playerAnimator.Play(LEFT_ATTACK_HASH);
+                break;
+            case "Right":
+                _playerAnimator.Play(RIGHT_ATTACK_HASH);
+                break;
+            default:
+                break;
         }
     }
 
