@@ -2,14 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//[CreateAssetMenu(menuName = "Scriptable Objects/Item Data Object")]
 public class ItemDataSO : ScriptableObject
 {
     #region // Item Info
     public int _itemID;
     public string _itemName;
-    // private SkillItemType itemType;
-    // public SkillItemType _itemType { get { return itemType; } protected set { itemType = value; } }
     public int _itemPrice;
     public Sprite _itemIcon;
     [TextArea]
