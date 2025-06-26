@@ -31,7 +31,10 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     float _dashCoolTime;
 
     readonly int DASH_HASH = Animator.StringToHash("PlayerDash");
-    readonly int Attack_HASH = Animator.StringToHash("PlayerAttack");
+    readonly int DOWN_ATTACK_HASH = Animator.StringToHash("Player_Down_Attack");
+    readonly int UP_ATTACK_HASH = Animator.StringToHash("Player_Up_Attack");
+    readonly int LEFT_ATTACK_HASH = Animator.StringToHash("Player_Left_Attack");
+    readonly int RIGHT_ATTACK_HASH = Animator.StringToHash("Player_Right_Attack");
 
     private void Awake()
     {
@@ -142,7 +145,6 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     {
         if (_playerStatus._isKnockBack) return;
 
-        _playerAnimator.Play(DASH_HASH);
         gameObject.layer = 8;   // Player Layer Change
         transform.position += (Vector3)_dashDirection * _playerStatus._dashSpeed * Time.deltaTime;
         _dashProgressTime -= Time.deltaTime;
@@ -165,18 +167,22 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         if (Input.GetKey(KeyCode.UpArrow))
         {
             _attackDirection += Vector2.up;
+            _playerAnimator.Play(UP_ATTACK_HASH);
         }
         if (Input.GetKey(KeyCode.DownArrow))
         {
             _attackDirection += Vector2.down;
+            _playerAnimator.Play(DOWN_ATTACK_HASH);
         }
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             _attackDirection += Vector2.left;
+            _playerAnimator.Play(LEFT_ATTACK_HASH);
         }
         if (Input.GetKey(KeyCode.RightArrow))
         {
             _attackDirection += Vector2.right;
+            _playerAnimator.Play(RIGHT_ATTACK_HASH);
         }
 
         _attackDirection = _attackDirection.normalized;
