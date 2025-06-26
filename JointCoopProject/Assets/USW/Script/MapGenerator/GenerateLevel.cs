@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
+/*
 public class GenerateLevel : MonoBehaviour
 {
 
@@ -968,3 +969,5 @@ public class GenerateLevel : MonoBehaviour
     }
 
 }
+
+*/
