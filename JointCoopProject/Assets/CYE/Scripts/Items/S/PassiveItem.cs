@@ -27,7 +27,7 @@ public class PassiveSkillItem : MonoBehaviour//, IPickable // SkillItem
     }
     private void PickedUp()
     {
-        _itemData.PickedUp();
+        
     }
     #endregion
 }
