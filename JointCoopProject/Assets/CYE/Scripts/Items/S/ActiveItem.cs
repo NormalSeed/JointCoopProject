@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActiveSkillItem : MonoBehaviour //, IPickable // SkillItem
+public class ActiveSkillItem : MonoBehaviour, IPickable // SkillItem
 {
     public ItemDataSO _itemData;
 
@@ -25,9 +25,21 @@ public class ActiveSkillItem : MonoBehaviour //, IPickable // SkillItem
     {
 
     }
-    private void PickedUp()
+    public void Use(Transform playerPos)
     {
-        _itemData.PickedUp();
+        _itemData.Act(playerPos);
+    }
+    #endregion
+
+    #region // IPickable
+    public void PickedUp()
+    {
+        Destroy(gameObject, 0.1f);
+    }
+    public void Drop(Transform itemPos)
+    {
+        GameObject droppedItem = Instantiate(gameObject, itemPos.position, itemPos.rotation);
+        droppedItem.SetActive(true);
     }
     #endregion
 }

@@ -5,16 +5,16 @@ using UnityEngine;
 public interface IPickable
 {
     // 아이템 주움
-    void PickedUp();
+    public void PickedUp();
     
     // 아이템 떨굼
-    void Drop(Transform itemPos);
+    public void Drop(Transform itemPos);
 }
-public enum ItemType
+public enum SkillItemType
 {
-    active, passive, trait, enhance, expendable
+    Active, Passive
 }
 public enum StatChangeMethod
 { 
-    sum, multiplication
+    sum, mlt
 }
