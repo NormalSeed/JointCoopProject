@@ -16,15 +16,18 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     // 데미지를 받을 수 있고 줄 수 있음
     // curHP가 0이 되면 사망 처리
     // TODO: 사망시 랜덤 확률로 재화 또는 아이템 드롭
+    protected int _monsterID;
     private float _activeDelay;
     public bool _isActivated;
     public MonsterMovement _movement;
     public MonsterModel _model;
+    public Dictionary<int, MonsterData> _dataDic = new();
     public MonsterView _view;
     public StateMachine _stateMachine;
     public GameObject _player;
     public bool _isAttack1;
     public bool _isAttack2;
+    public bool _isAttack3;
     public bool _isDamaged;
     public bool _isDead;
     private Coroutine _coOffDamage;
@@ -45,6 +48,8 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _view = GetComponent<MonsterView>();
         _player = GameObject.Find("Player");
 
+        LoadCSV("MonsterStats");
+
         StateMachineInit();
     }
 
@@ -61,14 +66,45 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _stateMachine._curState = _stateMachine._stateDic[EState.Idle];
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         _activeDelay = 1f;
         _isActivated = false;
         _isAttack1 = false;
         _isAttack2 = false;
+        _isAttack3 = false;
         _isDamaged = false;
         _isDead = false;
+    }
+
+    private void LoadCSV(string path)
+    {
+        TextAsset csvFile = Resources.Load<TextAsset>(path);
+        string[] lines = csvFile.text.Split('\n');
+
+        for (int i = 1; i < lines.Length; i++)
+        {
+            if (string.IsNullOrWhiteSpace(lines[i])) continue;
+
+            string[] values = lines[i].Split(',');
+
+            MonsterData monster = new MonsterData
+            {
+                _ID = int.Parse(values[0]),
+                _name = values[1],
+                _maxHP = int.Parse(values[2]),
+                _bodyDamage = int.Parse(values[3]),
+                _attack1Damage = int.Parse(values[4]),
+                _attack2Damage = int.Parse(values[5]),
+                _attack3Damage = int.Parse(values[6]),
+                _attack1Range = float.Parse(values[7]),
+                _attack2Range = float.Parse(values[8]),
+                _attack3Range = float.Parse(values[9]),
+                _moveSpd = float.Parse(values[10])
+            };
+
+            _dataDic.Add(monster._ID, monster);
+        }
     }
 
     protected virtual void Update()

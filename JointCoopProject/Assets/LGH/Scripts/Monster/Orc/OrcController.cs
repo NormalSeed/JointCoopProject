@@ -13,12 +13,13 @@ public class OrcController : MonsterBase
     protected override void Init()
     {
         base.Init();
+        _monsterID = 10101;
         // csv 파일로 데이터를 받아오는 기능 구현 시도
-        _model._maxHP = 30;
-        _model._curHP.Value = _model._maxHP;
-        _model._moveSpd = 2f;
-        _model._attack1Damage = 1;
-        _model._attackRange = 1f;
+        //_model._maxHP = 30;
+        //_model._moveSpd = 2f;
+        //_model._attack1Damage = 1;
+        //_model._attack1Range = 1f;
+
     }
 
     protected override void StateMachineInit()
@@ -27,20 +28,31 @@ public class OrcController : MonsterBase
         _stateMachine._stateDic.Add(EState.Attack1, new Orc_Attack1(this));
     }
 
+    protected override void Start()
+    {
+        base.Start();
+        
+        if (_dataDic.TryGetValue(_monsterID, out MonsterData data))
+        {
+            _model.ApplyData(data);
+        }
+        _model._curHP.Value = _model._maxHP;
+    }
+
     protected override void Update()
     {
         base.Update();
-        if (Vector2.Distance(transform.position, _player.transform.position) <= _model._attackRange && !_isDamaged)
+        if (Vector2.Distance(transform.position, _player.transform.position) <= _model._attack1Range && !_isDamaged)
         {
             _movement._isTrace = false;
             _isAttack1 = true;
         }
 
-        // TakeDamage 테스트
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            TakeDamage(10, transform.position);
-        }
+        //// TakeDamage 테스트
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    TakeDamage(10, transform.position);
+        //}
     }
 
     public void Attack1()
