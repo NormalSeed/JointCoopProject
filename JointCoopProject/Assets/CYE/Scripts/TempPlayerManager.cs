@@ -5,7 +5,5 @@ using UnityEngine;
 public class TempPlayerManager : TempSingleton<TempPlayerManager>
 {
     private PlayerStatus playerStatus = new();
-    public PlayerStatus _playerStatus => playerStatus;
-
-    
+    public PlayerStatus _playerStatus => playerStatus;    
 }

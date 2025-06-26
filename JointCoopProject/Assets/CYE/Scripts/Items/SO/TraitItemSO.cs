@@ -14,12 +14,12 @@ public class TraitItemSO : ItemDataSO
     // 아이템 등급
     public int _grade;
 
-    public override void PickedUp()
-    {
+    // public override void PickedUp()
+    // {
         
-    }
-    public override void Act(Transform currentPosition)
-    {
-        _skillData.UseSkill(currentPosition);
-    }
+    // }
+    // public override void Act(Transform currentPosition)
+    // {
+    //     _skillData.UseSkill(currentPosition);
+    // }
 }

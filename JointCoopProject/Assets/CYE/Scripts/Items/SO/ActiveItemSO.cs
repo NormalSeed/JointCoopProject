@@ -16,15 +16,8 @@ public class ActiveItemSO : ItemDataSO
     private float _itemTimer;
     public float _itemCooldown;
 
-    public override void PickedUp()
-    {
-        // 예상되는 문제 -> 사용자가 Active Item을 번갈아 착용할 경우 아이템 및 스킬 쿨타임이 초기화됨
-        _canUse = true;
-        _itemTimer = 0f;
-        _skillTimer = 0f;
-    }
-    public override void Act(Transform currentPosition)
-    {
-        _skillData.UseSkill(currentPosition);
-    }
+    // public override void Act(Transform currentPosition)
+    // {
+    //     _skillData.UseSkill(currentPosition);
+    // }
 }

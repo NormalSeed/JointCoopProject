@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//[CreateAssetMenu(menuName = "Scriptable Objects/Item Data Object")]
 public class ItemDataSO : ScriptableObject
 {
     #region // Item Info
-    public int _itemID;
+    [SerializeField] private int _itemID;
+    [SerializeField] private GameObject _itemPrefab; // 재귀적 참조가.. 발생할수도?
+    
+    [Space(10f)]
     public string _itemName;
-    // private SkillItemType itemType;
-    // public SkillItemType _itemType { get { return itemType; } protected set { itemType = value; } }
     public int _itemPrice;
     public Sprite _itemIcon;
-    [TextArea]
+    [Multiline(3)]
     public string _itemDesc;
     #endregion
 
@@ -23,6 +23,7 @@ public class ItemDataSO : ScriptableObject
     public virtual void Dropped(Transform currentPosition)
     {
         // 버려짐
+        Instantiate(_itemPrefab, currentPosition.position, Quaternion.identity);
     }
     public virtual void Act(Transform currentPosition)
     {
