@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class TempPlayerManager : TempSingleton<TempPlayerManager>
 {
-    private PlayerStatus playerStatus = new();
-    public PlayerStatus _playerStatus => playerStatus;    
+    // private PlayerStatus status = new();
+    // public PlayerStatus _status => status;    
+    public PlayerStatus _status;
+    
+    private Inventory inventory = new();
+    public Inventory _inventory => inventory;
 }

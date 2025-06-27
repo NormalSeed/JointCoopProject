@@ -34,6 +34,7 @@ public class ActiveSkillItem : MonoBehaviour, IPickable // SkillItem
     #region // IPickable
     public void PickedUp()
     {
+        // TempManager._InventoryManager._inventory.GetActiveItem()
         Destroy(gameObject, 0.1f);
     }
     public void Drop(Transform itemPos)
