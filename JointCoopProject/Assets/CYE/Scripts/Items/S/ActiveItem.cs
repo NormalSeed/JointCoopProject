@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActiveSkillItem : MonoBehaviour, IPickable // SkillItem
+/// <summary>
+/// 사용자가 임의로 사용이 가능하며, 사용시 효과(스킬)가 발동하는 아이템.
+/// </summary>
+public class ActiveItem : MonoBehaviour, IPickable
 {
     public ItemDataSO _itemData;
 
@@ -20,6 +23,17 @@ public class ActiveSkillItem : MonoBehaviour, IPickable // SkillItem
     }
     #endregion
 
+    #region // IPickable
+    public void PickedUp()
+    {
+
+    }
+    public void Drop(Transform itemPos)
+    {
+
+    }
+    #endregion
+    
     #region // funciton
     private void Init()
     {
@@ -28,19 +42,6 @@ public class ActiveSkillItem : MonoBehaviour, IPickable // SkillItem
     public void Use(Transform playerPos)
     {
         _itemData.Act(playerPos);
-    }
-    #endregion
-
-    #region // IPickable
-    public void PickedUp()
-    {
-        // TempManager._InventoryManager._inventory.GetActiveItem()
-        Destroy(gameObject, 0.1f);
-    }
-    public void Drop(Transform itemPos)
-    {
-        GameObject droppedItem = Instantiate(gameObject, itemPos.position, itemPos.rotation);
-        droppedItem.SetActive(true);
     }
     #endregion
 }

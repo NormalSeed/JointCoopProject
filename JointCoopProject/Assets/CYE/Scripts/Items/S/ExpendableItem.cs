@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExpendableItem : MonoBehaviour
+/// <summary>
+/// 소모성 재화 아이템.
+/// </summary>
+public class ExpendableItem : MonoBehaviour, IPickable
 {
     public ItemDataSO _itemData;
 
@@ -20,14 +23,21 @@ public class ExpendableItem : MonoBehaviour
     }
     #endregion
 
+    #region // IPickable
+    public void PickedUp()
+    {
+
+    }
+    public void Drop(Transform itemPos)
+    {
+
+    }
+    #endregion
+
     #region // funciton
     private void Init()
     {
 
-    }
-    private void PickedUp()
-    {
-        
     }
     #endregion
 }
