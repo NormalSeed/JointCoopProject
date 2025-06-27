@@ -202,7 +202,8 @@ public class PlayerMovement : MonoBehaviour, IDamagable
             if (_attackDirection != Vector2.zero && _wieldTimer <= 0f)
             {
                 GameObject sword = Instantiate(_swordPrefab, transform.position, Quaternion.identity);
-                sword.GetComponent<PlayerSwordControllerTest>().Init(transform, _attackDirection, _playerStatus._attackSpeed);
+                // 검의 데이터 초기화
+                sword.GetComponent<PlayerSwordControllerTest>().Init(transform, _attackDirection, _playerStatus._attackSpeed, _playerStatus._attackDamage);
                 
                 // Attack Animation
                 AttackDirection(_selectAttackDir);

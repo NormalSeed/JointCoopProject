@@ -9,6 +9,10 @@ public class PlayerStatus : MonoBehaviour
     [SerializeField] int playerHp = 3;
     public int _playerHp { get { return playerHp; } set { playerHp = value; } }
 
+    // Player Attack Damage
+    [SerializeField] int attackDamage = 1;
+    public int _attackDamage { get { return attackDamage; } set { attackDamage = value; } }
+
     // Player Move Speed
     [SerializeField][Range(0, 10)] float moveSpeed;
     public float _moveSpeed { get { return moveSpeed; } set { moveSpeed = value; } }
