@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Nothing_Buff : IBuff
+public class AttackSpeed_Buff : IBuff
 {
     public string _buffName => throw new System.NotImplementedException();
 

@@ -168,20 +168,24 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         if (Input.GetKey(KeyCode.UpArrow))
         {
             _attackDirection += Vector2.up;
+            _playerAnimator.speed = _playerStatus._attackSpeed;
             _selectAttackDir = "Up";
         }
         if (Input.GetKey(KeyCode.DownArrow))
         {
+            _playerAnimator.speed = _playerStatus._attackSpeed;
             _attackDirection += Vector2.down;
             _selectAttackDir = "Down";
         }
         if (Input.GetKey(KeyCode.LeftArrow))
         {
+            _playerAnimator.speed = _playerStatus._attackSpeed;
             _attackDirection += Vector2.left;
             _selectAttackDir = "Left";
         }
         if (Input.GetKey(KeyCode.RightArrow))
         {
+            _playerAnimator.speed = _playerStatus._attackSpeed;
             _attackDirection += Vector2.right;
             _selectAttackDir = "Right";
         }
@@ -199,9 +203,11 @@ public class PlayerMovement : MonoBehaviour, IDamagable
             {
                 GameObject sword = Instantiate(_swordPrefab, transform.position, Quaternion.identity);
                 sword.GetComponent<PlayerSwordControllerTest>().Init(transform, _attackDirection, _playerStatus._attackSpeed);
-                // 공격속도에 비례하여 근접 공격 쿨타임 계산
-                _playerAnimator.speed = _playerStatus._attackSpeed;
+                
+                // Attack Animation
                 AttackDirection(_selectAttackDir);
+
+                // 공격속도에 비례하여 근접 공격 쿨타임 계산
                 _wieldTimer = _swordAttackDelay / _playerStatus._attackSpeed;   
             }
             _wieldTimer -= Time.deltaTime;
