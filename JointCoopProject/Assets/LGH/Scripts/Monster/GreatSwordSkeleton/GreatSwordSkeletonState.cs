@@ -37,9 +37,7 @@ public class GreatSwordSkeleton_Attack1 : GreatSwordSkeletonState
     public override void Enter()
     {
         // Attack1 애니메이션 재생
-        int random = Random.Range(0, 2);
-        
-        
+        _controller._view.PlayAnimation(_controller.ATTACK1_1_HASH);
         // Attack1 기능 실행
         _controller.Attack1();
     }
