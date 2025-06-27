@@ -8,7 +8,6 @@ public class PlayerSwordControllerTest : MonoBehaviour
 {
     Transform _playerPos;
 
-    int _swordDamage = 1;
     Vector2 _wieldDirection;        // 휘두르는 방향 벡터
     float _wieldAngle = 90f;       // 무기의 휘두름 반경
     float _rotationSpeed = 420f;    // 회전 속도 (값이 높을 수록 빨리 회전한다)
@@ -16,18 +15,38 @@ public class PlayerSwordControllerTest : MonoBehaviour
     float _currentAngle = 0;       // 현재 각도
     float _startAngle = 0;         // 시작 각도
     float _wieldSpeed;              // 플레이어의 공격 속도
+    int _attackDamage;
 
+    
     private void Update()
     {
-        if (_playerPos == null) // 플레이어가 무기를 소지하지 않으면 디스트로이
-        {
-            Destroy(gameObject);
-            return;
-        }
+        AttackAngle();
+    }
 
+    // 데이터 초기화
+    public void Init(Transform player, Vector2 direction, float attackSpeed, int attackDamage)
+    {
+        _playerPos = player;
+        _wieldDirection = direction.normalized;
+        _wieldSpeed = attackSpeed;
+        _currentAngle = 0f;
+        _attackDamage = attackDamage;
+
+        _startAngle = Mathf.Atan2(_wieldDirection.y, _wieldDirection.x) * Mathf.Rad2Deg;
+
+        float radian = _startAngle * Mathf.Deg2Rad;
+        Vector3 firstOffset = new Vector3(Mathf.Cos(radian), Mathf.Sin(radian), 0f) * _wieldRadius;
+        transform.position = _playerPos.position + firstOffset;
+
+        transform.rotation = Quaternion.Euler(0, 0, _currentAngle + _startAngle + 90f);
+    }
+
+    // 검의 휘두름 각도 세팅
+    private void AttackAngle()
+    {
         float angle = _rotationSpeed * _wieldSpeed * Time.deltaTime;    // 회전스피드가 플레이어의 공격스피드에 영향을 받아 빨리 휘두름
         _currentAngle -= angle;
-   
+
         // 현재 각도로 위치를 플레이어의 중심을 기준으로 재계산
         float radian = (_currentAngle + _startAngle) * Mathf.Deg2Rad;
         Vector3 posOffset = new Vector3(Mathf.Cos(radian), Mathf.Sin(radian), 0f) * _wieldRadius;   // 현재의 각도와 시작각도를 더한 값에 회전 반경을 곱해서 위치 옵셋 세팅
@@ -45,29 +64,14 @@ public class PlayerSwordControllerTest : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-            Debug.Log("적을 공격했습니다.");
+            Debug.Log($"적을 {_attackDamage}로 공격했습니다.");
             IDamagable damagable = collision.GetComponent<IDamagable>();
             if (damagable != null)
             {
-                damagable.TakeDamage(_swordDamage, transform.position);
+                damagable.TakeDamage(_attackDamage, transform.position);
             }
         }
     }
 
-    public void Init(Transform player, Vector2 direction, float attackSpeed)
-    {
-        _playerPos = player;
-        _wieldDirection = direction.normalized;
-        _wieldSpeed = attackSpeed;
-        _currentAngle = 0f;
-
-        _startAngle = Mathf.Atan2(_wieldDirection.y, _wieldDirection.x) * Mathf.Rad2Deg;
-
-        float radian = _startAngle * Mathf.Deg2Rad;
-        Vector3 firstOffset = new Vector3(Mathf.Cos(radian), Mathf.Sin(radian), 0f) * _wieldRadius;
-        transform.position = _playerPos.position + firstOffset;
-
-        transform.rotation = Quaternion.Euler(0, 0, _currentAngle + _startAngle + 90f);
-
-    }
+    
 }

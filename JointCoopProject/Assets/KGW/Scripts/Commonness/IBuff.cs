@@ -10,7 +10,7 @@ public interface IBuff
     string _buffDescription { get; }
     // 버퍼의 카테고리 (축복, 저주, 꽝)
     BuffCategory _buffCategory { get; }
-    // 버퍼의 종류 (공격력업, 스피드업, 공격속도업, 꽝(운세)
+    // 버퍼의 종류 (공격력, 스피드, 공격속도, 오늘의 운세)
     BuffType _buffType { get; }
     // 버퍼의 레벨
     int _buffLevel { get; }
@@ -19,12 +19,17 @@ public interface IBuff
     public void BuffReceive(PlayerStatus playerStatus);
 }
 
+// 버퍼의 종류
 public enum BuffCategory
-{ //  축복  , 저주, 꽝 
+{ 
+  //  축복  , 저주,   꽝 
     Blessing, Curs, Nothing
 }
 
+// 버퍼의 타입
 public enum BuffType
-{ // 공격력 상승 ,이동속도 상승, 아이템 데미지 증가, 꽝
-    AttackPowerUp, MoveSpeedUp, AttackSpeedUp, Nothing
+{ 
+  //   공격력  , 이동속도 ,  공격속도  , 오늘의 운세, 꽝
+    AttackPower, MoveSpeed, AttackSpeed, Fortune, Nothing
+
 }

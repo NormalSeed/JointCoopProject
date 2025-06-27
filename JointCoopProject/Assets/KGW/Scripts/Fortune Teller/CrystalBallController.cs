@@ -16,14 +16,14 @@ public class CrystalBallController : MonoBehaviour
             if (_isContact)
             {
                 // TODO : 사용했다는 문구 출력?
-                Debug.Log("이미 플레이어가 수정구슬과 접촉했습니다.");
+                Debug.Log("이미 버프를 받았습니다.");
                 return;
             }
 
-            Debug.Log("플레이어가 수정구슬과 접촉했습니다.");
-
-            // 랜덤 버퍼 생성
-            // 생성된 버퍼를 플레이어에 적용
+            // 랜덤 버퍼 룰렛 생성
+            IBuff randomBuff = BuffCreateFactory.BuffRoulette();
+            // 버퍼 적용
+            BuffManager.Instance.ApplyBuff(randomBuff, _playerStatus);
             // 버프를 받고 수정구슬은 사라지지 않고 남아있지만 다시 접촉을해도 상호작용 없음
             _isContact = true;
 
