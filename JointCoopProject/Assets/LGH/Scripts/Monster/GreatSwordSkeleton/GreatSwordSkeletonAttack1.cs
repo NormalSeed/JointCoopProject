@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OrcAttack1 : MonoBehaviour
+public class GreatSwordSkeletonAttack1 : MonoBehaviour
 {
     private MonsterModel _model;
 
