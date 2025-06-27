@@ -16,10 +16,6 @@ public class ItemDataSO : ScriptableObject
     public string _itemDesc;
     #endregion
 
-    public virtual void PickedUp(GameObject player)
-    {
-        // 주워짐
-    }
     public virtual void Act(Transform currentPosition)
     {
         // 동작함

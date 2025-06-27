@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NonAbilityItem : MonoBehaviour//, IPickable // SkillItem
+/// <summary>
+/// 아이템 획득시 사용자의 수치를 상승 또는 하락시키는 아이템.
+/// </summary>
+public class EnhanceItem : MonoBehaviour, IPickable
 {
     public ItemDataSO _itemData;
 
@@ -20,14 +23,21 @@ public class NonAbilityItem : MonoBehaviour//, IPickable // SkillItem
     }
     #endregion
 
+    #region // IPickable
+    public void PickedUp()
+    {
+
+    }
+    public void Drop(Transform itemPos)
+    {
+
+    }
+    #endregion
+
     #region // funciton
     private void Init()
     {
 
-    }
-    private void PickedUp()
-    {
-        
     }
     #endregion
 }

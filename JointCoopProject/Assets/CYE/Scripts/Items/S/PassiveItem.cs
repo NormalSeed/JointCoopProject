@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PassiveSkillItem : MonoBehaviour//, IPickable // SkillItem
+/// <summary>
+/// 사용자가 임의로 사용이 불가능한, 효과(스킬)가 자동으로 발생하는 아이템.
+/// </summary>
+public class PassiveItem : MonoBehaviour, IPickable
 {
     public ItemDataSO _itemData;
 
@@ -20,14 +23,21 @@ public class PassiveSkillItem : MonoBehaviour//, IPickable // SkillItem
     }
     #endregion
 
+    #region // IPickable
+    public void PickedUp()
+    {
+
+    }
+    public void Drop(Transform itemPos)
+    {
+
+    }
+    #endregion
+    
     #region // funciton
     private void Init()
     {
 
-    }
-    private void PickedUp()
-    {
-        
     }
     #endregion
 }
