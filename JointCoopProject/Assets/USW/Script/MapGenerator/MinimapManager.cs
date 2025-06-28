@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,263 +6,292 @@ using UnityEngine.UI;
 
 public class MinimapManager : MonoBehaviour
 {
-    [Header("Minimap Settings")]
-    public Canvas minimapCanvas;
-    public RectTransform minimapContainer;
-    public GameObject minimapRoomPrefab;
-    public Vector2 roomIconSize = new Vector2(20f, 20f);
-    public float roomSpacing = 25f;
+    [Header("기본 설정")]
+    public Canvas minimapCanvas;                    // 미니맵 캔버스
+    public RectTransform container;                 // 미니맵 컨테이너
+    public GameObject roomPrefab;                   // 방 아이콘 프리팹
+    public Vector2 iconSize = new Vector2(20f, 20f);   // 아이콘 크기
+    public float spacing = 25f;                     // 방 간격
     
-    [Header("Custom Shadow Background")]
-    public GameObject customShadowPrefab; 
-    public RectTransform shadowBackground; 
+    [Header("배경 설정")]
+    public GameObject backgroundPrefab;             // 배경 프리팹
+    public RectTransform bgTransform;              // 배경 Transform
     
-    [Header("Room Icons")]
-    public Sprite startRoomIcon;
-    public Sprite defaultRoomIcon;
-    public Sprite bossRoomIcon;
-    public Sprite shopRoomIcon;
-    public Sprite itemRoomIcon;
-    public Sprite secretRoomIcon;
-    public Sprite currentRoomIcon;
-    public Sprite unexploredRoomIcon;
+    [Header("아이콘들")]
+    public Sprite startIcon;                       // 시작방 아이콘
+    public Sprite normalIcon;                      // 일반방 아이콘
+    public Sprite bossIcon;                        // 보스방 아이콘
+    public Sprite shopIcon;                        // 상점방 아이콘
+    public Sprite itemIcon;                        // 아이템방 아이콘
+    public Sprite secretIcon;                      // 비밀방 아이콘
+    public Sprite currentIcon;                     // 현재방 아이콘
+    public Sprite hiddenIcon;                      // 숨겨진방 아이콘
     
-    [Header("Colors")]
-    public Color exploredColor = Color.white;
-    public Color unexploredColor = Color.gray;
-    public Color currentRoomColor = Color.yellow;
+    [Header("색상 설정")]
+    public Color visitedColor = Color.white;       // 방문한 방 색상
+    public Color unvisitedColor = Color.gray;      // 방문하지 않은 방 색상
+    public Color playerColor = Color.yellow;       // 플레이어 위치 색상
     
-    private Dictionary<Vector2Int, MinimapRoom> minimapRooms = new Dictionary<Vector2Int, MinimapRoom>();
-    private MapGenerator mapGenerator; 
-    private Vector2Int currentPlayerRoom;
+    // 내부 변수들
+    private Dictionary<Vector2Int, MinimapRoom> rooms = new Dictionary<Vector2Int, MinimapRoom>();
+    private MapGenerator mapGen;                   // 맵 생성기 참조
+    private Vector2Int playerRoom;                 // 플레이어 현재 방
+    
+    // 디버그/테스트용
+    public bool showAllRooms = false;              // 모든 방 표시 여부
+    private bool initialized = false;              // 초기화 완료 여부
     
     void Start()
     {
-        mapGenerator = FindObjectOfType<MapGenerator>();
-        if (mapGenerator == null)
+        mapGen = FindObjectOfType<MapGenerator>();
+        if (mapGen == null)
         {
+            Debug.LogError("MapGenerator를 찾을 수 없음!");
             return;
         }
         
-        // 커스텀 Shadow 배경 설정
-        SetupCustomShadowBackground();
-        
-        // 맵 생성 완료 후 미니맵 생성
-        StartCoroutine(WaitForMapGeneration());
+        SetupBackground();
+        StartCoroutine(WaitAndGenerate());
     }
     
-    void SetupCustomShadowBackground()
+    void Update()
     {
-        // 기존 배경 이미지 제거
-        Image existingBg = minimapContainer.GetComponent<Image>();
-        if (existingBg != null)
+        // 디버그 컨트롤
+        if (Input.GetKeyDown(KeyCode.M))
         {
-            existingBg.color = Color.clear; // 투명하게 만들기
+            showAllRooms = !showAllRooms;
+            Debug.Log("모든 방 표시: " + showAllRooms);
+            if (initialized) RefreshAllRooms();
+        }
+    }
+    
+    void SetupBackground()
+    {
+        // 기본 배경 제거
+        Image bg = container.GetComponent<Image>();
+        if (bg != null)
+        {
+            bg.color = Color.clear;
         }
         
-        // 커스텀 Shadow 배경 생성
-        if (customShadowPrefab != null)
+        // 커스텀 배경이 있으면 추가
+        if (backgroundPrefab != null)
         {
-            GameObject shadowBgObj = Instantiate(customShadowPrefab, minimapContainer);
-            shadowBackground = shadowBgObj.GetComponent<RectTransform>();
+            GameObject bgObj = Instantiate(backgroundPrefab, container);
+            bgTransform = bgObj.GetComponent<RectTransform>();
             
-            if (shadowBackground == null)
+            if (bgTransform == null)
             {
-                shadowBackground = shadowBgObj.AddComponent<RectTransform>();
+                bgTransform = bgObj.AddComponent<RectTransform>();
             }
             
-            // 강제로 앵커 피벗 설정.
-            shadowBackground.anchorMin = Vector2.zero;        // (0, 0)
-            shadowBackground.anchorMax = Vector2.one;         // (1, 1)
-            shadowBackground.offsetMin = Vector2.zero;        // Left=0, Bottom=0
-            shadowBackground.offsetMax = Vector2.zero;        // Right=0, Top=0
-            shadowBackground.anchoredPosition = Vector2.zero; // 중앙 정렬
+            // 컨테이너 전체에 맞게 늘리기
+            bgTransform.anchorMin = Vector2.zero;
+            bgTransform.anchorMax = Vector2.one;
+            bgTransform.offsetMin = Vector2.zero;
+            bgTransform.offsetMax = Vector2.zero;
+            bgTransform.anchoredPosition = Vector2.zero;
             
-            // Shadow를 맨 뒤에 배치 (방 아이콘들 뒤로)
-            shadowBackground.SetAsFirstSibling();
-            
-            // Shadow 이름 설정
-            shadowBgObj.name = "CustomShadowBackground";
-            
+            // 배경을 맨 뒤로 보내기
+            bgTransform.SetAsFirstSibling();
+            bgObj.name = "MinimapBackground";
         }
     }
     
-    IEnumerator WaitForMapGeneration()
+    IEnumerator WaitAndGenerate()
     {
-        // 맵 생성이 완료될 때까지 대기
         yield return new WaitForSeconds(0.1f);
-        GenerateMinimap();
+        GenerateMap();
     }
     
-    public void GenerateMinimap()
+    public void GenerateMap()
     {
-        ClearMinimap();
+        ClearMap();
         
-        if (mapGenerator.generatedRooms == null || mapGenerator.generatedRooms.Count == 0)
+        if (mapGen.generatedRooms == null || mapGen.generatedRooms.Count == 0)
         {
+            Debug.LogWarning("미니맵에 표시할 방이 없음");
             return;
         }
         
-        // 각 방에 대해 미니맵 아이콘 생성
-        foreach (var roomPair in mapGenerator.generatedRooms)
+        // 방 아이콘들 생성
+        foreach (var roomPair in mapGen.generatedRooms)
         {
-            CreateMinimapRoom(roomPair.Key, roomPair.Value);
+            CreateRoomIcon(roomPair.Key, roomPair.Value);
         }
         
-        // 시작 방을 현재 방으로 설정
-        SetCurrentRoom(mapGenerator.startPosition);
+        // 시작방을 현재 방으로 설정
+        SetCurrentRoom(mapGen.startPosition);
+        initialized = true;
+        
+        Debug.Log($"미니맵 생성 완료: {rooms.Count}개 방");
     }
     
-    void CreateMinimapRoom(Vector2Int gridPos, MapGenerator.RoomData roomData)
+    void CreateRoomIcon(Vector2Int pos, MapGenerator.RoomData roomData)
     {
-        // 미니맵 룸 오브젝트 생성
-        GameObject roomObj = Instantiate(minimapRoomPrefab, minimapContainer);
-        MinimapRoom minimapRoom = roomObj.GetComponent<MinimapRoom>();
+        GameObject roomObj = Instantiate(roomPrefab, container);
+        MinimapRoom room = roomObj.GetComponent<MinimapRoom>();
         
-        if (minimapRoom == null)
+        if (room == null)
         {
-            minimapRoom = roomObj.AddComponent<MinimapRoom>();
+            room = roomObj.AddComponent<MinimapRoom>();
         }
         
-        // 위치 설정 (그리드 좌표를 UI 좌표로 변환)
-        Vector2 uiPosition = GridToUIPosition(gridPos);
-        roomObj.GetComponent<RectTransform>().anchoredPosition = uiPosition;
-        roomObj.GetComponent<RectTransform>().sizeDelta = roomIconSize;
+        // 아이콘 위치 설정
+        Vector2 uiPos = GetUIPosition(pos);
+        RectTransform rect = roomObj.GetComponent<RectTransform>();
+        rect.anchoredPosition = uiPos;
+        rect.sizeDelta = iconSize;
         
-        // 미니맵 룸 초기화
-        minimapRoom.Initialize(gridPos, roomData, GetRoomIcon(roomData.roomType));
-        minimapRooms.Add(gridPos, minimapRoom);
+        // 방 초기화
+        room.Setup(pos, roomData, GetIcon(roomData.roomType));
+        rooms.Add(pos, room);
         
-        // Shadow 배경 위에 방 아이콘이 오도록 순서 조정
+        // 방 아이콘을 배경 위에 표시
         roomObj.transform.SetAsLastSibling();
         
-        // 시작 방이 아닌 경우 탐험되지 않은 상태로 설정
-        if (roomData.roomType != MapGenerator.RoomType.Start)
+        // 시작방이 아니면 처음엔 숨기기
+        if (roomData.roomType != MapGenerator.RoomType.Start && !showAllRooms)
         {
-            minimapRoom.SetExplored(false);
+            room.SetVisible(false);
         }
     }
     
-    Vector2 GridToUIPosition(Vector2Int gridPos)
+    Vector2 GetUIPosition(Vector2Int gridPos)
     {
-        // 중앙을 기준으로 UI 위치 계산
-        Vector2Int centerGrid = mapGenerator.startPosition;
+        Vector2Int center = mapGen.startPosition;
         Vector2 offset = new Vector2(
-            (gridPos.x - centerGrid.x) * roomSpacing,
-            (gridPos.y - centerGrid.y) * roomSpacing
+            (gridPos.x - center.x) * spacing,
+            (gridPos.y - center.y) * spacing
         );
         return offset;
     }
     
-    Sprite GetRoomIcon(MapGenerator.RoomType roomType)
+    Sprite GetIcon(MapGenerator.RoomType type)
     {
-        switch (roomType)
+        switch (type)
         {
             case MapGenerator.RoomType.Start:
-                return startRoomIcon ? startRoomIcon : defaultRoomIcon;
+                return startIcon ? startIcon : normalIcon;
             case MapGenerator.RoomType.Boss:
-                return bossRoomIcon;
+                return bossIcon;
             case MapGenerator.RoomType.Shop:
-                return shopRoomIcon;
+                return shopIcon;
             case MapGenerator.RoomType.Item:
-                return itemRoomIcon;
+                return itemIcon;
             case MapGenerator.RoomType.Secret:
-                return secretRoomIcon;
+                return secretIcon;
             default:
-                return defaultRoomIcon;
+                return normalIcon;
         }
     }
     
-    
-    public void SetCurrentRoom(Vector2Int roomPosition)
+    public void SetCurrentRoom(Vector2Int pos)
     {
         // 이전 현재 방 표시 제거
-        if (minimapRooms.ContainsKey(currentPlayerRoom))
+        if (rooms.ContainsKey(playerRoom))
         {
-            minimapRooms[currentPlayerRoom].SetAsCurrent(false);
+            rooms[playerRoom].SetCurrent(false);
         }
     
         // 새로운 현재 방 설정
-        currentPlayerRoom = roomPosition;
-        if (minimapRooms.ContainsKey(roomPosition))
+        playerRoom = pos;
+        if (rooms.ContainsKey(pos))
         {
-            minimapRooms[roomPosition].SetAsCurrent(true);
-            minimapRooms[roomPosition].SetExplored(true);
+            rooms[pos].SetCurrent(true);
+            rooms[pos].SetVisited(true);
         
-            // 인접한 방들도 표시 
-            RevealAdjacentRooms(roomPosition);
+            // 인접한 방들도 표시
+            ShowAdjacentRooms(pos);
         
             // 미니맵을 현재 방 중심으로 이동
-            CenterMinimapOnCurrentRoom(roomPosition);
+            RecenterMinimap(pos);
         }
     }
-    void CenterMinimapOnCurrentRoom(Vector2Int roomPosition)
+    
+    void RecenterMinimap(Vector2Int centerRoom)
     {
-        // 전체 미니맵 컨테이너를 이동시키는 방식 대신
-        // 개별 방들의 상대 위치를 다시 계산
+        Vector2Int newCenter = centerRoom;
     
-        Vector2Int centerGrid = roomPosition; // 현재 방을 중심으로 설정
-    
-        // 모든 방 아이콘들의 위치를 현재 방 기준으로 재계산
-        foreach (var roomPair in minimapRooms)
+        // 모든 방 위치 재계산
+        foreach (var roomPair in rooms)
         {
             Vector2Int gridPos = roomPair.Key;
-            RectTransform roomRect = roomPair.Value.GetComponent<RectTransform>();
+            RectTransform rect = roomPair.Value.GetComponent<RectTransform>();
         
-            // 현재 방을 중심으로 상대 위치 계산
-            Vector2 relativePos = new Vector2(
-                (gridPos.x - centerGrid.x) * roomSpacing,
-                (gridPos.y - centerGrid.y) * roomSpacing
+            Vector2 newPos = new Vector2(
+                (gridPos.x - newCenter.x) * spacing,
+                (gridPos.y - newCenter.y) * spacing
             );
         
-            roomRect.anchoredPosition = relativePos;
+            rect.anchoredPosition = newPos;
         }
     
-        // Shadow 배경은 항상 중앙에 고정
-        if (shadowBackground != null)
+        // 배경은 항상 중앙에 고정
+        if (bgTransform != null)
         {
-            shadowBackground.anchoredPosition = Vector2.zero;
+            bgTransform.anchoredPosition = Vector2.zero;
         }
-        
     }
     
-    void RevealAdjacentRooms(Vector2Int centerPos)
+    void ShowAdjacentRooms(Vector2Int center)
     {
-        Vector2Int[] directions = {
+        Vector2Int[] dirs = {
             Vector2Int.up, Vector2Int.down,
             Vector2Int.left, Vector2Int.right
         };
         
-        foreach (Vector2Int dir in directions)
+        for (int i = 0; i < dirs.Length; i++)
         {
-            Vector2Int adjacentPos = centerPos + dir;
-            if (minimapRooms.ContainsKey(adjacentPos))
+            Vector2Int adjacentPos = center + dirs[i];
+            if (rooms.ContainsKey(adjacentPos))
             {
-                minimapRooms[adjacentPos].SetVisible(true);
+                rooms[adjacentPos].SetVisible(true);
             }
         }
     }
     
-    public void ExploreRoom(Vector2Int roomPosition)
+    public void VisitRoom(Vector2Int pos)
     {
-        if (minimapRooms.ContainsKey(roomPosition))
+        if (rooms.ContainsKey(pos))
         {
-            minimapRooms[roomPosition].SetExplored(true);
+            rooms[pos].SetVisited(true);
         }
     }
     
-    public void RevealSecretRoom(Vector2Int roomPosition)
+    public void RevealSecretRoom(Vector2Int pos)
     {
-        if (minimapRooms.ContainsKey(roomPosition))
+        if (rooms.ContainsKey(pos))
         {
-            minimapRooms[roomPosition].SetVisible(true);
-            minimapRooms[roomPosition].SetExplored(true);
+            rooms[pos].SetVisible(true);
+            rooms[pos].SetVisited(true);
+            Debug.Log("비밀방이 " + pos + "에서 발견됨");
         }
     }
     
-    void ClearMinimap()
+    void RefreshAllRooms()
     {
-        foreach (var room in minimapRooms.Values)
+        foreach (var room in rooms.Values)
+        {
+            if (showAllRooms)
+            {
+                room.SetVisible(true);
+            }
+            else
+            {
+                // 보이면 안 되는 방들 숨기기
+                if (room.GetRoomData().roomType != MapGenerator.RoomType.Start && 
+                    !room.IsVisited())
+                {
+                    room.SetVisible(false);
+                }
+            }
+        }
+    }
+    
+    void ClearMap()
+    {
+        foreach (var room in rooms.Values)
         {
             if (room != null && room.gameObject != null)
             {
@@ -271,38 +301,45 @@ public class MinimapManager : MonoBehaviour
                     DestroyImmediate(room.gameObject);
             }
         }
-        minimapRooms.Clear();
+        rooms.Clear();
     }
     
-    [ContextMenu("Setup Custom Shadow Background")]
-    public void SetupShadowBackground()
+    // 테스트용 컨텍스트 메뉴
+    [ContextMenu("배경 설정")]
+    public void DoSetupBackground()
     {
-        SetupCustomShadowBackground();
+        SetupBackground();
     }
     
-    [ContextMenu("Regenerate Minimap")]
-    public void RegenerateMinimap()
+    [ContextMenu("재생성")]
+    public void Regenerate()
     {
-        GenerateMinimap();
+        GenerateMap();
     }
     
-    // 커스텀 Shadow 배경 교체
-    public void ChangeCustomShadowBackground(GameObject newShadowPrefab)
+    // 런타임에서 배경 변경
+    public void ChangeBackground(GameObject newBg)
     {
-        // 기존 Shadow 배경 제거
-        if (shadowBackground != null)
+        if (bgTransform != null)
         {
             if (Application.isPlaying)
-                Destroy(shadowBackground.gameObject);
+                Destroy(bgTransform.gameObject);
             else
-                DestroyImmediate(shadowBackground.gameObject);
+                DestroyImmediate(bgTransform.gameObject);
         }
         
-        // 새로운 Shadow 배경 설정
-        customShadowPrefab = newShadowPrefab;
-        SetupCustomShadowBackground();
+        backgroundPrefab = newBg;
+        SetupBackground();
     }
     
-    // 외부에서 현재 방 정보 가져오기
-    public Vector2Int GetCurrentRoom() => currentPlayerRoom;
+    // 호환성을 위한 기존 코드용 메서드
+    public void GenerateMinimap()
+    {
+        GenerateMap();
+    }
+    
+    // 게터 함수들
+    public Vector2Int GetPlayerRoom() { return playerRoom; }
+    public int GetRoomCount() { return rooms.Count; }
+    public bool IsInitialized() { return initialized; }
 }
