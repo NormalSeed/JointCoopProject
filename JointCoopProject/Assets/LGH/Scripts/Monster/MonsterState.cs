@@ -19,7 +19,7 @@ public class MonsterState : BaseState
 
     public override void Update()
     {
-        if (_controller._isAttack1 && !_controller._isDamaged)
+        if (_controller._isAttack1 && !_controller._isDamaged && _controller._isActivated)
         {
             _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Attack1]);
         }
