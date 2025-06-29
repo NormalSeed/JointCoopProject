@@ -65,9 +65,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.5}
+  m_Offset: {x: 0, y: 0.3}
   serializedVersion: 2
-  m_Radius: 0.4
+  m_Radius: 0.28
 --- !u!114 &5369717808346593708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,7 +160,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: -1501469521, guid: 04676f3b7d59823489397b3ea7cd126b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -191,6 +191,7 @@ MonoBehaviour:
   _player: {fileID: 0}
   _isAttack1: 0
   _isAttack2: 0
+  _isAttack3: 0
   _isDamaged: 0
   _isDead: 0
   _attackCollider: {fileID: 2774666380051216967}
@@ -206,10 +207,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37df4d19e720abf499487816a9779c26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <_moveSpd>k__BackingField: 0
-  <_attack1Damage>k__BackingField: 0
-  <_attackRange>k__BackingField: 0
   <_maxHP>k__BackingField: 0
+  <_name>k__BackingField: 
+  <_bodyDamage>k__BackingField: 0
+  <_attack1Damage>k__BackingField: 0
+  <_attack2Damage>k__BackingField: 0
+  <_attack3Damage>k__BackingField: 0
+  <_attack1Range>k__BackingField: 0
+  <_attack2Range>k__BackingField: 0
+  <_attack3Range>k__BackingField: 0
+  <_moveSpd>k__BackingField: 0
 --- !u!114 &3317090879424697441
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -317,6 +324,6 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.46875}
+  m_Offset: {x: 0, y: 0.3176721}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.29696938

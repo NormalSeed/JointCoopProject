@@ -40,11 +40,11 @@ public class GreatSwordSkeletonController : MonsterBase
 
         if (xDir < 0f)
         {
-            _attackCollider.transform.position = transform.position + new Vector3(-_model._attack1Range, 0);
+            _attackCollider.transform.position = transform.position + new Vector3(-_model._attack1Range / 2, 0);
         }
         else if (xDir > 0f)
         {
-            _attackCollider.transform.position = transform.position + new Vector3(_model._attack1Range, 0);
+            _attackCollider.transform.position = transform.position + new Vector3(_model._attack1Range / 2, 0);
         }
 
         // ¿¸πÊ¿∏∑Œ µµ≥¢∏¶ »÷µŒ∏• »ƒ 1√  ∏ÿ√„
