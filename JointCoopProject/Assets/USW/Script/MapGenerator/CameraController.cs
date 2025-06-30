@@ -5,8 +5,11 @@ public class CameraController : MonoBehaviour
 {
     [Header("Camera Settings")]
     public float transitionSpeed = 2f;
-    public bool constrainToRoom = true;
-    public float roomPadding = 0.5f;
+    //public bool constrainToRoom = true;
+    //public float roomPadding = 0.5f;
+    public Vector2 cameraOffset = new Vector2(1f, 0f);
+    
+    
     
     private Camera cam;
     private MapGenerator mapGenerator;
@@ -34,13 +37,13 @@ public class CameraController : MonoBehaviour
         InstantMoveToRoom(mapGenerator.startPosition);
     }
 
-    void LateUpdate()
-    {
-        if (constrainToRoom)
-        {
-            ConstrainCameraToRoom();
-        }
-    }
+    //void LateUpdate()
+    //{
+    //    if (constrainToRoom)
+    //    {
+    //        ConstrainCameraToRoom();
+    //    }
+    //}
 
     public void SetupForRoom(Vector2Int roomPos)
     {
@@ -105,6 +108,8 @@ public class CameraController : MonoBehaviour
         Vector3 roomCenter = roomData.instantiatedRoom.transform.position;
         roomCenter += new Vector3(mapGenerator.prefabSize.x * 0.5f, mapGenerator.prefabSize.y * 0.5f, 0);
         
+        roomCenter += new Vector3(cameraOffset.x, cameraOffset.y, 0);
+        
         return new Vector3(roomCenter.x, roomCenter.y, transform.position.z);
     }
 
@@ -123,27 +128,31 @@ public class CameraController : MonoBehaviour
         
         currentRoomBounds = new Bounds(roomCenter, roomSize);
     }
-
-    void ConstrainCameraToRoom()
-    {
-        if (currentRoomBounds.size == Vector3.zero) return;
-
-        float cameraHeight = cam.orthographicSize * 2f;
-        float cameraWidth = cameraHeight * cam.aspect;
-        
-        float minX = currentRoomBounds.min.x + cameraWidth * 0.5f + roomPadding;
-        float maxX = currentRoomBounds.max.x - cameraWidth * 0.5f - roomPadding;
-        float minY = currentRoomBounds.min.y + cameraHeight * 0.5f + roomPadding;
-        float maxY = currentRoomBounds.max.y - cameraHeight * 0.5f - roomPadding;
-        
-        if (minX >= maxX) minX = maxX = currentRoomBounds.center.x;
-        if (minY >= maxY) minY = maxY = currentRoomBounds.center.y;
-        
-        Vector3 pos = transform.position;
-        pos.x = Mathf.Clamp(pos.x, minX, maxX);
-        pos.y = Mathf.Clamp(pos.y, minY, maxY);
-        transform.position = pos;
-    }
+    
+    /// <summary>
+    /// 기획이 변경됨에 따라 고정 15x9 으로 확정되었으므로 할필요가없음.
+    /// </summary>
+    /// <returns></returns>
+    //void ConstrainCameraToRoom()
+    //{
+    //    if (currentRoomBounds.size == Vector3.zero) return;
+    //
+    //    float cameraHeight = cam.orthographicSize * 2f;
+    //    float cameraWidth = cameraHeight * cam.aspect;
+    //    
+    //    float minX = currentRoomBounds.min.x + cameraWidth * 0.5f + roomPadding;
+    //    float maxX = currentRoomBounds.max.x - cameraWidth * 0.5f - roomPadding;
+    //    float minY = currentRoomBounds.min.y + cameraHeight * 0.5f + roomPadding;
+    //    float maxY = currentRoomBounds.max.y - cameraHeight * 0.5f - roomPadding;
+    //    
+    //    if (minX >= maxX) minX = maxX = currentRoomBounds.center.x;
+    //    if (minY >= maxY) minY = maxY = currentRoomBounds.center.y;
+    //    
+    //    Vector3 pos = transform.position;
+    //    pos.x = Mathf.Clamp(pos.x, minX, maxX);
+    //    pos.y = Mathf.Clamp(pos.y, minY, maxY);
+    //    transform.position = pos;
+    //}
 
     public bool IsTransitioning() => isTransitioning;
     public Vector2Int GetCurrentRoom() => currentRoom;
