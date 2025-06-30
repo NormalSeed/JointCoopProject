@@ -12,13 +12,6 @@ public class SkillItem : MonoBehaviour, IPickable
     {
         Init();
     }
-    // void OnTriggerEnter2D(Collider2D collision)
-    // {
-    //     if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-    //     {
-    //         PickUp(collision.transform);
-    //     }
-    // }
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
@@ -30,7 +23,7 @@ public class SkillItem : MonoBehaviour, IPickable
 
     private void Init()
     {
-
+        gameObject.GetComponent<SpriteRenderer>().sprite = _itemData._itemIcon;
     }
     
     public void Act(Transform PlayerPos)
@@ -49,6 +42,7 @@ public class SkillItem : MonoBehaviour, IPickable
             case SkillItemType.PassiveAttack:
             case SkillItemType.PassiveAuto:
                 TempManager._player._inventory.GetPassiveItem(this);
+                PlayerPos.gameObject.GetComponentInParent<PlayerSkillManager>().AddSkill(_itemData._itemSkill);
                 break;
             default:
                 Debug.Log("Skill Item type error.");
