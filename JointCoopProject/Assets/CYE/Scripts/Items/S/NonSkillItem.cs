@@ -23,7 +23,7 @@ public class NonSkillItem : MonoBehaviour, IPickable
 
     private void Init()
     {
-
+        gameObject.GetComponent<SpriteRenderer>().sprite = _itemData._itemIcon;
     }
     
     public void Act()
