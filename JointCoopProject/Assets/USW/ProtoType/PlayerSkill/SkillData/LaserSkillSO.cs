@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Skills/Passive/Laser Skill")]
 public class LaserSkillSO : SkillDataSO
 {
-    // mvc mvp mvvm <- 패턴에 대해서 주말 
+    
     public float duration = 0.5f;
 
     public float laserSpeed = 5f;
