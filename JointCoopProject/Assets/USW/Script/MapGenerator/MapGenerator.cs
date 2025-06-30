@@ -119,8 +119,11 @@ public class MapGenerator : MonoBehaviour
 
         // 3단계: 비밀방 생성
         GenerateSecretRoom();
+
+
         // 4단계: 남은 공간에 일반방 추가
         FillRemainingSpaces();
+
 
         // 5단계: 최종 검증
         if (!ValidateSpecialRoomsPlacement())
@@ -137,6 +140,7 @@ public class MapGenerator : MonoBehaviour
 
         currentAttempts = 0; // 성공하면 시도 횟수 리셋
         Debug.Log("맵 생성 성공! 총 방 개수: " + generatedRooms.Count);
+
     }
 
     bool GenerateBasicMapStructure()
