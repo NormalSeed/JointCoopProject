@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 123215862173689184}
   - component: {fileID: 329425975746390107}
   - component: {fileID: 6286290414304799025}
-  - component: {fileID: 5605251306460940047}
+  - component: {fileID: 6746592649774607402}
   m_Layer: 0
   m_Name: InfectedSlime
   m_TagString: Untagged
@@ -210,8 +210,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!58 &5605251306460940047
-CircleCollider2D:
+--- !u!70 &6746592649774607402
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -242,6 +242,6 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.11695546}
-  serializedVersion: 2
-  m_Radius: 0.205755
+  m_Offset: {x: 0.007881924, y: -0.018306825}
+  m_Size: {x: 0.4523227, y: 0.327881}
+  m_Direction: 1
