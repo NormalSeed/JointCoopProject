@@ -1,53 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
-
-
 
 public class Inventory : MonoBehaviour
 {
-    // Active Item - Slot 1
-    // Trait Item - Slot 5 -> 플레이어에 귀속될 수 있음
-    // Passive Item - List
-    // Enhance Item - List
-    // Expendable(Coin, Bomb) -> 플레이어에 귀속될 수 있음
-    private const int MIN_ITEM_SLOT = 12;
-    private const int MAX_ITEM_SLOT = 18;
-    public IPickable _activeSlot = null;
-    // TraitItemSO[] _traitSlots = new TraitItemSO[5];
-    // List<PassiveItemSO> _passiveList = new List<PassiveItemSO>();
-    // List<EnhanceItemSO> _enhanceList = new List<EnhanceItemSO>();
-    public List<IPickable> _itemList = new List<IPickable>(MIN_ITEM_SLOT);
+    private const int ITEM_SLOT = 12;
+    private SkillItem _activeItem = null;
+    private SkillItemSO _activeItemData;
+    private List<SkillItemSO> _itemList = new List<SkillItemSO>(ITEM_SLOT);
+    private List<NonSkillItemSO> _enhanceList = new List<NonSkillItemSO>();
 
-    int _holdingCoins = 0;
-    int _holdingBombs = 0;
-
-    public void GetActiveItem(IPickable item)
+    public void GetActiveItem(SkillItem item, Transform _currentPos)
     {
-        if (_activeSlot is not null)
+        if (_activeItem is not null)
         {
-            // _activeSlot.Drop(TempManager._)
+            _activeItem.Drop(_currentPos);
+            _activeItem = null;
+        }
+        _activeItem = item;
+        _activeItemData = item._itemData;
+    }
+
+    public void UseActiveItem(Transform _currentPos)
+    {
+        _activeItem.Act(_currentPos);
+    }
+
+    public void GetPassiveItem(SkillItem item)
+    {
+        if (_itemList.Count < _itemList.Capacity)
+        {
+            _itemList.Add(item._itemData);
+            // PlayerSkillManager.AddSkill(item._itemData._itemSkill);
         }
     }
 
-    public void UseActiveItem()
+    public void GetNonSkillItem(NonSkillItem item)
     {
-
-    }
-
-    public void GetPassiveItem(IPickable item)
-    {
-
-    }
-
-    public void IncreasePassiveSlot()
-    {
-
-    }
-
-    public void UpgradePassiveItem(IPickable item)
-    { 
-        
+        item.Act();
+        if (item._itemType == NonSkillItemType.Enhance)
+        { 
+            _enhanceList.Add(item._itemData);
+        }
     }
 
 }
