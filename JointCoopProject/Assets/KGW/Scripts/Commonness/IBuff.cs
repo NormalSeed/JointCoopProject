@@ -16,7 +16,7 @@ public interface IBuff
     int _buffLevel { get; }
 
     // 플레이어의 버퍼를 받는 메서드
-    public void BuffReceive(PlayerStatus playerStatus);
+    public void BuffReceive(PlayerStatManager playerStatus);
 }
 
 // 버퍼의 종류

@@ -4,7 +4,7 @@ using System.Data;
 using TreeEditor;
 using UnityEngine;
 
-public class PlayerSwordControllerTest : MonoBehaviour
+public class PlayerSwordController : MonoBehaviour
 {
     Transform _playerPos;
 
