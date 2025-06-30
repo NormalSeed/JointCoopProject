@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Skills/Passive/Laser Skill")]
 public class LaserSkillSO : SkillDataSO
 {
+    // mvc mvp mvvm <- 패턴에 대해서 주말 
     public float duration = 0.5f;
 
     public float laserSpeed = 5f;
@@ -36,12 +37,12 @@ public class LaserSkillSO : SkillDataSO
         
         GameObject laser = Instantiate(skillPrefab,caster.position, Quaternion.identity);
         
-        var bullet = laser.GetComponent<ChasingEnemy>();
-        if (bullet != null)
-        {
-            bullet.SetTarget(target.position);
-            bullet.SetSpeed(laserSpeed);
-        }
+        //var bullet = laser.GetComponent<ChasingEnemy>();
+        //if (bullet != null)
+        //{
+        //    bullet.SetTarget(target.position);
+        //    bullet.SetSpeed(laserSpeed);
+        //}
         
         // 아 너무 머리아픈데;
         // 1. 스킬이 많아질 예정이고  , 스킬로직이 유사할경우 ( skillmanager 에 통합설계 )  
