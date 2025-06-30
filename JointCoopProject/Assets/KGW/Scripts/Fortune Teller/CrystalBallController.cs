@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CrystalBallController : MonoBehaviour
 {
-    [SerializeField] PlayerStatus _playerStatus;
     bool _isContact = false;
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -23,9 +22,9 @@ public class CrystalBallController : MonoBehaviour
             // 랜덤 버퍼 룰렛 생성
             IBuff randomBuff = BuffCreateFactory.BuffRoulette();
             // 버퍼 적용
-            BuffManager.Instance.ApplyBuff(randomBuff, _playerStatus);
+            BuffManager.Instance.ApplyBuff(randomBuff, PlayerStatManager.Instance);
             // 버프를 받고 수정구슬은 사라지지 않고 남아있지만 다시 접촉을해도 상호작용 없음
-            _isContact = true;
+            //_isContact = true;
 
             // 접촉시 사운드와 이펙트
         }
