@@ -59,12 +59,12 @@ public class WerewolfController : MonsterBase
 
         if (xDir < 0f)
         {
-            transform.position = attackTransform.position + new Vector3(0.6f, 0);
+            transform.position = attackTransform.position + new Vector3(1f, 0);
             _attackCollider.transform.position = transform.position + new Vector3(-0.6f, 0);
         }
         else if (xDir > 0f)
         {
-            transform.position = attackTransform.position - new Vector3(0.6f, 0);
+            transform.position = attackTransform.position - new Vector3(1f, 0);
             _attackCollider.transform.position = transform.position + new Vector3(0.6f, 0);
         }
         yield return _attackDelay;
