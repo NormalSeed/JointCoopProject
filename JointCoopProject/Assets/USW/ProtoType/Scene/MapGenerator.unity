@@ -199,7 +199,7 @@ MonoBehaviour:
   startPosition: {x: 7, y: 7}
   totalRooms: 9
   roomGenerationChance: 0.7
-  prefabSize: {x: 15, y: 9}
+  prefabSize: {x: 17, y: 9}
   playerPrefab: {fileID: 2443373463263467340, guid: 28c93c198489ed64f8e94a40600f8f48, type: 3}
   playerSpawnOffset: {x: 8, y: 5}
   cameraSystem: {fileID: 0}
@@ -735,11 +735,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4759838298703841680, guid: d8dde2fd9d073f24f96650e07d78fcdb, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 359
+      value: 292.5
       objectReference: {fileID: 0}
     - target: {fileID: 4759838298703841680, guid: d8dde2fd9d073f24f96650e07d78fcdb, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 180
+      value: 143.3
       objectReference: {fileID: 0}
     - target: {fileID: 4759838298703841680, guid: d8dde2fd9d073f24f96650e07d78fcdb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1006,7 +1006,7 @@ Transform:
   m_GameObject: {fileID: 1911344670}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 1, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1026,7 +1026,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transitionSpeed: 2
   constrainToRoom: 1
-  roomPadding: 0.5
+  roomPadding: 1
 --- !u!114 &1911344675
 MonoBehaviour:
   m_ObjectHideFlags: 0
