@@ -7,15 +7,18 @@ public class Inventory : MonoBehaviour
 {
     private const int ITEM_SLOT = 12;
     private SkillItem _activeItem = null;
-    private SkillItemSO _activeItemData;
-    private List<SkillItemSO> _itemList = new List<SkillItemSO>(ITEM_SLOT);
-    private List<NonSkillItemSO> _enhanceList = new List<NonSkillItemSO>();
+    private ItemDataSO _activeItemData;
+    private List<ItemDataSO> _itemList = new List<ItemDataSO>(ITEM_SLOT);
+    private List<ItemDataSO> _enhanceList = new List<ItemDataSO>();
+
+    public int _coin;
+    public int _bomb;
 
     public void GetActiveItem(SkillItem item, Transform _currentPos)
     {
         if (_activeItem is not null)
         {
-            _activeItem.Drop(_currentPos);
+            Instantiate(_activeItem, _currentPos.position, _currentPos.rotation);
             _activeItem = null;
         }
         _activeItem = item;
@@ -32,7 +35,7 @@ public class Inventory : MonoBehaviour
         if (_itemList.Count < _itemList.Capacity)
         {
             _itemList.Add(item._itemData);
-            // PlayerSkillManager.AddSkill(item._itemData._itemSkill);
+            // PlayerPos.gameObject.GetComponentInParent<PlayerSkillManager>().AddSkill(_itemSkill);
         }
     }
 

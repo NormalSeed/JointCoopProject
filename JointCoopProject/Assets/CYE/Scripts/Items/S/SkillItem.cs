@@ -5,7 +5,11 @@ using UnityEngine;
 public class SkillItem : MonoBehaviour, IPickable
 {
     public SkillItemType _itemType;
-    public SkillItemSO _itemData;
+    public int _itemGrade;
+    public ItemDataSO _itemData;
+    
+    [Header("Skill Settings")]
+    public SkillDataSO _itemSkill;
     
     #region // Unity Message Function
     void Awake()
@@ -27,8 +31,8 @@ public class SkillItem : MonoBehaviour, IPickable
     }
     
     public void Act(Transform PlayerPos)
-    { 
-        
+    {
+        _itemSkill.UseSkill(PlayerPos);
     }
 
     #region // IPickable
@@ -42,17 +46,12 @@ public class SkillItem : MonoBehaviour, IPickable
             case SkillItemType.PassiveAttack:
             case SkillItemType.PassiveAuto:
                 TempManager._player._inventory.GetPassiveItem(this);
-                PlayerPos.gameObject.GetComponentInParent<PlayerSkillManager>().AddSkill(_itemData._itemSkill);
                 break;
             default:
                 Debug.Log("Skill Item type error.");
                 break;
         }
         Destroy(gameObject);
-    }
-    public void Drop(Transform dropPos)
-    {
-        Instantiate(_itemData._itemPrefab, dropPos.position, dropPos.rotation);
     }
     #endregion 
 }
