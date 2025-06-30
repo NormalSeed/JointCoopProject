@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlacementBomb : MonoBehaviour
+public class Bomb : MonoBehaviour
 {
     [SerializeField] private ItemDataSO _itemData;
     [SerializeField] private float _explodeDelay;
