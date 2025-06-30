@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     [SerializeField] float _tearAttackDelay = 0.3f;     // ´«¹° °ø°Ý µô·¹ÀÌ
     [SerializeField] float _swordAttackDelay = 0.5f;    // ±ÙÁ¢ °ø°Ý µô·¹ÀÌ
     [SerializeField] bool _isMeleeWeapon;
+
+    [Header("Player KnockBack & Invincible")]
     [SerializeField] public float _hitCoolTime = 0.5f;
     [SerializeField] float _knockBackForce = 3f;
     [SerializeField] float _knockBackTime = 0.2f;

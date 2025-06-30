@@ -17,7 +17,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     // curHP가 0이 되면 사망 처리
     // TODO: 사망시 랜덤 확률로 재화 또는 아이템 드롭
     protected int _monsterID;
-    private float _activeDelay;
+    public float _activeDelay;
     public bool _isActivated;
     public MonsterMovement _movement;
     public MonsterModel _model;
