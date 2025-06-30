@@ -12,8 +12,11 @@ public class SkillDataSO : ScriptableObject
 {
     public string skillName;
     public float skillCooldown;
+    public float skillPossibility;
+    public Sprite skillIcon;
     //public string skillDescription;
     public GameObject skillPrefab;
+    
 
     public virtual void UseSkill(Transform caster)
     {

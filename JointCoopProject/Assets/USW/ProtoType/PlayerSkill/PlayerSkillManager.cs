@@ -20,7 +20,7 @@ public class PlayerSkillManager : MonoBehaviour
    {
       public SkillDataSO skill;     // 자동 발동할 스킬 데이터
       public float cooldown = 5f;   // 쿨다운 간격 (초단위입니다!)
-      public float timer;           // 현재 남은 시간 (Update에서 감소합니다)
+      public float timer;           // 현재 남은 시간
    }
    
    // 자동 발동 스킬들의 리스트
@@ -53,6 +53,22 @@ public class PlayerSkillManager : MonoBehaviour
       {
          ownedSkills.Add(newSkill);
       }
+
+        AutoSkill autoSkill = new AutoSkill()
+        {
+            skill = newSkill
+        };
+
+        // 뭐지 ? skilldataso 에서 받아와서 skillpickupitem이 얘 호출하면 받아와야하는거아닌가 ? 
+        // 아니 collsion2d 해서 받아오는게 맞잖아 
+        // 디버그도 안찍히고이게뭐야
+        // 랩핑에 문제가있었나 ? 아니잖아 
+        // 뭔데 그럼 
+        // skillpickupitem 에서 얘가 안불러와지는건가 ? 
+
+
+      autoskills.Add(autoSkill);
+        Debug.Log($"{newSkill.skillName} 추가됨");
    }
    
    /// <summary>
@@ -73,3 +89,4 @@ public class PlayerSkillManager : MonoBehaviour
    
    }
 }
+

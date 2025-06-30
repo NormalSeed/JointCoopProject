@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Skills/Passive/Laser Skill")]
 public class LaserSkillSO : SkillDataSO
 {
+    
     public float duration = 0.5f;
 
     public float laserSpeed = 5f;
@@ -26,7 +27,7 @@ public class LaserSkillSO : SkillDataSO
         // 적 추적 ,  - > tag 형식 ? , layer 형식 ? 
         // enemy 종류 10가지 산정 , tag 형식 
         // 각도 아크탄젠트로 추적후 
-        // distance 를 산정할필요가있나 . 
+        // distance 를 산정할필요가있나 .            
         Transform target = FindClosestTarget(caster.position);
         
         if (target == null)
@@ -36,12 +37,12 @@ public class LaserSkillSO : SkillDataSO
         
         GameObject laser = Instantiate(skillPrefab,caster.position, Quaternion.identity);
         
-        var bullet = laser.GetComponent<ChasingEnemy>();
-        if (bullet != null)
-        {
-            bullet.SetTarget(target.position);
-            bullet.SetSpeed(laserSpeed);
-        }
+        //var bullet = laser.GetComponent<ChasingEnemy>();
+        //if (bullet != null)
+        //{
+        //    bullet.SetTarget(target.position);
+        //    bullet.SetSpeed(laserSpeed);
+        //}
         
         // 아 너무 머리아픈데;
         // 1. 스킬이 많아질 예정이고  , 스킬로직이 유사할경우 ( skillmanager 에 통합설계 )  
@@ -58,6 +59,7 @@ public class LaserSkillSO : SkillDataSO
         //  speed 
         // 지정해두고 아래에 skill.timer = skill.cooldown 으로 실시간 시간 피드백하면 되긴해요 근데 그렇게하면 확장할때마다 일일이 선언해줘야함.
         // 
+        // ㅖ ? ㅢㅖ? 
         
        
             
@@ -72,7 +74,13 @@ public class LaserSkillSO : SkillDataSO
         //GameObject laser = Instantiate(laserEffectPrefab, spawnPos, rotation);
         //Destroy(laser, duration);
     }
-
+    
+    
+    
+    
+    
+    
+    
     
     // 가까이 있는 target 거리 추적
     private Transform FindClosestTarget(Vector3 casterPos)

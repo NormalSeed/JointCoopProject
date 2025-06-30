@@ -1,50 +1,57 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class ChasingEnemy : MonoBehaviour
 {
-    private Vector3 targetPosition;
-    private float speed = 5f;
-    private float lifeTime = 2f;
-    private float timer = 0f;
-    private bool init = false;
-    public ParticleSystem particleSystem;
+    private GameObject target;
+    private float speed;
+    // private float stunDuration;
+    private bool isInit = false;
 
-    public void SetTarget(Vector3 target)
+    // 초기화 함수
+    public void Init(GameObject targetEnemy, float projectileSpeed )
     {
-        targetPosition = target;
-        Vector3 direction = targetPosition - transform.position;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, angle);
-        init = true;
+        target = targetEnemy;
+        speed = projectileSpeed;
+        isInit = true;
     }
 
-    public void SetSpeed(float s)
+    private void Update()
     {
-        speed = s;
-    }
-
-    public void SetLifeTime(float t)
-    {
-        lifeTime = t;
-    }
-    void Update()
-    {
-        if (!init) return;
-        
-        timer += Time.deltaTime;
-        if (timer >= lifeTime)
+        if (!isInit || target == null)
         {
-            Destroy(gameObject);
+            transform.Translate (Vector3.forward*speed*Time.deltaTime);
             return;
         }
-        
-        
-        // 목표위치까지 이동 
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+
+        Vector3 targetDirection = (target.transform.position - transform.position).normalized;
+
+        if(targetDirection != Vector3.zero )
+        {
+            transform.rotation = Quaternion.LookRotation (targetDirection);
+        }
+
+
+        transform.Translate(Vector3.forward * speed*Time.deltaTime);
+
+      
     }
 
 
-  
+    //
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            Destroy(gameObject);
+        }
+        else if (other.CompareTag("Wall"))
+        {
+            Destroy (gameObject);
+        }
+    }
+
+
 }
