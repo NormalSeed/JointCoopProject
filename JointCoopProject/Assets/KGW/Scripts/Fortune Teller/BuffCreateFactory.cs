@@ -1,3 +1,6 @@
+using Unity.VisualScripting;
+using UnityEngine;
+
 public static class BuffCreateFactory
 {
     static System.Random _randomChoice = new System.Random();
@@ -6,7 +9,7 @@ public static class BuffCreateFactory
     public static IBuff BuffRoulette()
     {
         int playerLuckSetting = PlayerStatManager.Instance._playerLuck * 5; // 캐릭터 운1 -> 확률 5% 
-
+        
         // 0 ~ 99 Choice
         int randomRoll = _randomChoice.Next(0, 100);
 
