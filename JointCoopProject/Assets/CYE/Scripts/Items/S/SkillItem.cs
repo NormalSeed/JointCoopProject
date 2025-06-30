@@ -1,14 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
 public class SkillItem : MonoBehaviour, IPickable
 {
-    public SkillItemType _itemType;
-    public int _itemGrade;
+    [Header("Item Info")]
+    [Tooltip("아이템 타입을 결정합니다.\n - Active: 액티브 \n - PassiveAttack: 패시브-공격 강화 \n - PassiveAuto: 패시브-상시 활성화 ")]
+    public SkillItemType _itemType;    
+    [SerializeField]
+    [Tooltip("아이템 중복 획득 가능 여부를 결정합니다.")]
+    private bool _canStackable;
+
+    [Header("Item Data")]
     public ItemDataSO _itemData;
     
-    [Header("Skill Settings")]
+    [Header("Skill Data")]
     public SkillDataSO _itemSkill;
     
     #region // Unity Message Function

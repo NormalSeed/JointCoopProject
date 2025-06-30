@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(menuName = "Items/ItemDataSO", order = 1)]
+// [CreateAssetMenu(menuName = "Items/ItemDataSO", order = 1)]
 public class ItemDataSO : ScriptableObject
 {
     #region // Item Info
@@ -16,13 +16,4 @@ public class ItemDataSO : ScriptableObject
     [Multiline(3)]
     public string _itemDesc;
     #endregion
-
-    public virtual void Act()
-    {
-        // 동작함
-    }
-    public virtual void Act(Transform currentPosition)
-    {
-        // 동작함
-    }
 }
