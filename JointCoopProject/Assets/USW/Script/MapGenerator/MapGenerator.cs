@@ -14,8 +14,8 @@ public class MapGenerator : MonoBehaviour
     public GameObject[] bossRoomPrefabs = new GameObject[3]; 
 
     [Header("맵 설정")] public int mapSize = 13; 
-    public Vector2Int startPosition = new Vector2Int(7, 7); 
-    public int totalRooms = 9; 
+    public Vector2Int startPosition = new Vector2Int(7, 7);
+    public int totalRooms; 
     public float roomGenerationChance = 0.7f; // 방 생성 확률
 
     [Header("프리팹 설정")] 
@@ -33,7 +33,7 @@ public class MapGenerator : MonoBehaviour
     private List<Vector2Int> availablePositions = new List<Vector2Int>(); // 생성 가능한 위치들
     private GameObject spawnedPlayer; // 생성된 플레이어
     private int currentAttempts = 0; // 현재 시도 횟수
-    private int maxGenerationAttempts = 30; // 최대 시도 횟수
+    private int maxGenerationAttempts = 50; // 최대 시도 횟수
 
     // 디버그 관련
     public bool enableDebugLogs = false; // 디버그 로그 활성화
@@ -321,7 +321,12 @@ public class MapGenerator : MonoBehaviour
             }
         }
 
-        bool success = validCount == 3;
+        int currentRoomCount = generatedRooms.Count;
+        bool hasCorrectTotalRooms = currentRoomCount == totalRooms;
+
+
+
+        bool success = validCount == 3 == hasCorrectTotalRooms;
         if (enableDebugLogs) Debug.Log("검증 결과: " + success + " (유효한 방: " + validCount + "개)");
         return success;
     }
@@ -343,6 +348,7 @@ public class MapGenerator : MonoBehaviour
         return count;
     }
 
+    
     // 남은 공간에 일반방 추가로 채우기
     void FillRemainingSpaces()
     {
@@ -382,6 +388,7 @@ public class MapGenerator : MonoBehaviour
     // 보스방 2칸 떨어져서 방만드는 필터링
     List<Vector2Int> FilterBossRoomPositions(List<Vector2Int> positions)
     {
+
         List<Vector2Int> validPositions = new List<Vector2Int>();
 
         for (int i = 0; i < positions.Count; i++)
@@ -392,7 +399,6 @@ public class MapGenerator : MonoBehaviour
                 validPositions.Add(pos);
             }
         }
-
         return validPositions;
     }
 
