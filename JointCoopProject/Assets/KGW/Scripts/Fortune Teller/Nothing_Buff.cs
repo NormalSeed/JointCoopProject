@@ -10,7 +10,7 @@ public class Nothing_Buff : IBuff
     public BuffType _buffType => BuffType.Nothing;
     public int _buffLevel => 0;
 
-    public void BuffReceive(PlayerStatus playerStatus)
+    public void BuffReceive(PlayerStatManager playerStatus)
     {
         Debug.Log("효과 없음");
     }

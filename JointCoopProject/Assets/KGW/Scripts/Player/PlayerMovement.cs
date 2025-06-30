@@ -11,15 +11,17 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     [SerializeField] float _tearAttackDelay = 0.3f;     // 눈물 공격 딜레이
     [SerializeField] float _swordAttackDelay = 0.5f;    // 근접 공격 딜레이
     [SerializeField] bool _isMeleeWeapon;
+    [SerializeField] public float _hitCoolTime = 0.5f;
+    [SerializeField] float _knockBackForce = 3f;
+    [SerializeField] float _knockBackTime = 0.2f;
 
-    PlayerStatus _playerStatus;
     SpriteRenderer _PlayerSprite;
     public Rigidbody2D _playerRigid;
     Animator _playerAnimator;
 
     Vector2 _moveInput;
     Vector2 _targetVelocity;
-    public Vector2 _curVelocity;
+    Vector2 _curVelocity;
     Vector2 _attackDirection;
     Vector2 _dashDirection;
 
@@ -27,11 +29,11 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     float _wieldTimer;   
     bool _isDash = false;
     bool _isDamaged = false;
+    bool _isKnockBack = false;
     float _dashProgressTime;
     float _dashCoolTime;
     string _selectAttackDir;
 
-    readonly int DASH_HASH = Animator.StringToHash("PlayerDash");
     readonly int DOWN_ATTACK_HASH = Animator.StringToHash("Player_Down_Attack");
     readonly int UP_ATTACK_HASH = Animator.StringToHash("Player_Up_Attack");
     readonly int LEFT_ATTACK_HASH = Animator.StringToHash("Player_Left_Attack");
@@ -41,14 +43,14 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     {
         Init();
     }
-
+    
     private void Update()
     {
-        if (_playerStatus._isAlive)
+        if (PlayerStatManager.Instance._alive)
         {
             MoveInput();
 
-            if (_playerStatus._canDash && _isDash)
+            if (PlayerStatManager.Instance._canDash && _isDash)
             {
                 MoveDash();
             }
@@ -62,7 +64,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         }
         else
         {
-            _playerStatus.PlayerDeath();
+            PlayerDeath();
         }
     }
 
@@ -70,17 +72,15 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     private void Init()
     {
         _playerRigid = GetComponent<Rigidbody2D>();
-        _playerStatus = GetComponent<PlayerStatus>();
         _playerAnimator = GetComponent<Animator>();
         _PlayerSprite = GetComponent<SpriteRenderer>();
         _isMeleeWeapon = true;
-        _playerStatus._isAlive = true;
     }
 
     // Player Move Input
     private void MoveInput()
     {
-        if (_playerStatus._isKnockBack) return;
+        if (_isKnockBack) return;
 
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
@@ -90,12 +90,12 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     // Player Movement
     private void Movement()
     {
-        if (_playerStatus._isKnockBack) return;
+        if (_isKnockBack) return;
 
-        _targetVelocity = _moveInput * _playerStatus._moveSpeed;
+        _targetVelocity = _moveInput * PlayerStatManager.Instance._moveSpeed;
 
         // Acceleration & Deceleration Speed Choice
-        float moveSpeed = (_targetVelocity.magnitude > _curVelocity.magnitude) ? _playerStatus._accelerationSpeed : _playerStatus._decelerationSpeed;
+        float moveSpeed = (_targetVelocity.magnitude > _curVelocity.magnitude) ? PlayerStatManager.Instance._accelerationSpeed : PlayerStatManager.Instance._decelerationSpeed;
         _curVelocity = Vector2.MoveTowards(_curVelocity, _targetVelocity, moveSpeed * Time.deltaTime);
         transform.position += (Vector3)_curVelocity * Time.deltaTime;
 
@@ -126,15 +126,15 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     // Player Dash Input
     private void DashInput()
     {
-        if (_playerStatus._isKnockBack) return;
+        if (_isKnockBack) return;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (_moveInput != Vector2.zero && _dashCoolTime <= 0f )
             {
                 _isDash = true;
-                _dashProgressTime = _playerStatus._dashDurationTime;
-                _dashCoolTime = _playerStatus._dashCoolTime;
+                _dashProgressTime = PlayerStatManager.Instance._dashDurationTime;
+                _dashCoolTime = PlayerStatManager.Instance._dashCoolTime;
                 _dashDirection = _moveInput;
             }
         }
@@ -144,10 +144,10 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     // Player Move Dash
     private void MoveDash()
     {
-        if (_playerStatus._isKnockBack) return;
+        if (_isKnockBack) return;
 
         gameObject.layer = 8;   // Player Layer Change
-        transform.position += (Vector3)_dashDirection * _playerStatus._dashSpeed * Time.deltaTime;
+        transform.position += (Vector3)_dashDirection * PlayerStatManager.Instance._dashSpeed * Time.deltaTime;
         _dashProgressTime -= Time.deltaTime;
         _PlayerSprite.color = new Color(0.5f, 0.5f, 0.5f, 0.7f);
 
@@ -168,24 +168,24 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         if (Input.GetKey(KeyCode.UpArrow))
         {
             _attackDirection += Vector2.up;
-            _playerAnimator.speed = _playerStatus._attackSpeed;
+            _playerAnimator.speed = PlayerStatManager.Instance._attackSpeed;
             _selectAttackDir = "Up";
         }
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            _playerAnimator.speed = _playerStatus._attackSpeed;
+            _playerAnimator.speed = PlayerStatManager.Instance._attackSpeed;
             _attackDirection += Vector2.down;
             _selectAttackDir = "Down";
         }
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            _playerAnimator.speed = _playerStatus._attackSpeed;
+            _playerAnimator.speed = PlayerStatManager.Instance._attackSpeed;
             _attackDirection += Vector2.left;
             _selectAttackDir = "Left";
         }
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            _playerAnimator.speed = _playerStatus._attackSpeed;
+            _playerAnimator.speed = PlayerStatManager.Instance._attackSpeed;
             _attackDirection += Vector2.right;
             _selectAttackDir = "Right";
         }
@@ -195,7 +195,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
 
     private void Attack()
     {
-        if (_playerStatus._isKnockBack) return;
+        if (_isKnockBack) return;
 
         if (_isMeleeWeapon)
         {
@@ -203,13 +203,13 @@ public class PlayerMovement : MonoBehaviour, IDamagable
             {
                 GameObject sword = Instantiate(_swordPrefab, transform.position, Quaternion.identity);
                 // 검의 데이터 초기화
-                sword.GetComponent<PlayerSwordControllerTest>().Init(transform, _attackDirection, _playerStatus._attackSpeed, _playerStatus._attackDamage);
+                sword.GetComponent<PlayerSwordController>().Init(transform, _attackDirection, PlayerStatManager.Instance._attackSpeed, PlayerStatManager.Instance._attackDamage);
                 
                 // Attack Animation
                 AttackDirection(_selectAttackDir);
 
                 // 공격속도에 비례하여 근접 공격 쿨타임 계산
-                _wieldTimer = _swordAttackDelay / _playerStatus._attackSpeed;   
+                _wieldTimer = _swordAttackDelay / PlayerStatManager.Instance._attackSpeed;   
             }
             _wieldTimer -= Time.deltaTime;
         }
@@ -218,7 +218,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
             if (_attackDirection != Vector2.zero && _shotTimer <= 0f)
             {
                 GameObject tearGeneration = Instantiate(_tearPrefab, transform.position, Quaternion.identity);
-                tearGeneration.GetComponent<Rigidbody2D>().velocity = _attackDirection * _playerStatus._shotSpeed;
+                tearGeneration.GetComponent<Rigidbody2D>().velocity = _attackDirection * PlayerStatManager.Instance._shotSpeed;
                 _shotTimer = _tearAttackDelay;
             }
             _shotTimer -= Time.deltaTime;
@@ -255,9 +255,9 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         }
 
         _isDamaged = true;
-        
+
         // Player Hp Down
-        _playerStatus.HealthDown(damage);
+        HealthDown(damage);
 
         // Player hit Reaction
         _PlayerSprite.color = new Color(1, 0.4f, 0.1f, 0.7f);
@@ -266,8 +266,8 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         gameObject.layer = 8;
 
         // Player Hit KnockBack
-        _playerStatus.PlayerKnockBack(targetPos);
-        Invoke("OffDamage", _playerStatus._hitCoolTime);
+        PlayerKnockBack(targetPos);
+        Invoke("OffDamage", _hitCoolTime);
     }
 
     private void OffDamage()
@@ -277,5 +277,48 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         _isDamaged = false;
         _PlayerSprite.color = new Color(1, 1, 1, 1);
     }
-    
+
+    // Player Hp Down
+    public void HealthDown(int damage)
+    {
+        if (PlayerStatManager.Instance._playerHp > 1)
+        {
+            PlayerStatManager.Instance._playerHp -= damage;
+            Debug.Log($"플레이어의 체력이 {PlayerStatManager.Instance._playerHp} 입니다.");
+            // TODO : 플레이어 피격 사운드
+        }
+        else
+        {
+            Debug.Log("플레이어가 사망했습니다.");
+            // Player Death
+            PlayerStatManager.Instance._alive = false;
+        }
+    }
+
+    // Player Death
+    public void PlayerDeath()
+    {
+        _playerAnimator.SetBool("IsDeath", true);
+        GetComponent<CapsuleCollider2D>().enabled = false;
+        Destroy(gameObject, 9f);
+        // TODO : UI 추가
+    }
+
+    // Player KnockBack
+    public void PlayerKnockBack(Vector2 targetPos)
+    {
+        _isKnockBack = true;
+        Vector2 hitDirection = ((Vector2)transform.position - targetPos).normalized;
+        _playerRigid.velocity = Vector2.zero;
+        _playerRigid.AddForce(hitDirection * _knockBackForce, ForceMode2D.Impulse);
+
+        Invoke("StopKnockBack", _knockBackTime);
+    }
+
+    private void StopKnockBack()
+    {
+        _playerRigid.velocity = Vector2.zero;
+        _curVelocity = Vector2.zero;
+        _isKnockBack = false;
+    }
 }
