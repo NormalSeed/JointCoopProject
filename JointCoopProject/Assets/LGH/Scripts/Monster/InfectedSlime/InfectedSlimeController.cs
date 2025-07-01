@@ -7,6 +7,6 @@ public class InfectedSlimeController : MonsterBase
     protected override void Init()
     {
         base.Init();
-        _monsterID = 10103;
+        _monsterID = 10104;
     }
 }
