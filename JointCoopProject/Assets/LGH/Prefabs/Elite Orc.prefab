@@ -13,6 +13,10 @@ GameObject:
   - component: {fileID: 7731833656297537977}
   - component: {fileID: 1722298915841986388}
   - component: {fileID: 3413983186819702850}
+  - component: {fileID: 5779567693473274470}
+  - component: {fileID: 3252097944278347860}
+  - component: {fileID: 7926493946851752179}
+  - component: {fileID: 3696866143975018886}
   m_Layer: 0
   m_Name: Elite Orc
   m_TagString: Untagged
@@ -170,3 +174,78 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5779567693473274470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9006187670591877226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6561fb952f081948930877baf42a200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _activeDelay: 0
+  _isActivated: 0
+  _movement: {fileID: 0}
+  _model: {fileID: 0}
+  _view: {fileID: 0}
+  _player: {fileID: 0}
+  _isAttack1: 0
+  _isAttack2: 0
+  _isAttack3: 0
+  _isDamaged: 0
+  _isDead: 0
+  _attack1Cooldown: 0
+  _rushDestination: {x: 0, y: 0}
+  _stopDistance: 0.05
+--- !u!114 &3252097944278347860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9006187670591877226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 691bf3cd86eca634ba572ce393c027c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <_maxHP>k__BackingField: 0
+  <_name>k__BackingField: 
+  <_bodyDamage>k__BackingField: 0
+  <_attack1Damage>k__BackingField: 0
+  <_attack2Damage>k__BackingField: 0
+  <_attack3Damage>k__BackingField: 0
+  <_attack1Range>k__BackingField: 0
+  <_attack2Range>k__BackingField: 0
+  <_attack3Range>k__BackingField: 0
+  <_moveSpd>k__BackingField: 0
+--- !u!114 &7926493946851752179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9006187670591877226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aea9e2716bc818f44aa2eedac778d19b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isPatrol: 0
+  _isTrace: 0
+--- !u!114 &3696866143975018886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9006187670591877226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03706b8d66ee6ad4897597043a143d8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 0}
