@@ -14,13 +14,20 @@ public class SkillDataSO : ScriptableObject
     public float skillCooldown;
     public float skillPossibility;
     public Sprite skillIcon;
+    public bool _isTrace;
     //public string skillDescription;
     public GameObject skillPrefab;
     
-
+    // 위치만 설정
     public virtual void UseSkill(Transform caster)
     {
         GameObject skillInstance = Instantiate(this.skillPrefab); 
+    }
+
+    // 이동 방향 필요 시 설정
+    public virtual void UseSkill(Transform caster, Vector3 direction)
+    {
+        GameObject skillInstance = Instantiate(this.skillPrefab);
     }
 }
 
