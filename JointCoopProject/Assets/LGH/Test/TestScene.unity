@@ -122,6 +122,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!70 &230804111 stripped
+CapsuleCollider2D:
+  m_CorrespondingSourceObject: {fileID: 4617075190939531525, guid: 41ebe702377af504598b980c660684a8, type: 3}
+  m_PrefabInstance: {fileID: 6540320535429088710}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &234811330
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1578,6 +1583,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 999462467356764602, guid: 41ebe702377af504598b980c660684a8, type: 3}
+      propertyPath: _attack1Collider
+      value: 
+      objectReference: {fileID: 230804111}
     - target: {fileID: 1156009267915784255, guid: 41ebe702377af504598b980c660684a8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.23
@@ -1616,6 +1625,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1156009267915784255, guid: 41ebe702377af504598b980c660684a8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4617075190939531525, guid: 41ebe702377af504598b980c660684a8, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4735936653474544939, guid: 41ebe702377af504598b980c660684a8, type: 3}
