@@ -4,18 +4,18 @@ using UnityEngine;
 
 public abstract class MonsterBase : MonoBehaviour, IDamagable
 {
-    // FSMÀ» ÅëÇØ ¿òÁ÷ÀÌ´Â MonsterµéÀÇ ±âº»
-    // StateMachineÀ» ¹Þ¾Æ¿À°í
-    // »óÅÂ º¯°æÀ» StateMachine¿¡ Àü´ÞÇØÁÖ´Â ¿ªÇÒ
-    // model, view, movement ÄÄÆ÷³ÍÆ® °¡Áü
-    // movement´Â MonsterMovement·Î ¸ðµç ¸ó½ºÅÍµéÀÇ ±âº»ÀûÀÎ »óÇÏÁÂ¿ì ¿òÁ÷ÀÓ AI¸¦ °¡Á®¾ß ÇÔ
-    // modelÀº ¸ó½ºÅÍÀÇ ½ºÅÈ(Ã¼·Â, °ø°Ý·Â, ÀÌµ¿¼Óµµ, »çÁ¤°Å¸® µî)
-    // view´Â ¸ó½ºÅÍ ¾Ö´Ï¸ÞÀÌ¼Ç, Ã¼·Â UI µî »ç¿ëÀÚ°¡ Á÷Á¢ ´«À¸·Î º¼ ¼ö ÀÖ´Â ¿ä¼Òµé
-    // ¸ðµç ¸ó½ºÅÍ´Â ÇÃ·¹ÀÌ¾î°¡ ¹æ¿¡ Ã³À½ ÁøÀÔÇßÀ» ¶§ 1ÃÊÀÇ µô·¹ÀÌ¸¦ °®°í È°¼ºÈ­µÈ´Ù.
-    // ¹æ¿¡ µé¾î°¬À» ¶§ SetActive(true) µÇ°í Start¿¡¼­ 1ÃÊ ´ë±â¸¦ °É¾îÁÖ¸é µÈ´Ù.
-    // µ¥¹ÌÁö¸¦ ¹ÞÀ» ¼ö ÀÖ°í ÁÙ ¼ö ÀÖÀ½
-    // curHP°¡ 0ÀÌ µÇ¸é »ç¸Á Ã³¸®
-    // TODO: »ç¸Á½Ã ·£´ý È®·ü·Î ÀçÈ­ ¶Ç´Â ¾ÆÀÌÅÛ µå·Ó
+    // FSMï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì´ï¿½ Monsterï¿½ï¿½ï¿½ï¿½ ï¿½âº»
+    // StateMachineï¿½ï¿½ ï¿½Þ¾Æ¿ï¿½ï¿½ï¿½
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ StateMachineï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½
+    // model, view, movement ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
+    // movementï¿½ï¿½ MonsterMovementï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ ï¿½âº»ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Â¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ AIï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+    // modelï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(Ã¼ï¿½ï¿½, ï¿½ï¿½ï¿½Ý·ï¿½, ï¿½Ìµï¿½ï¿½Óµï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ ï¿½ï¿½)
+    // viewï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½, Ã¼ï¿½ï¿½ UI ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½Òµï¿½
+    // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í´ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½æ¿¡ Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ 1ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­ï¿½È´ï¿½.
+    // ï¿½æ¿¡ ï¿½ï¿½î°¬ï¿½ï¿½ ï¿½ï¿½ SetActive(true) ï¿½Ç°ï¿½ Startï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½ ï¿½ï¿½â¸¦ ï¿½É¾ï¿½ï¿½Ö¸ï¿½ ï¿½È´ï¿½.
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö°ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    // curHPï¿½ï¿½ 0ï¿½ï¿½ ï¿½Ç¸ï¿½ ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+    // TODO: ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­ ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     protected int _monsterID;
     public float _activeDelay;
     public bool _isActivated;
@@ -32,6 +32,10 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     public bool _isDead;
     private Coroutine _coOffDamage;
     private WaitForSeconds _damageDelay = new WaitForSeconds(1f);
+    
+    //Monster RoomManager
+    private RoomMonsterManager roomMonsterManager;
+    private Vector2Int myRoom;
 
     public readonly int IDLE_HASH = Animator.StringToHash("Idle");
     public readonly int MOVE_HASH = Animator.StringToHash("Walk");
@@ -42,7 +46,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     private void Awake() => Init();
 
     /// <summary>
-    /// °¢ monster controller¸¶´Ù _monsterID °»½Å ÇÊ¿ä
+    /// ï¿½ï¿½ monster controllerï¿½ï¿½ï¿½ï¿½ _monsterID ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
     /// </summary>
     protected virtual void Init()
     {
@@ -51,14 +55,16 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _view = GetComponent<MonsterView>();
         _player = GameObject.Find("Player");
 
+        roomMonsterManager = FindObjectOfType<RoomMonsterManager>();
+        
         LoadCSV("MonsterStats");
 
         StateMachineInit();
     }
 
     /// <summary>
-    /// ¸ðµç MonsterµéÀÌ °¡Áö´Â ±âº» »óÅÂ Æ÷ÇÔ.
-    /// °¢ monster controller¿¡¼­ »óÅÂ Ãß°¡ÇØ »ç¿ë
+    /// ï¿½ï¿½ï¿½ Monsterï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½âº» ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
+    /// ï¿½ï¿½ monster controllerï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     /// </summary>
     protected virtual void StateMachineInit()
     {
@@ -87,6 +93,19 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
             _model.ApplyData(data);
         }
         _model._curHP.Value = _model._maxHP;
+
+        FindMyRoom();
+    }
+    
+    void FindMyRoom()
+    {
+        MapGenerator mapGen = FindObjectOfType<MapGenerator>();
+        if (mapGen != null)
+        {
+            int x = Mathf.FloorToInt(transform.position.x / mapGen.prefabSize.x);
+            int y = Mathf.FloorToInt(transform.position.y / mapGen.prefabSize.y);
+            myRoom = new Vector2Int(x, y);
+        }
     }
 
     private void LoadCSV(string path)
@@ -120,7 +139,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     }
 
     /// <summary>
-    /// °¢ monster°¡ °®°í ÀÖ´Â °ø°Ý ÆÐÅÏ(Attack1, Attack2 µî)¿¡ µû¸¥ »ç°Å¸® °è»ê ÇÊ¿ä
+    /// ï¿½ï¿½ monsterï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(Attack1, Attack2 ï¿½ï¿½)ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
     /// </summary>
     protected virtual void Update()
     {
@@ -177,11 +196,16 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     public void Die()
     {
         _isDead = true;
+        
+        if (roomMonsterManager != null)
+        {
+            roomMonsterManager.MonsterDied(this, myRoom);
+        }
     }
 
     public void UnactivateSelf()
     {
-        //TODO: ºñÈ°¼ºÈ­ÇÏ¸ç µ¿½Ã¿¡ ¾ÆÀÌÅÛ ¶Ç´Â ÀçÈ­¸¦ µå·ÓÇÏ´Â ±â´É ±¸Çö ÇÊ¿ä
+        //TODO: ï¿½ï¿½È°ï¿½ï¿½È­ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½Ã¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
         if (_isDead)
         {
             gameObject.SetActive(false);

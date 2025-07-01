@@ -16,29 +16,26 @@ public class Dagger : SkillDataSO
     public int _skillLevel = 1;
     public int _skillDamage = 25;
     public float _projectileSpeed = 5f;
-    public float _skillTimer = 3f;
-    public Transform _PlayerThrowPoint;
-
-    public override void UseSkill(Transform caster)
+    
+    public override void UseSkill(Transform caster, Vector3 dir)
     {
+        int _totalDamage;
+
         int _randomValue = Random.Range(0, 100);
         if (_randomValue > skillPossibility)
         {
             return;
         }
+        // 단검 데미지 (스킬레벨 +1 == 데미지 +5)
+        _totalDamage = _skillDamage + (_skillLevel * 5);
 
-        GameObject Dagger = Instantiate(skillPrefab, _PlayerThrowPoint.forward, Quaternion.identity);
-        _skillTimer -= Time.deltaTime;
+        // 단검 생성
+        GameObject dagger = Instantiate(skillPrefab, caster.position, caster.rotation);
+        DaggerController daggerController = dagger.GetComponent<DaggerController>();
+        daggerController.Init(dir, _projectileSpeed, _totalDamage);
 
-        if(_skillTimer <= 0)
-        {
-            Destroy(Dagger);
-        }
+        // 캐릭터의 이동방향에 맞게 단검 회전
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        dagger.transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        
-    }
-
 }
