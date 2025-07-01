@@ -53,8 +53,6 @@ public class RoomMonsterManager : MonoBehaviour
         // 플레이어가 다른 방으로 이동했으면
         if (playerRoom != currentRoom)
         {
-            Debug.Log("RoomMonsterManager 방 이동: " + currentRoom + " -> " + playerRoom);
-            
             // 이전 방 몬스터들 끄고
             TurnOffMonstersInRoom(currentRoom);
             
