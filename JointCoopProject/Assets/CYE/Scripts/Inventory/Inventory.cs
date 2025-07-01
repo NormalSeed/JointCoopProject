@@ -1,48 +1,67 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
+// using System.Collections;
+// using System.Collections.Generic;
+// using Unity.VisualScripting;
+// using UnityEngine;
 
-public class Inventory : MonoBehaviour
-{
-    private const int ITEM_SLOT = 12;
-    private SkillItem _activeItem = null;
-    private SkillItemSO _activeItemData;
-    private List<SkillItemSO> _itemList = new List<SkillItemSO>(ITEM_SLOT);
-    private List<NonSkillItemSO> _enhanceList = new List<NonSkillItemSO>();
+// public class Inventory
+// {
+//     private struct ItemSlot
+//     {
+//         ItemDataSO itemDataSO;
+//         int itemStackCount;
+//     }
 
-    public void GetActiveItem(SkillItem item, Transform _currentPos)
-    {
-        if (_activeItem is not null)
-        {
-            _activeItem.Drop(_currentPos);
-            _activeItem = null;
-        }
-        _activeItem = item;
-        _activeItemData = item._itemData;
-    }
+//     private const int SLOT_COUNT = 12;
 
-    public void UseActiveItem(Transform _currentPos)
-    {
-        _activeItem.Act(_currentPos);
-    }
+//     // UI visible
+//     private GameItem _activeItem = null;
+//     private ItemDataSO _activeItemData;
+//     private List<ItemSlot> _itemList = new List<ItemSlot>(SLOT_COUNT);
 
-    public void GetPassiveItem(SkillItem item)
-    {
-        if (_itemList.Count < _itemList.Capacity)
-        {
-            _itemList.Add(item._itemData);
-            // PlayerSkillManager.AddSkill(item._itemData._itemSkill);
-        }
-    }
+//     // UI invisible
+//     private List<ItemSlot> _invItemList = new List<ItemSlot>();
 
-    public void GetNonSkillItem(NonSkillItem item)
-    {
-        item.Act();
-        if (item._itemType == NonSkillItemType.Enhance)
-        { 
-            _enhanceList.Add(item._itemData);
-        }
-    }
+//     public int _coin;
+//     public int _bomb;
 
-}
+//     public bool TryGetItem(IPickable item)
+//     {
+//         return true;
+//     }
+
+//     private void AddStackableItem(ItemDataSO itemData)
+//     {
+//         foreach (ItemSlot item in _itemList)
+//         {
+
+//         }
+//     }
+//     private void GetActiveItem(GameItem item, Transform _currentPos)
+//     {
+//         if (_activeItem is not null)
+//         {
+//             Instantiate(_activeItem, _currentPos.position, _currentPos.rotation);
+//             _activeItem = null;
+//         }
+//         _activeItem = item;
+//         _activeItemData = item._itemData;
+//     }
+
+//     private void UseActiveItem(Transform _currentPos)
+//     {
+//         _activeItem.Act(_currentPos);
+//     }
+
+//     private void GetPassiveItem(GameItem item)
+//     {
+//         if (_itemList.Count < _itemList.Capacity)
+//         {
+//             _itemList.Add(item._itemData);
+//         }
+//     }
+
+//     private void GetNonSkillItem(GameItem item)
+//     {
+//         _invItemList.Add(item._itemData);
+//     }
+// }

@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+// [CreateAssetMenu(menuName = "Items/ItemDataSO", order = 1)]
 public class ItemDataSO : ScriptableObject
 {
     #region // Item Info
-    [SerializeField] private int _itemID;
-    public GameObject _itemPrefab; // 재귀적 참조가.. 발생할수도?
+    [SerializeField] private int itemID;
+    public int _itemID { get { return itemID; } } // readonly
 
     [Space(10f)]
     public string _itemName;
@@ -15,13 +17,4 @@ public class ItemDataSO : ScriptableObject
     [Multiline(3)]
     public string _itemDesc;
     #endregion
-
-    public virtual void Act()
-    {
-        // 동작함
-    }
-    public virtual void Act(Transform currentPosition)
-    {
-        // 동작함
-    }
 }
