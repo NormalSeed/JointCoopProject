@@ -88,8 +88,8 @@ public class SlotMachine : MonoBehaviour
     }
     private bool CheckPayFee()
     {
+        return true; // TestCode
         // return TempManager.inventory._coin >= fee;
-        return true; // For Test
     }
     private SlotResult GetRandomSlotResult()
     {
