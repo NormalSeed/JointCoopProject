@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DaggerController : MonoBehaviour
 {
-    [SerializeField] float _throwTimer = 4f;
+    [SerializeField] float _throwTimer = 0.9f;
     float _daggerSpeed;
     int _daggerDamage;
     Vector3 _daggerDirection;

@@ -22,14 +22,6 @@ public class MonsterTest : MonoBehaviour, IDamagable
     {
         Vector2 hitDirection = ((Vector2)transform.position - targetPos).normalized;
 
-        _monsterRigid.velocity = Vector2.zero;
-        _monsterRigid.AddForce(hitDirection * _knockBackForce, ForceMode2D.Impulse);
-        Invoke("OffDamage", _knockBackTime);
-    }
-
-    private void OffDamage()
-    {
-        _monsterRigid.velocity = Vector2.zero;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

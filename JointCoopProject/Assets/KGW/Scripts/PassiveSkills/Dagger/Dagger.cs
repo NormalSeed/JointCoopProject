@@ -14,7 +14,7 @@ public class Dagger : SkillDataSO
     // 4m의 투척거리
     // 관통 없음 (적중 시 즉시 파괴)
     public int _skillLevel = 1;
-    public int _skillDamage = 25;
+    public int _skillDamage = 20;
     public float _projectileSpeed = 5f;
     
     public override void UseSkill(Transform caster, Vector3 dir)
