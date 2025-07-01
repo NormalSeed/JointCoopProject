@@ -7,7 +7,7 @@ public interface IPickable
     public void PickUp(Transform pickupPos);
     public void Drop(Transform dropPos);
 }
-public enum SkillItemType
+public enum ItemType
 {
     Active, PassiveAttack, PassiveAuto, shop, Expend
 }

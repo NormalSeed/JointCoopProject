@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class TempManager
 {
-    public static InventoryManager _inventory => InventoryManager.GetInstance();
+    public static InventoryManager inventory => InventoryManager.GetInstance();
     
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Initailize()
