@@ -38,7 +38,7 @@ public class Werewolf_Attack1 : WerewolfState
     {
         // Attack1 애니메이션 재생
         _controller._view.PlayAnimation(_controller.ATTACK1_HASH);
-
+        // Attack1 기능 실행
         _controller.Attack1();
     }
 
