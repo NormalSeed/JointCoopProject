@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.EditorTools;
 using UnityEngine;
 
 public enum SlotResult
@@ -10,16 +11,43 @@ public enum SlotResult
 }
 public class SlotMachine : MonoBehaviour
 {
-    [SerializeField] private int fee;
-    [SerializeField] private GameItem[] _itemArray; // index를 사용하기 위함(Intialize 이후 멤버의 추가 및 삭제가 발생하지 않음)
-    [SerializeField] private int _minCoin;
-    [SerializeField] private int _maxCoin;
-    [SerializeField] private Transform _dropPoint;
-    [SerializeField] private GameItem _coinPrefab;
-    private SlotResult _slotResult;
+    [SerializeField]
+    [Tooltip("1회당 사용료를 지정합니다.(단위: 1코인)")]
+    private int fee;
+
+    [SerializeField]
+    [Tooltip("당첨시 결과 Object가 발생할 위치를 지정합니다.")]
+     private Transform _dropPoint;
+
+    [Header("Result Items Info")]
+    [SerializeField]
+    [Tooltip("당첨시 지급되는 아이템의 목록을 지정합니다.")]
+    private GameItem[] _itemArray; // index를 사용하기 위해 배열 사용.(Intialize 이후 멤버의 추가 및 삭제가 발생하지 않음)
+
+    [Space(10)]
+    [SerializeField]
+    [Tooltip("당첨시 지급되는 코인의 Object를 지정합니다.")]
+     private GameItem _coinPrefab;
+
+    [SerializeField]
+    [Tooltip("코인 당첨시 지급되는 최저량을 지정합니다.(단위: 1코인)")]
+    private int _minCoin;
+
+    [SerializeField]
+    [Tooltip("코인 당첨시 지급되는 최고량을 지정합니다.(단위: 1코인)")]
+    private int _maxCoin;
+
     private const int ITEM_PROBABILITY = 12;
-    private const int COIN_PROBABILITY = 30; // 18
-    private System.Random _randomInstance = new System.Random((int)GetUnixTimeStamp());
+    private const int COIN_PROBABILITY = 18;
+
+    private SlotResult _slotResult;
+    private System.Random _randomInstance;
+
+    private void Awake()
+    {
+        CheckValidation();
+        Init();
+    }    
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -46,6 +74,18 @@ public class SlotMachine : MonoBehaviour
             }
         }
     }
+    private void Init()
+    {
+        _randomInstance = new System.Random((int)GetUnixTimeStamp());
+    }
+    private void CheckValidation()
+    {
+        if (_minCoin > _maxCoin)
+        { 
+            throw new Exception("Invalid value specified: _minCoin, _maxCoin");
+        }
+        
+    }
     private bool CheckPayFee()
     {
         // return TempManager.inventory._coin >= fee;
@@ -58,7 +98,7 @@ public class SlotMachine : MonoBehaviour
         {
             return SlotResult.Item;
         }
-        else if (randomNumber < COIN_PROBABILITY)
+        else if (randomNumber < (ITEM_PROBABILITY + COIN_PROBABILITY))
         {
             return SlotResult.Coin;
         }
