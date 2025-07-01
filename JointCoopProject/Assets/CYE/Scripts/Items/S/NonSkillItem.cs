@@ -5,6 +5,9 @@ using UnityEngine;
 public class NonSkillItem : MonoBehaviour, IPickable
 {
     public NonSkillItemType _itemType;
+    [SerializeField]
+    [Tooltip("아이템 중복 획득 가능 여부를 결정합니다.")]
+    private bool _canStackable;
     public ItemDataSO _itemData;
 
     // 수치를 변경시키고자하는 타겟 

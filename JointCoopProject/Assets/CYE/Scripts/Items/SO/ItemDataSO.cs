@@ -7,7 +7,8 @@ using UnityEngine;
 public class ItemDataSO : ScriptableObject
 {
     #region // Item Info
-    [SerializeField] private int _itemID;
+    [SerializeField] private int itemID;
+    public int _itemID { get { return itemID; } } // readonly
 
     [Space(10f)]
     public string _itemName;

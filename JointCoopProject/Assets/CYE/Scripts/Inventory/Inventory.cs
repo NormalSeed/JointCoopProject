@@ -5,16 +5,38 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    private const int ITEM_SLOT = 12;
+    private struct ItemSlot
+    {
+        ItemDataSO itemDataSO;
+        int itemCount;
+    }
+
+    private const int SLOT_COUNT = 12;
+
+    // UI visible
     private SkillItem _activeItem = null;
     private ItemDataSO _activeItemData;
-    private List<ItemDataSO> _itemList = new List<ItemDataSO>(ITEM_SLOT);
-    private List<ItemDataSO> _enhanceList = new List<ItemDataSO>();
+    private List<ItemSlot> _itemList = new List<ItemSlot>(SLOT_COUNT);
+
+    // UI invisible
+    private List<ItemSlot> _invItemList = new List<ItemSlot>();
 
     public int _coin;
     public int _bomb;
 
-    public void GetActiveItem(SkillItem item, Transform _currentPos)
+    public bool TryGetItem(IPickable item)
+    {
+        return true;
+    }
+
+    private void AddStackableItem(ItemDataSO itemData)
+    {
+        foreach (ItemSlot item in _itemList)
+        {
+
+        }
+    }
+    private void GetActiveItem(SkillItem item, Transform _currentPos)
     {
         if (_activeItem is not null)
         {
@@ -25,12 +47,12 @@ public class Inventory : MonoBehaviour
         _activeItemData = item._itemData;
     }
 
-    public void UseActiveItem(Transform _currentPos)
+    private void UseActiveItem(Transform _currentPos)
     {
         _activeItem.Act(_currentPos);
     }
 
-    public void GetPassiveItem(SkillItem item)
+    private void GetPassiveItem(SkillItem item)
     {
         if (_itemList.Count < _itemList.Capacity)
         {
@@ -39,13 +61,8 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void GetNonSkillItem(NonSkillItem item)
+    private void GetNonSkillItem(NonSkillItem item)
     {
-        item.Act();
-        if (item._itemType == NonSkillItemType.Enhance)
-        { 
-            _enhanceList.Add(item._itemData);
-        }
+        _invItemList.Add(item._itemData);
     }
-
 }
