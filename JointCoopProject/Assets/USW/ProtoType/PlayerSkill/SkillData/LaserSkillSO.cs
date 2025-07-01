@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "PlayerSkill/Laser Skill Data")]
+[CreateAssetMenu(menuName = "Skills/Passive/Laser Skill")]
+
 public class LaserSkillSO : SkillDataSO
 {
     [Header("레이저 설정")]
