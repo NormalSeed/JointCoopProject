@@ -1,11 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 
 public class WarriorController : MonsterBase
 {
+    public float _attack1Cooldown = 15f;
+    public float _attack2Cooldown = 0f;
+    private int _shieldAmount = 300;
+    public int _curShield = 0;
+    public float _shieldDuration = 5f;
+    public Vector2 _attack2Dir;
+    public float _attack2Angle = 60f;
+    public Coroutine _coAttack2;
+    private readonly WaitForSeconds _attackDelay = new WaitForSeconds(1f);
+
     public readonly int ATTACK1_HASH = Animator.StringToHash("Attack1");
     public readonly int ATTACK2_HASH = Animator.StringToHash("Attack2");
+    public readonly int STUN_HASH = Animator.StringToHash("Stun");
 
     protected override void Init()
     {
@@ -17,13 +29,86 @@ public class WarriorController : MonsterBase
     {
         base.StateMachineInit();
         _stateMachine._stateDic.Add(EState.Attack1, new Warrior_Attack1(this));
-        _stateMachine._stateDic.Add(EState.Attack1, new Warrior_Attack2(this));
+        _stateMachine._stateDic.Add(EState.Attack2, new Warrior_Attack2(this));
+        _stateMachine._stateDic.Add(EState.Stun, new Warrior_Stun(this));
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        if (_attack1Cooldown > 0f)
+        {
+            _attack1Cooldown -= Time.deltaTime;
+        }
+
+        if (_attack2Cooldown > 0f)
+        {
+            _attack2Cooldown -= Time.deltaTime;
+        }
+
+        if (!_isDamaged && _attack1Cooldown <= 0f && !_isAttack2)
+        {
+            _movement._isTrace = false;
+            _isAttack1 = true;
+        }
+
+        if (Vector2.Distance(transform.position, _player.transform.position) <= _model._attack2Range && !_isDamaged && _attack2Cooldown <= 0f && !_isAttack1)
+        {
+            _movement._isTrace = false;
+            _isAttack2 = true;
+        }
     }
 
     // Attack1: 실드 패턴, 5초간 지속되고 체력 300만큼의 실드를 획득하고 제자리에 멈춰 있음
     // 지속시간이 끝나거나 실드가 모두 소모되면 패턴이 종료되고 종료된 시점부터 15초의 쿨다운을 갖는다.
+    public void Attack1()
+    {
+        _model._curHP.Value += _shieldAmount;
+        _curShield = _model._curHP.Value;
+    }
 
-    // Attack2: 부채꼴 공격 패턴, 공격받은 Player는 기절해서 잠시 못움직임
+    public void EndAttack1()
+    {
+        _movement._isTrace = true;
+        _isAttack1 = false;
+    }
 
-    
+    // Attack2: 부채꼴 공격 패턴, 공격받은 Player는 기절해서 잠시 못움직임, 쿨타임 3초
+    // 공격 방향을 입력받은 후 공격방향쪽으로 각도 60도의 부채꼴 공격
+    public void Attack2()
+    {
+        Vector2 toPlayer = _player.transform.position - transform.position;
+
+        float angleToPlayer = Vector2.Angle(_attack2Dir, toPlayer.normalized);
+
+        if (toPlayer.magnitude > _model._attack2Range) return;
+        else
+        {
+            if (angleToPlayer <= _attack2Angle / 2f)
+            {
+                Debug.Log("공격 맞음");
+            }
+        }
+        if (_coAttack2 != null)
+        {
+            StopCoroutine(_coAttack2);
+            _coAttack2 = StartCoroutine(CoAttack2());
+        }
+        else
+        {
+            _coAttack2 = StartCoroutine(CoAttack2());
+        }
+    }
+    public void GetAttack2Dir()
+    {
+        // 애니메이션 이벤트로 공격 시작 모션에 할당
+        _attack2Dir = (_player.transform.position - transform.position).normalized;
+    }
+
+    private IEnumerator CoAttack2()
+    {
+        yield return _attackDelay;
+        _movement._isTrace = true;
+        _isAttack2 = false;
+    }
 }
