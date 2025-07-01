@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WerewolfState : BaseState
+public class IncubusState : BaseState
 {
-    protected WerewolfController _controller;
+    protected IncubusController _controller;
 
-    public WerewolfState(WerewolfController controller)
+    public IncubusState(IncubusController controller)
     {
         _controller = controller;
     }
@@ -27,9 +27,9 @@ public class WerewolfState : BaseState
     }
 }
 
-public class Werewolf_Attack1 : WerewolfState
+public class Incubus_Attack1 : IncubusState
 {
-    public Werewolf_Attack1(WerewolfController controller) : base(controller)
+    public Incubus_Attack1(IncubusController controller) : base(controller)
     {
         _hasPhysics = false;
     }
@@ -38,7 +38,7 @@ public class Werewolf_Attack1 : WerewolfState
     {
         // Attack1 애니메이션 재생
         _controller._view.PlayAnimation(_controller.ATTACK1_HASH);
-        // Attack1 기능 실행
+        // Attack1 기능 실행, Attack1Collider는 애니메이션에 맞춰서 활성화, 비활성화 조절
         _controller.Attack1();
     }
 
@@ -53,5 +53,21 @@ public class Werewolf_Attack1 : WerewolfState
         {
             _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Damaged]);
         }
+    }
+}
+
+public class Incubus_Attack2 : IncubusState
+{
+    public Incubus_Attack2(IncubusController controller) : base(controller)
+    {
+        _hasPhysics = true;
+    }
+
+    public override void Enter()
+    {
+        // Attack2 애니메이션 재생
+        _controller._view.PlayAnimation(_controller.ATTACK2_HASH);
+        // Attack2 기능 실행
+        _controller.Attack2();
     }
 }
