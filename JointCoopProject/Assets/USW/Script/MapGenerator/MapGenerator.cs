@@ -61,24 +61,24 @@ public class MapGenerator : MonoBehaviour
         new Dictionary<Vector2Int, Dictionary<Direction, GameObject>>();
 
     public Dictionary<Vector2Int, RoomData> generatedRooms = new Dictionary<Vector2Int, RoomData>();
-    private List<Vector2Int> availablePositions = new List<Vector2Int>(); // 생성 가능한 위치들
-    private GameObject spawnedPlayer; // 생성된 플레이어
-    private int currentAttempts = 0; // 현재 시도 횟수
-    private int maxGenerationAttempts = 50; // 최대 시도 횟수
+    private List<Vector2Int> availablePositions = new List<Vector2Int>(); 
+    private GameObject spawnedPlayer;
+    private int currentAttempts = 0; 
+    private int maxGenerationAttempts = 50; 
 
     // 디버그 관련
-    public bool enableDebugLogs = false; // 디버그 로그 활성화
+    public bool enableDebugLogs = false; 
     private int failsafe = 0; // 무한루프 방지
 
     [System.Serializable]
     public class RoomData
     {
-        public Vector2Int position; // 방 위치
-        public RoomType roomType; // 방 타입
-        public GameObject roomPrefab; // 방 프리팹
-        public GameObject instantiatedRoom; // 생성된 방 인스턴스
-        public bool isGenerated; // 생성 완료 여부
-        public bool isDeadEnd; // 막다른길 여부
+        public Vector2Int position; 
+        public RoomType roomType; 
+        public GameObject roomPrefab; 
+        public GameObject instantiatedRoom; 
+        public bool isGenerated; 
+        public bool isDeadEnd; 
 
         public RoomData(Vector2Int pos, RoomType type, GameObject prefab)
         {
@@ -135,7 +135,6 @@ public class MapGenerator : MonoBehaviour
         // 1단계: 기본 구조 생성
         if (!GenerateBasicMapStructure())
         {
-            if (enableDebugLogs) Debug.Log("구조 설계 실패 ");
             GenerateMap();
             return;
         }
@@ -143,7 +142,6 @@ public class MapGenerator : MonoBehaviour
         // 2단계: 특수방 배치
         if (!GenerateSpecialRoomsFlexible())
         {
-            if (enableDebugLogs) Debug.Log("특수방 배치 실패");
             GenerateMap();
             return;
         }
@@ -188,13 +186,13 @@ public class MapGenerator : MonoBehaviour
         return true;
     }
 
-    // 초기 기본방들 생성 (막다른길 5개 이상 확보)
+    // 초기 기본방들 생성
     bool GenerateInitialRooms()
     {
         int attempts = 0;
         int generated = 0;
         int maxAttempts = 200;
-        int minDeadEnds = 5; // 특수방용 막다른길
+        int minDeadEnds = 5; 
 
         while (attempts < maxAttempts && availablePositions.Count > 0)
         {
@@ -270,7 +268,6 @@ public class MapGenerator : MonoBehaviour
     {
         if (prefab == null)
         {
-            Debug.LogWarning("방 타입 " + roomType + "의 프리팹이 null입니다");
             return false;
         }
 
@@ -296,7 +293,6 @@ public class MapGenerator : MonoBehaviour
 
         if (validDeadEnds.Count == 0)
         {
-            if (enableDebugLogs) Debug.Log(roomType + "용 유효한 막다른길이 없음");
             return false;
         }
 
@@ -306,8 +302,7 @@ public class MapGenerator : MonoBehaviour
         specialRoom.isDeadEnd = true;
         generatedRooms.Add(targetPos, specialRoom);
         availablePositions.Remove(targetPos);
-
-        if (enableDebugLogs) Debug.Log(roomType + "을(를) " + targetPos + "에 배치했음");
+        
         return true;
     }
 
@@ -348,7 +343,6 @@ public class MapGenerator : MonoBehaviour
                 }
                 else
                 {
-                    if (enableDebugLogs) Debug.Log(room.roomType + " (" + pos + ")의 검증 실패");
                     return false;
                 }
             }
@@ -359,7 +353,6 @@ public class MapGenerator : MonoBehaviour
 
 
         bool success = validCount == 3 == hasCorrectTotalRooms;
-        if (enableDebugLogs) Debug.Log("검증 결과: " + success + " (유효한 방: " + validCount + "개)");
         return success;
     }
 
@@ -413,8 +406,6 @@ public class MapGenerator : MonoBehaviour
                 availablePositions.Remove(randomPos);
             }
         }
-
-        if (enableDebugLogs) Debug.Log("추가로 " + generated + "개 방을 더 생성했음");
     }
 
     // 보스방 2칸 떨어져서 방만드는 필터링
@@ -449,7 +440,7 @@ public class MapGenerator : MonoBehaviour
     {
         if (playerPrefab == null || !generatedRooms.ContainsKey(startPosition))
         {
-            Debug.LogWarning("플레이어 스폰 불가 - 프리팹이나 시작방이 없음");
+           
             return;
         }
 
@@ -473,7 +464,7 @@ public class MapGenerator : MonoBehaviour
         spawnedPlayer.name = "Player";
         spawnedPlayer.tag = "Player";
 
-        if (enableDebugLogs) Debug.Log("플레이어 스폰 위치: " + playerSpawnPos);
+       
     }
 
     void SetupSystems()
@@ -482,18 +473,9 @@ public class MapGenerator : MonoBehaviour
         {
             cameraSystem.SetupForRoom(startPosition);
         }
-        else
-        {
-            Debug.LogWarning("카메라 찾을 수 없음");
-        }
-
         if (minimapManager != null)
         {
             StartCoroutine(DelayedMinimapSetup());
-        }
-        else
-        {
-            Debug.LogWarning("미니맵 매니저 찾을 수 없음");
         }
     }
 
@@ -520,7 +502,7 @@ public class MapGenerator : MonoBehaviour
         return deadEndPositions;
     }
 
-    // 막다른길인지 확인 (인접한 방이 1개만 있는지)
+    // 막다른길인지 확인
     bool IsDeadEndPosition(Vector2Int pos)
     {
         int adjacentCount = 0;
@@ -573,7 +555,6 @@ public class MapGenerator : MonoBehaviour
     {
         if (bossRoomPrefabs == null || bossRoomPrefabs.Length == 0)
         {
-            Debug.LogWarning("보스방 프리팹이 할당되지 않음");
             return null;
         }
 
@@ -585,7 +566,6 @@ public class MapGenerator : MonoBehaviour
     {
         if (secretRoomPrefab == null)
         {
-            if (enableDebugLogs) Debug.Log("비밀방 프리팹이 할당되지 않음");
             return;
         }
 
@@ -610,12 +590,6 @@ public class MapGenerator : MonoBehaviour
             RoomData secretRoom = new RoomData(secretPos, RoomType.Secret, secretRoomPrefab);
             generatedRooms.Add(secretPos, secretRoom);
             availablePositions.Remove(secretPos);
-
-            if (enableDebugLogs) Debug.Log("비밀방이 " + secretPos + "에 배치됨");
-        }
-        else
-        {
-            if (enableDebugLogs) Debug.Log("비밀방을 배치할 적절한 위치를 찾을 수 없음");
         }
     }
 
@@ -716,7 +690,7 @@ public class MapGenerator : MonoBehaviour
         generatedRooms.Clear();
         availablePositions.Clear();
         roomDoors.Clear();
-        failsafe = 0; // failsafe 카운터 리셋
+        failsafe = 0; 
     }
 
     [ContextMenu("맵 재생성")]
@@ -769,12 +743,12 @@ public class MapGenerator : MonoBehaviour
 
         if (doorSprite != null)
         {
-            // GameObject 생성하고 SpriteRenderer 추가
+           
             GameObject door = new GameObject($"Door_{direction}_{roomPos.x}_{roomPos.y}");
             door.transform.position = doorWorldPos;
             door.transform.parent = generatedRooms[roomPos].instantiatedRoom.transform;
 
-            // SpriteRenderer 컴포넌트 추가
+           
             SpriteRenderer spriteRenderer = door.AddComponent<SpriteRenderer>();
             spriteRenderer.sprite = doorSprite;
 
@@ -785,7 +759,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-// 방향별 벽 스프라이트 가져오기
+
     Sprite GetWallSprite(Direction direction)
     {
         switch (direction)
@@ -798,7 +772,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-// 방향별 닫힌 문 스프라이트 가져오기
+
     Sprite GetClosedDoorSprite(Direction direction)
     {
         switch (direction)
@@ -811,7 +785,6 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-// 방향별 열린 문 스프라이트 가져오기  
     Sprite GetOpenDoorSprite(Direction direction)
     {
         switch (direction)
@@ -845,16 +818,5 @@ public class MapGenerator : MonoBehaviour
         }
 
         return roomWorldPos + doorLocalPos;
-    }
-
-    // 테스트용으로 추가한 유틸리티 메서드들
-    public int GetRoomCount()
-    {
-        return generatedRooms.Count;
-    }
-
-    public bool HasRoomAt(Vector2Int pos)
-    {
-        return generatedRooms.ContainsKey(pos);
     }
 }
