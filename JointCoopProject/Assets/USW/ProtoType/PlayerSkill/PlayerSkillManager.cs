@@ -38,7 +38,7 @@ public class PlayerSkillManager : MonoBehaviour
             skill.timer -= Time.deltaTime;
             if (skill.timer <= 0)
             {
-                if(skill.skill._isTrace)
+                if(!skill.skill._isTrace)
                 {
                     Vector3 throwDir = _playerMove._moveInput;
                     if (throwDir == Vector3.zero)
