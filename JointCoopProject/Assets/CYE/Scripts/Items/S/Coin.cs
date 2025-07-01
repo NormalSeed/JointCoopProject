@@ -4,7 +4,7 @@ using System.ComponentModel;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class GameItem : Item, IPickable
+public class Coin : Item, IPickable
 {    
     #region // Unity Message Function
     void Awake()

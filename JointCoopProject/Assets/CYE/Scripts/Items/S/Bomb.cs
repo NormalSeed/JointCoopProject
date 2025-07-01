@@ -3,9 +3,19 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class GameItem : Item, IPickable
-{    
+public class Bomb : Item, IPickable
+{
+    [Header("Item Data")]
+    [SerializeField]
+    private float _explosiveDelay;
+    [SerializeField]
+    private float _explosiveDamage;
+
+    private bool _isSetUp;
+
+
     #region // Unity Message Function
     void Awake()
     {
@@ -13,13 +23,13 @@ public class GameItem : Item, IPickable
     }
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if (!_isSetUp && collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             PickUp(collision.transform);
         }
     }
     #endregion
-    
+
     #region // IPickable
     public void PickUp(Transform pickupPos)
     {
@@ -35,5 +45,16 @@ public class GameItem : Item, IPickable
         itemObject.SetActive(true);
         itemObject.GetComponent<Rigidbody2D>().AddForce(0.5f * transform.forward);
     }
-    #endregion 
+    #endregion
+
+    #region // Member Function
+    private void SetUp(Transform datumPoint)
+    {
+        RaycastHit2D checkForward = Physics2D.Raycast(datumPoint.position, datumPoint.forward, 1f);
+        if (checkForward)
+        {
+
+        }
+    }
+    #endregion
 }
