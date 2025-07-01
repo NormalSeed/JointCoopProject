@@ -18,10 +18,10 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     [SerializeField] float _knockBackTime = 0.2f;
 
     SpriteRenderer _PlayerSprite;
-    public Rigidbody2D _playerRigid;
+    Rigidbody2D _playerRigid;
     Animator _playerAnimator;
 
-    Vector2 _moveInput;
+    public Vector2 _moveInput;
     Vector2 _targetVelocity;
     Vector2 _curVelocity;
     Vector2 _attackDirection;
