@@ -73,7 +73,7 @@ public class WarriorController : MonsterBase
         _isAttack1 = false;
     }
 
-    // Attack2: 부채꼴 공격 패턴, 공격받은 Player는 기절해서 잠시 못움직임, 쿨타임 3초
+    // Attack2: 부채꼴 공격 패턴, 쿨타임 3초
     // 공격 방향을 입력받은 후 공격방향쪽으로 각도 60도의 부채꼴 공격
     public void Attack2()
     {
@@ -89,6 +89,11 @@ public class WarriorController : MonsterBase
                 Debug.Log("공격 맞음");
             }
         }
+    }
+    public void GetAttack2Dir()
+    {
+        // 애니메이션 이벤트로 공격 시작 모션에 할당
+        _attack2Dir = (_player.transform.position - transform.position).normalized;
         if (_coAttack2 != null)
         {
             StopCoroutine(_coAttack2);
@@ -98,11 +103,6 @@ public class WarriorController : MonsterBase
         {
             _coAttack2 = StartCoroutine(CoAttack2());
         }
-    }
-    public void GetAttack2Dir()
-    {
-        // 애니메이션 이벤트로 공격 시작 모션에 할당
-        _attack2Dir = (_player.transform.position - transform.position).normalized;
     }
 
     private IEnumerator CoAttack2()
