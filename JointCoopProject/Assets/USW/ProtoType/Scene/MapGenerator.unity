@@ -168,26 +168,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startRoomPrefab: {fileID: 7496861836574619238, guid: a45fa142c73ca194b88012a6a4a506e7, type: 3}
   defaultRoomPrefabs:
-  - {fileID: 705861012767888997, guid: 5738e8105394df145a43b569daf0961e, type: 3}
   - {fileID: 3888920506856798881, guid: 3581a6bd54e069e448b3f66f779463e5, type: 3}
-  - {fileID: 6143719404621961417, guid: 429719d4dc3eb304ab2f7590e40fa79c, type: 3}
-  - {fileID: 9197960725872469246, guid: 4aa582d39d7ed294b8b92eb3585ac18d, type: 3}
-  - {fileID: 5672596921377248777, guid: 6ef1a06e0646c4145b43a1b0d1feb871, type: 3}
-  - {fileID: 5799145602857332841, guid: 5748ef4937c41ff47bd2885daaa04595, type: 3}
-  - {fileID: 7095119599128949262, guid: 8da4d68e2d98e684ea5ee283de2ee31e, type: 3}
-  - {fileID: 2638197462021651804, guid: 81722ccb60493e44494d21254a7380a5, type: 3}
-  - {fileID: 7885509548282198823, guid: ccfb9e01957e00648b2f104c0691dc9a, type: 3}
-  - {fileID: 413501770259619734, guid: 04a76a6267200c44097b12901d0adfae, type: 3}
-  - {fileID: 4317263867328139841, guid: 5812eb922d0f22d49a5d0212cc6a6b2f, type: 3}
-  - {fileID: 2029431614564714826, guid: 7d1ce546c9e64ab48aaca2a5f9fbbf83, type: 3}
-  - {fileID: 5320206428684247487, guid: beea1e473116bdc41b86e2f4730f42ce, type: 3}
-  - {fileID: 5676898798798317404, guid: af2a1775d64122a44bdb2da39ec765e6, type: 3}
-  - {fileID: 3612517837452149784, guid: 5e8e1dcbe3921ca48812c12b7fccee13, type: 3}
-  - {fileID: 8000769971064094987, guid: cb055476cc0814d4da38c3e568784988, type: 3}
-  - {fileID: 134709334660243239, guid: 4eb72fd1526ea9f4fbe3e9222e4c675a, type: 3}
-  - {fileID: 407746696230788764, guid: d3ac88e1355b9e7499c12b894920e669, type: 3}
-  - {fileID: 3708851742587669595, guid: dc1417bbc9ec9bc4899e60115bc69e2b, type: 3}
-  - {fileID: 656412146344426144, guid: dbbbf4a290df06041ad70cb8224bbdfb, type: 3}
+  - {fileID: 3888920506856798881, guid: 3581a6bd54e069e448b3f66f779463e5, type: 3}
+  - {fileID: 3888920506856798881, guid: 3581a6bd54e069e448b3f66f779463e5, type: 3}
+  - {fileID: 3888920506856798881, guid: 3581a6bd54e069e448b3f66f779463e5, type: 3}
+  - {fileID: 3888920506856798881, guid: 3581a6bd54e069e448b3f66f779463e5, type: 3}
+  - {fileID: 3888920506856798881, guid: 3581a6bd54e069e448b3f66f779463e5, type: 3}
+  - {fileID: 3888920506856798881, guid: 3581a6bd54e069e448b3f66f779463e5, type: 3}
   shopRoomPrefab: {fileID: 2052194385309627822, guid: 1b20407f7471d224d80e2a56e0255917, type: 3}
   itemRoomPrefab: {fileID: 9149892058920509277, guid: c3950aea72aff9b4a95326d847b2e1fe, type: 3}
   secretRoomPrefab: {fileID: 3355924642886105236, guid: 7a3a92c11a14a344995b082e5bbf32b6, type: 3}
@@ -202,6 +189,18 @@ MonoBehaviour:
   prefabSize: {x: 17, y: 9}
   playerPrefab: {fileID: 2443373463263467340, guid: 28c93c198489ed64f8e94a40600f8f48, type: 3}
   playerSpawnOffset: {x: 8, y: 5}
+  wallUpPrefab: {fileID: 21300000, guid: 4ec8586a90df8524fa78d472bffb9d29, type: 3}
+  wallDownPrefab: {fileID: 21300000, guid: 1f8308827c4b0ad4ab0820615e55b139, type: 3}
+  wallLeftPrefab: {fileID: 21300000, guid: 58a5f86e5ec4baa479404a61da1a6339, type: 3}
+  wallRightPrefab: {fileID: 21300000, guid: 65ce3ea78b38cb046997ba7a0ca63f2e, type: 3}
+  doorClosedUpPrefab: {fileID: 21300000, guid: 5c1d915b2c117ec428082892e3da8890, type: 3}
+  doorClosedDownPrefab: {fileID: 21300000, guid: 745f839eb29b4354b8b6a901b92582f9, type: 3}
+  doorClosedLeftPrefab: {fileID: 21300000, guid: 6b3a345efb86c1e4498d52b145a173b8, type: 3}
+  doorClosedRightPrefab: {fileID: 21300000, guid: 7cbcd52b44254af429a7863c4fe2d347, type: 3}
+  doorOpenUpPrefab: {fileID: 21300000, guid: 169ba506e614bde4fa905dcefe76a2ce, type: 3}
+  doorOpenDownPrefab: {fileID: 21300000, guid: e7cc25bc9b177334488801ff8e36b26e, type: 3}
+  doorOpenLeftPrefab: {fileID: 21300000, guid: 695260192efbf484d9dadeecafff1046, type: 3}
+  doorOpenRightPrefab: {fileID: 21300000, guid: d13fda58f262a5d408ae4b16230f59a3, type: 3}
   cameraSystem: {fileID: 0}
   minimapManager: {fileID: 350239011}
   enableDebugLogs: 0
@@ -735,11 +734,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4759838298703841680, guid: d8dde2fd9d073f24f96650e07d78fcdb, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 292.5
+      value: 358.4
       objectReference: {fileID: 0}
     - target: {fileID: 4759838298703841680, guid: d8dde2fd9d073f24f96650e07d78fcdb, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 143.3
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 4759838298703841680, guid: d8dde2fd9d073f24f96650e07d78fcdb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -929,7 +928,7 @@ GameObject:
   - component: {fileID: 1677042938}
   - component: {fileID: 1677042937}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: RoomMonsterManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

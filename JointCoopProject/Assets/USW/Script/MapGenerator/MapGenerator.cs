@@ -7,28 +7,59 @@ using Random = UnityEngine.Random;
 public class MapGenerator : MonoBehaviour
 {
     [Header("방 프리팹들")] public GameObject startRoomPrefab;
-    public GameObject[] defaultRoomPrefabs = new GameObject[20]; 
-    public GameObject shopRoomPrefab; 
-    public GameObject itemRoomPrefab; 
-    public GameObject secretRoomPrefab; 
-    public GameObject[] bossRoomPrefabs = new GameObject[3]; 
+    public GameObject[] defaultRoomPrefabs = new GameObject[20];
+    public GameObject shopRoomPrefab;
+    public GameObject itemRoomPrefab;
+    public GameObject secretRoomPrefab;
+    public GameObject[] bossRoomPrefabs = new GameObject[3];
 
-    [Header("맵 설정")] public int mapSize = 13; 
+    [Header("맵 설정")] public int mapSize = 13;
     public Vector2Int startPosition = new Vector2Int(7, 7);
-    public int totalRooms; 
+    public int totalRooms;
     public float roomGenerationChance = 0.7f; // 방 생성 확률
 
-    [Header("프리팹 설정")] 
-    public Vector2 prefabSize = new Vector2(15, 9); // 방 프리팹 크기
+    [Header("프리팹 설정")] public Vector2 prefabSize = new Vector2(15, 9); // 방 프리팹 크기
 
-    [Header("플레이어 설정")] 
-    public GameObject playerPrefab; // 플레이어 프리팹
+    [Header("플레이어 설정")] public GameObject playerPrefab; // 플레이어 프리팹
     public Vector2 playerSpawnOffset = new Vector2(7.5f, 4.5f); // 스폰 오프셋
 
-    public CameraController cameraSystem; 
-    public MinimapManager minimapManager; 
+
+    [Header("문 설정")] public Sprite wallUpPrefab;
+    public Sprite wallDownPrefab;
+    public Sprite wallLeftPrefab;
+    public Sprite wallRightPrefab;
+
+    public Sprite doorClosedUpPrefab;
+    public Sprite doorClosedDownPrefab;
+    public Sprite doorClosedLeftPrefab;
+    public Sprite doorClosedRightPrefab;
+
+    public Sprite doorOpenUpPrefab;
+    public Sprite doorOpenDownPrefab;
+    public Sprite doorOpenLeftPrefab;
+    public Sprite doorOpenRightPrefab;
+
+    // 문 위치 설정
+    private Vector2 doorUpPos = new Vector2(7.5f, 8.5f);
+    private Vector2 doorDownPos = new Vector2(7.5f, 0.5f);
+    private Vector2 doorLeftPos = new Vector2(0.5f, 4.5f);
+    private Vector2 doorRightPos = new Vector2(14.5f, 4.5f);
+
+    public enum Direction
+    {
+        Up,
+        Down,
+        Left,
+        Right
+    }
+
+    public CameraController cameraSystem;
+    public MinimapManager minimapManager;
 
     // 생성된 방들 정보
+    public Dictionary<Vector2Int, Dictionary<Direction, GameObject>> roomDoors =
+        new Dictionary<Vector2Int, Dictionary<Direction, GameObject>>();
+
     public Dictionary<Vector2Int, RoomData> generatedRooms = new Dictionary<Vector2Int, RoomData>();
     private List<Vector2Int> availablePositions = new List<Vector2Int>(); // 생성 가능한 위치들
     private GameObject spawnedPlayer; // 생성된 플레이어
@@ -135,12 +166,14 @@ public class MapGenerator : MonoBehaviour
 
         // 6단계: 실제 방들 생성 및 시스템 설정
         InstantiateRooms();
+
+        GenerateDoorsAndWalls();
+
         SpawnPlayer();
         SetupSystems();
 
         currentAttempts = 0; // 성공하면 시도 횟수 리셋
         Debug.Log("맵 생성 성공! 총 방 개수: " + generatedRooms.Count);
-
     }
 
     bool GenerateBasicMapStructure()
@@ -325,7 +358,6 @@ public class MapGenerator : MonoBehaviour
         bool hasCorrectTotalRooms = currentRoomCount == totalRooms;
 
 
-
         bool success = validCount == 3 == hasCorrectTotalRooms;
         if (enableDebugLogs) Debug.Log("검증 결과: " + success + " (유효한 방: " + validCount + "개)");
         return success;
@@ -348,7 +380,7 @@ public class MapGenerator : MonoBehaviour
         return count;
     }
 
-    
+
     // 남은 공간에 일반방 추가로 채우기
     void FillRemainingSpaces()
     {
@@ -388,7 +420,6 @@ public class MapGenerator : MonoBehaviour
     // 보스방 2칸 떨어져서 방만드는 필터링
     List<Vector2Int> FilterBossRoomPositions(List<Vector2Int> positions)
     {
-
         List<Vector2Int> validPositions = new List<Vector2Int>();
 
         for (int i = 0; i < positions.Count; i++)
@@ -399,6 +430,7 @@ public class MapGenerator : MonoBehaviour
                 validPositions.Add(pos);
             }
         }
+
         return validPositions;
     }
 
@@ -652,7 +684,6 @@ public class MapGenerator : MonoBehaviour
                 room.instantiatedRoom = Instantiate(room.roomPrefab, worldPos, Quaternion.identity, transform);
                 room.instantiatedRoom.name = $"{room.roomType}Room_{room.position.x}_{room.position.y}";
                 room.isGenerated = true;
-                
             }
         }
     }
@@ -684,6 +715,7 @@ public class MapGenerator : MonoBehaviour
         // 데이터 초기화
         generatedRooms.Clear();
         availablePositions.Clear();
+        roomDoors.Clear();
         failsafe = 0; // failsafe 카운터 리셋
     }
 
@@ -692,6 +724,127 @@ public class MapGenerator : MonoBehaviour
     {
         currentAttempts = 0;
         GenerateMap();
+    }
+
+
+    void GenerateDoorsAndWalls()
+    {
+        foreach (var roomPair in generatedRooms)
+        {
+            Vector2Int roomPos = roomPair.Key;
+            RoomData roomData = roomPair.Value;
+
+            if (roomData.instantiatedRoom == null) continue;
+
+            // 해당 방의 문들을 저장할 딕셔너리 초기화
+            roomDoors[roomPos] = new Dictionary<Direction, GameObject>();
+
+            // 4방향 확인해서 문/벽 생성
+            CheckAndCreateDoor(roomPos, Direction.Up, Vector2Int.up);
+            CheckAndCreateDoor(roomPos, Direction.Down, Vector2Int.down);
+            CheckAndCreateDoor(roomPos, Direction.Left, Vector2Int.left);
+            CheckAndCreateDoor(roomPos, Direction.Right, Vector2Int.right);
+        }
+    }
+
+    void CheckAndCreateDoor(Vector2Int roomPos, Direction direction, Vector2Int directionVector)
+    {
+        Vector2Int adjacentRoomPos = roomPos + directionVector;
+        Vector3 roomWorldPos = generatedRooms[roomPos].instantiatedRoom.transform.position;
+        Vector3 doorWorldPos = GetDoorWorldPosition(roomWorldPos, direction);
+
+        Sprite doorSprite;
+
+        // 인접한 방이 있는지 확인
+        if (generatedRooms.ContainsKey(adjacentRoomPos))
+        {
+            // 인접 방이 있으면 방향별 닫힌 문
+            doorSprite = GetClosedDoorSprite(direction);
+        }
+        else
+        {
+            // 인접 방이 없으면 방향별 벽
+            doorSprite = GetWallSprite(direction);
+        }
+
+        if (doorSprite != null)
+        {
+            // GameObject 생성하고 SpriteRenderer 추가
+            GameObject door = new GameObject($"Door_{direction}_{roomPos.x}_{roomPos.y}");
+            door.transform.position = doorWorldPos;
+            door.transform.parent = generatedRooms[roomPos].instantiatedRoom.transform;
+
+            // SpriteRenderer 컴포넌트 추가
+            SpriteRenderer spriteRenderer = door.AddComponent<SpriteRenderer>();
+            spriteRenderer.sprite = doorSprite;
+
+            // 정렬 순서 설정 (방보다 앞에 보이게)
+            spriteRenderer.sortingOrder = 1;
+
+            roomDoors[roomPos][direction] = door;
+        }
+    }
+
+// 방향별 벽 스프라이트 가져오기
+    Sprite GetWallSprite(Direction direction)
+    {
+        switch (direction)
+        {
+            case Direction.Up: return wallUpPrefab;
+            case Direction.Down: return wallDownPrefab;
+            case Direction.Left: return wallLeftPrefab;
+            case Direction.Right: return wallRightPrefab;
+            default: return null;
+        }
+    }
+
+// 방향별 닫힌 문 스프라이트 가져오기
+    Sprite GetClosedDoorSprite(Direction direction)
+    {
+        switch (direction)
+        {
+            case Direction.Up: return doorClosedUpPrefab;
+            case Direction.Down: return doorClosedDownPrefab;
+            case Direction.Left: return doorClosedLeftPrefab;
+            case Direction.Right: return doorClosedRightPrefab;
+            default: return null;
+        }
+    }
+
+// 방향별 열린 문 스프라이트 가져오기  
+    Sprite GetOpenDoorSprite(Direction direction)
+    {
+        switch (direction)
+        {
+            case Direction.Up: return doorOpenUpPrefab;
+            case Direction.Down: return doorOpenDownPrefab;
+            case Direction.Left: return doorOpenLeftPrefab;
+            case Direction.Right: return doorOpenRightPrefab;
+            default: return null;
+        }
+    }
+
+    Vector3 GetDoorWorldPosition(Vector3 roomWorldPos, Direction direction)
+    {
+        Vector3 doorLocalPos = Vector3.zero;
+
+        switch (direction)
+        {
+            case Direction.Up:
+                doorLocalPos = new Vector3(doorUpPos.x, doorUpPos.y, 0);
+                break;
+            case Direction.Down:
+                doorLocalPos = new Vector3(doorDownPos.x, doorDownPos.y, 0);
+                break;
+            case Direction.Left:
+                doorLocalPos = new Vector3(doorLeftPos.x, doorLeftPos.y, 0);
+                break;
+            case Direction.Right:
+                doorLocalPos = new Vector3(doorRightPos.x, doorRightPos.y, 0);
+                break;
+        }
+
+        return roomWorldPos + doorLocalPos;
     }
 
     // 테스트용으로 추가한 유틸리티 메서드들
