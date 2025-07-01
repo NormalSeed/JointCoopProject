@@ -157,7 +157,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _stateMachine.FixedUpdate();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {

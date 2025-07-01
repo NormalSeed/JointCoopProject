@@ -7,6 +7,6 @@ public class GhostController : MonsterBase
     protected override void Init()
     {
         base.Init();
-        _monsterID = 10104;
+        _monsterID = 10105;
     }
 }
