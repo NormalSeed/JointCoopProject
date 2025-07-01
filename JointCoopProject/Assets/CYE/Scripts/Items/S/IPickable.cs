@@ -4,12 +4,12 @@ using UnityEngine;
 
 public interface IPickable
 {
-    // 아이템 주움
-    public void PickUp(Transform PlayerPos);
+    public void PickUp(Transform pickupPos);
+    public void Drop(Transform dropPos);
 }
 public enum SkillItemType
 {
-    Active, PassiveAttack, PassiveAuto
+    Active, PassiveAttack, PassiveAuto, shop, Expend
 }
 public enum NonSkillItemType
 { 

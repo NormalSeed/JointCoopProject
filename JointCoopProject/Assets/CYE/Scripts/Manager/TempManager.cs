@@ -4,13 +4,11 @@ using UnityEngine;
 
 public static class TempManager
 {
-    public static TempPlayerManager _player => TempPlayerManager.GetInstance();
-    // public static InventoryManager _inventory => InventoryManager.GetInstance();
+    public static InventoryManager _inventory => InventoryManager.GetInstance();
     
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Initailize()
     {
-        TempPlayerManager.CreateInstance();
-        // InventoryManager.CreateInstance();
+        InventoryManager.CreateInstance();
     }
 }
