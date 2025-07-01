@@ -50,11 +50,8 @@ public class Bomb : Item, IPickable
     #region // Member Function
     private void SetUp(Transform datumPoint)
     {
-        RaycastHit2D checkForward = Physics2D.Raycast(datumPoint.position, datumPoint.forward, 1f);
-        if (checkForward)
-        {
-
-        }
+        GameObject setUpBomb = Instantiate(gameObject, datumPoint.position, Quaternion.identity);
+        // setUpBomb._isSetUp = true;
     }
     #endregion
 }
