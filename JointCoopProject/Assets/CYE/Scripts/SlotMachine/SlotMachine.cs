@@ -40,36 +40,27 @@ public class SlotMachine : MonoBehaviour
     private const int ITEM_PROBABILITY = 12;
     private const int COIN_PROBABILITY = 18;
 
+    private bool _canUse;
     private SlotResult _slotResult;
     private System.Random _randomInstance;
+    private Animator _animator;
+    private Coroutine _slotRoutine;
 
     private void Awake()
     {
         CheckValidation();
         Init();
     }    
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if (_canUse && collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            // 슬롯머신 애니메이션 재생(있다면)
             if (CheckPayFee())
             {
-                _slotResult = GetRandomSlotResult();
-                switch (_slotResult)
-                {
-                    case SlotResult.Item:
-                        GetRandomItem();
-                        break;
-                    case SlotResult.Coin:
-                        GetRandomCoin();
-                        break;
-                    case SlotResult.Fail:
-                        // 꽝 애니메이션 재생(있다면)
-                        break;
-                    default:
-                        break;
+                _canUse = false;
+                if (_slotRoutine == null)
+                { 
+                    _slotRoutine = StartCoroutine(GetSlotResult());
                 }
             }
         }
@@ -77,7 +68,9 @@ public class SlotMachine : MonoBehaviour
     private void Init()
     {
         _randomInstance = new System.Random((int)GetUnixTimeStamp());
-    }
+        _animator = GetComponentInChildren<Animator>();
+        _canUse = true;
+    } 
     private void CheckValidation()
     {
         if (_minCoin > _maxCoin)
@@ -90,14 +83,43 @@ public class SlotMachine : MonoBehaviour
         }
         if (_itemArray.Length < 1)
         { 
-            throw new Exception("Null Reference Exception: SlotMachine._coinPrefab");
+            throw new Exception("Null Reference Exception: SlotMachine._itemArray not set.");
         }
         
     }
     private bool CheckPayFee()
     {
-        // return true; // TestCode
         return TempManager.inventory._coinCount >= fee;
+    }
+    private IEnumerator GetSlotResult()
+    {
+        _animator.SetBool("IsWorking", true);
+        yield return new WaitForSeconds(2f);
+
+        _animator.SetBool("IsWorking", false);
+        _slotResult = GetRandomSlotResult();
+        Debug.Log($"{_slotResult}");
+        switch (_slotResult)
+        {
+            case SlotResult.Item:
+                GetRandomItem();
+                break;
+            case SlotResult.Coin:
+                GetRandomCoin();
+                break;
+            case SlotResult.Fail:
+                // 꽝 애니메이션 재생(있다면)
+                break;
+            default:
+                break;
+        }
+
+        _canUse = true;
+        if (_slotRoutine != null)
+        {
+            StopCoroutine(_slotRoutine);
+            _slotRoutine = null;
+        }
     }
     private SlotResult GetRandomSlotResult()
     {
