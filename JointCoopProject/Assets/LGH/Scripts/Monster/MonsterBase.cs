@@ -193,7 +193,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _isDamaged = false;
     }
 
-    public void Die()
+    public virtual void Die()
     {
         _isDead = true;
         
