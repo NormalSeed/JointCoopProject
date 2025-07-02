@@ -19,3 +19,7 @@ public enum ChangeTarget
 {
     CurHp, AttackPoint, AttackSpeed, MoveSpeed, Luck
 }
+public interface IInstallable
+{
+    public void Install(Transform setUpPos);
+}

@@ -6,6 +6,10 @@ using UnityEngine;
 
 public class GameItem : Item, IPickable
 {    
+    [SerializeField]
+    [Tooltip("아이템 중복 획득 가능 여부를 결정합니다.")]
+    private bool _canStackable;
+
     #region // Unity Message Function
     void Awake()
     {
