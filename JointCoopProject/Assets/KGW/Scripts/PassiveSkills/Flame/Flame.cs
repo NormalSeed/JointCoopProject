@@ -25,16 +25,16 @@ public class Flame : SkillDataSO
         {
             return;
         }
-        // 염화 데미지 (스킬레벨 +1 == 데미지 +10)
+        // 염화 대미지 (스킬레벨 +1 == 대미지 +10)
         _totalDamage = _skillDamage + (_skillLevel * 10);
 
         // 염화 생성
-        GameObject Flame = Instantiate(skillPrefab, caster.position, caster.rotation);
-        FlameController FlameController = Flame.GetComponent<FlameController>();
-        FlameController.Init(dir, _projectileSpeed, _totalDamage);
+        GameObject flame = Instantiate(skillPrefab, caster.position, caster.rotation);
+        FlameController flameController = flame.GetComponent<FlameController>();
+        flameController.Init(dir, _projectileSpeed, _totalDamage);
 
         // 캐릭터의 이동방향에 맞게 불덩이 회전
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        Flame.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        flame.transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
 }

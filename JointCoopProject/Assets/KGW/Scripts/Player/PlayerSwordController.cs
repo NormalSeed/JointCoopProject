@@ -11,11 +11,12 @@ public class PlayerSwordController : MonoBehaviour
     Vector2 _wieldDirection;        // 휘두르는 방향 벡터
     float _wieldAngle = 90f;       // 무기의 휘두름 반경
     float _rotationSpeed = 420f;    // 회전 속도 (값이 높을 수록 빨리 회전한다)
-    float _wieldRadius = 0.3f;      // 무기 회전 반경
+    float _wieldRadius = 0;      // 무기 회전 반경
     float _currentAngle = 0;       // 현재 각도
     float _startAngle = 0;         // 시작 각도
     float _wieldSpeed;              // 플레이어의 공격 속도
     int _attackDamage;
+    PlayerSkillManager _skillManager;
 
     
     private void Update()
@@ -24,13 +25,14 @@ public class PlayerSwordController : MonoBehaviour
     }
 
     // 데이터 초기화
-    public void Init(Transform player, Vector2 direction, float attackSpeed, int attackDamage)
+    public void Init(Transform player, Vector2 direction, float attackSpeed, int attackDamage, PlayerSkillManager skillManager)
     {
         _playerPos = player;
         _wieldDirection = direction.normalized;
         _wieldSpeed = attackSpeed;
         _currentAngle = 0f;
         _attackDamage = attackDamage;
+        _skillManager = skillManager;
 
         _startAngle = Mathf.Atan2(_wieldDirection.y, _wieldDirection.x) * Mathf.Rad2Deg;
 
@@ -68,7 +70,9 @@ public class PlayerSwordController : MonoBehaviour
             IDamagable damagable = collision.GetComponent<IDamagable>();
             if (damagable != null)
             {
+                //_skillManager._isAttack = true;
                 damagable.TakeDamage(_attackDamage, transform.position);
+                _skillManager.SwordUpgradeAttack();
             }
         }
     }

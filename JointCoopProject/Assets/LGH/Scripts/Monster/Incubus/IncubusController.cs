@@ -47,7 +47,7 @@ public class IncubusController : MonsterBase
         if (!_isDamaged && _attack2Cooldown <= 0f && !_isAttack1)
         {
             _movement._isTrace = false;
-            _isAttack1 = true;
+            _isAttack2 = true;
         }
     }
 
@@ -66,7 +66,7 @@ public class IncubusController : MonsterBase
             _attack1Collider.transform.position = transform.position + new Vector3(_model._attack1Range / 2, 0);
         }
 
-        // Àü¹æÀ¸·Î µµ³¢¸¦ ÈÖµÎ¸¥ ÈÄ 1ÃÊ ¸ØÃã
+        // Àü¹æÀ¸·Î Ã¤ÂïÀ» ÈÖµÎ¸¥ ÈÄ 1ÃÊ ¸ØÃã
         // 1ÃÊ ¸ØÃç¾ß ÇÏ¹Ç·Î Coroutine »ç¿ë ÇÊ¿ä
         _coAttack1 = StartCoroutine(CoAttack1());
     }
@@ -115,7 +115,7 @@ public class IncubusController : MonsterBase
         {
             float distance = Vector2.Distance(transform.position, _player.transform.position);
             _outerRadius = _model._attack2Range;
-            _innerRadius = _model._attack2Range - 1;
+            _innerRadius = _model._attack2Range - 2;
 
             if (distance >= _innerRadius && distance <= _outerRadius)
             {
@@ -128,5 +128,6 @@ public class IncubusController : MonsterBase
         _movement._isTrace = true;
         _model._moveSpd *= 2;
         _isAttack2 = false;
+        _attack2Cooldown = 10f;
     }
 }

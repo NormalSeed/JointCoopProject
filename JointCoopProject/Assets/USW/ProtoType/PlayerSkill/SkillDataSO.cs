@@ -15,6 +15,7 @@ public class SkillDataSO : ScriptableObject
     public float skillPossibility;
     public Sprite skillIcon;
     public bool _isTrace;
+    public bool _isSwordAttack;
     //public string skillDescription;
     public GameObject skillPrefab;
     

@@ -46,19 +46,19 @@ public static class BuffCreateFactory
         {
             return GenerateBuffType(BuffCategory.Blessing, 1);
         }
-        else if (BlessLevelRoll < level2_Range)  // Level 2 Bless (7%) 운1 -> Level1 확률 1%증가
+        else if (BlessLevelRoll < level2_Range)  // Level 2 Bless (7%) 운1 -> Level2 확률 1%증가
         {
             return GenerateBuffType(BuffCategory.Blessing, 2);
         }
-        else if (BlessLevelRoll < level3_Range)  // Level 3 Bless (2%) 운1 -> Level1 확률 1%증가
+        else if (BlessLevelRoll < level3_Range)  // Level 3 Bless (2%) 운1 -> Level3 확률 1%증가
         {
             return GenerateBuffType(BuffCategory.Blessing, 3);
         }
-        else if (BlessLevelRoll < level4_Range)  // Level 4 Bless (0.65%) 운1 -> Level1 확률 0.7%증가
+        else if (BlessLevelRoll < level4_Range)  // Level 4 Bless (0.65%) 운1 -> Level4 확률 0.7%증가
         {
             return GenerateBuffType(BuffCategory.Blessing, 4);
         }
-        else  // Level 5 Bless (0.35%) 운1 -> Level1 확률 0.3%증가
+        else  // Level 5 Bless (0.35%) 운1 -> Level5 확률 0.3%증가
         {
             return GenerateBuffType(BuffCategory.Blessing, 5);
         }

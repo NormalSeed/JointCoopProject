@@ -16,7 +16,7 @@ public class SkeletonArcherController : MonsterBase
     protected override void Init()
     {
         base.Init();
-        _monsterID = 10106;
+        _monsterID = 10107;
         _arrowController = GetComponentInChildren<SkeletonArcherArrowController>();
     }
 

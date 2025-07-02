@@ -88,5 +88,6 @@ public class PlayerStatManager : MonoBehaviour
 
     // Player Alive
     [SerializeField] bool alive = true;
-    public bool _alive { get { return alive; } set { alive = value; } }    
+    public bool _alive { get { return alive; } set { alive = value; } }
+
 }
