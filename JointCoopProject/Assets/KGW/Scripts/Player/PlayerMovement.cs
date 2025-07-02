@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
 {
     [Header("Player Weapon Status")]
     [SerializeField] GameObject _swordPrefab;
-    [SerializeField] float _swordAttackDelay = 0.5f;    // 근접 공격 딜레이
+    [SerializeField] float _swordAttackDelay = 1f;    // 근접 공격 딜레이
 
     [Header("Player KnockBack & Invincible")]
     [SerializeField] public float _hitCoolTime = 0.5f;
@@ -27,7 +27,6 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     Vector2 _curVelocity;
     Vector2 _dashDirection;
 
-    float _shotTimer;
     float _wieldTimer;   
     bool _isDash = false;
     bool _isDamaged = false;
@@ -202,7 +201,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         {
             GameObject sword = Instantiate(_swordPrefab, transform.position, Quaternion.identity);
             // 검의 데이터 초기화
-            sword.GetComponent<PlayerSwordController>().Init(transform, _attackDirection, PlayerStatManager.Instance._attackSpeed, PlayerStatManager.Instance._attackDamage, _skillManager);
+            sword.GetComponent<PlayerSwordController>().Init(transform, _attackDirection, PlayerStatManager.Instance._attackSpeed, PlayerStatManager.Instance._attackDamage, _skillManager, PlayerStatManager.Instance._attackRange);
 
             // Attack Animation
             AttackDirection(_selectAttackDir);

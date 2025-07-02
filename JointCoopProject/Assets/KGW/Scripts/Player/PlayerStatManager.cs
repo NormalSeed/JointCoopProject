@@ -47,15 +47,15 @@ public class PlayerStatManager : MonoBehaviour
     public int _attackDamage { get { return attackDamage; } set { attackDamage = value; } }
 
     // Player Move Speed
-    [SerializeField][Range(0, 10)] float moveSpeed = 3;
+    [SerializeField][Range(0, 10)] float moveSpeed = 3f;
     public float _moveSpeed { get { return moveSpeed; } set { moveSpeed = value; } }
 
     // Player Acceleration Speed
-    [SerializeField][Range(0, 30)] float accelerationSpeed = 20;
+    [SerializeField][Range(0, 30)] float accelerationSpeed = 20f;
     public float _accelerationSpeed { get { return accelerationSpeed; } set { accelerationSpeed = value; } }
 
     // Player Deceleration Speed
-    [SerializeField][Range(0, 30)] float decelerationSpeed = 20;
+    [SerializeField][Range(0, 30)] float decelerationSpeed = 20f;
     public float _decelerationSpeed { get {return decelerationSpeed; } set { decelerationSpeed = value; } }
 
     // Player Dash Speed
@@ -67,15 +67,15 @@ public class PlayerStatManager : MonoBehaviour
     public float _dashDurationTime { get { return dashDurationTime; } set { dashDurationTime = value; } }
 
     // Player Dash CoolTime
-    [SerializeField][Range(0, 2)] float dashCoolTime = 1;
+    [SerializeField][Range(0, 2)] float dashCoolTime = 1f;
     public float _dashCoolTime { get { return dashCoolTime; } set { dashCoolTime = value; } }
 
-    // Player Shot Speed
-    [SerializeField] float shotSpeed = 7;
-    public float _shotSpeed { get { return shotSpeed; } set { shotSpeed = value; } }
+    // Player Attack Speed
+    [SerializeField] float attackRange = 0.8f;
+    public float _attackRange { get { return attackRange; } set { attackRange = value; } }
 
     // Player Attack Speed
-    [SerializeField] float attackSpeed = 1;
+    [SerializeField] float attackSpeed = 1f;
     public float _attackSpeed { get { return attackSpeed; } set { attackSpeed = value; } }
 
     // Player Dash Ability Check
