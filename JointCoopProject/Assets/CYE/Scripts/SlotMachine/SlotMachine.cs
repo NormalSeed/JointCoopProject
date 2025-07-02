@@ -27,7 +27,7 @@ public class SlotMachine : MonoBehaviour
     [Space(10)]
     [SerializeField]
     [Tooltip("당첨시 지급되는 코인의 Object를 지정합니다.")]
-     private GameItem _coinPrefab;
+     private GameObject _coinPrefab;
 
     [SerializeField]
     [Tooltip("코인 당첨시 지급되는 최저량을 지정합니다.(단위: 1코인)")]
@@ -96,11 +96,12 @@ public class SlotMachine : MonoBehaviour
     }
     private bool CheckPayFee()
     {
-        return true; // TestCode
-        // return TempManager.inventory._coin >= fee;
+        // return true; // TestCode
+        return TempManager.inventory._coinCount >= fee;
     }
     private SlotResult GetRandomSlotResult()
     {
+        TempManager.inventory.UseCoin(fee);
         int randomNumber = _randomInstance.Next(0, 100);
         if (randomNumber < ITEM_PROBABILITY)
         {
@@ -125,7 +126,7 @@ public class SlotMachine : MonoBehaviour
         int randomCoinCount = _randomInstance.Next(_minCoin, _maxCoin + 1);
         for (int cnt = 0; cnt < randomCoinCount; cnt++)
         {
-            _coinPrefab.Drop(_dropPoint);
+            _coinPrefab.GetComponent<Coin>()?.Drop(_dropPoint);
         }
     }
     private static float GetUnixTimeStamp()
