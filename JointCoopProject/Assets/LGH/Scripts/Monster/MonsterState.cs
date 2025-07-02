@@ -29,7 +29,7 @@ public class MonsterState : BaseState
             _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Attack2]);
         }
 
-        if (_controller._isDamaged)
+        if (_controller._isDamaged && !_controller._isAttack1 && !_controller._isAttack2 && !_controller._isAttack3)
         {
             _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Damaged]);
         }
@@ -124,6 +124,7 @@ public class Monster_Trace : MonsterState
 
 public class Monster_Damaged : MonsterState
 {
+    private float _damagedTime;
     public Monster_Damaged(MonsterBase controller) : base(controller)
     {
         _hasPhysics = false;
@@ -131,16 +132,23 @@ public class Monster_Damaged : MonsterState
 
     public override void Enter()
     {
+        _damagedTime = 1f;
         _controller._view.PlayAnimation(_controller.DAMAGED_HASH);
     }
 
     public override void Update()
     {
-        base.Update();
-        if (!_controller._isDamaged)
+        _damagedTime -= Time.deltaTime;
+
+        if (_damagedTime < 0f)
         {
             _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Idle]);
         }
+    }
+
+    public override void Exit()
+    {
+        _controller._isDamaged = false;
     }
 }
 

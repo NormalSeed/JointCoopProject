@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EliteOrcState : BaseState
+public class GolluxState : BaseState
 {
-    protected EliteOrcController _controller;
+    protected GolluxController _controller;
 
-    public EliteOrcState(EliteOrcController controller)
+    public GolluxState(GolluxController controller)
     {
         _controller = controller;
     }
@@ -18,7 +18,7 @@ public class EliteOrcState : BaseState
 
     public override void Update()
     {
-        
+
     }
 
     public override void Exit()
@@ -27,18 +27,18 @@ public class EliteOrcState : BaseState
     }
 }
 
-public class EliteOrc_Attack1 : EliteOrcState
+public class Gollux_Attack1 : GolluxState
 {
-    private float _rushDelay = 0.5f;
-    public EliteOrc_Attack1(EliteOrcController controller) : base(controller)
+    private float _rushDelay;
+    public Gollux_Attack1(GolluxController controller) : base(controller)
     {
         _hasPhysics = true;
     }
 
     public override void Enter()
     {
-        // Attack1 애니메이션 재생과 기능이 Attack1에 통합
         _controller.Attack1();
+        _rushDelay = 0.5f;
     }
 
     public override void Update()
@@ -46,6 +46,11 @@ public class EliteOrc_Attack1 : EliteOrcState
         if (_rushDelay > 0f) _rushDelay -= Time.deltaTime;
 
         if (_controller._movement._isTrace && !_controller._isAttack1)
+        {
+            _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Trace]);
+        }
+
+        if (_controller._isDamaged)
         {
             _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Stun]);
         }
@@ -55,42 +60,33 @@ public class EliteOrc_Attack1 : EliteOrcState
     {
         if (_rushDelay <= 0f)
         {
-            _controller.gameObject.transform.position = Vector2.MoveTowards(_controller.gameObject.transform.position, _controller._rushDestination, _controller._model._moveSpd * 1.5f * Time.deltaTime);
+            _controller.gameObject.transform.position = Vector2.MoveTowards(_controller.gameObject.transform.position, _controller._rushDestination, 8 * Time.deltaTime);
         }
-    }
-
-    public override void Exit()
-    {
-        _rushDelay = 0.5f;
     }
 }
 
-public class EliteOrc_Stun : EliteOrcState
+public class Gollux_Stun : GolluxState
 {
-    private float stunDuration = 4f;
-    public EliteOrc_Stun(EliteOrcController controller) : base(controller)
+    private float _stunDuration;
+    public Gollux_Stun(GolluxController controller) : base(controller)
     {
         _hasPhysics = false;
     }
 
     public override void Enter()
     {
-        _controller._view.PlayAnimation(_controller.IDLE_HASH);
+        _controller._view.PlayAnimation(_controller.STUN_HASH);
+        _stunDuration = 5f;
     }
 
     public override void Update()
     {
         base.Update();
-        stunDuration -= Time.deltaTime;
+        _stunDuration -= Time.deltaTime;
 
-        if (stunDuration <= 0)
+        if (_stunDuration <= 0)
         {
             _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Trace]);
         }
-    }
-
-    public override void Exit()
-    {
-        stunDuration = 4f;
     }
 }
