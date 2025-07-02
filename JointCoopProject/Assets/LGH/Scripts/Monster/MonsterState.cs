@@ -29,6 +29,11 @@ public class MonsterState : BaseState
             _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Attack2]);
         }
 
+        if (_controller._isAttack3 && !_controller._isDamaged && _controller._isActivated)
+        {
+            _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Attack3]);
+        }
+
         if (_controller._isDamaged && !_controller._isAttack1 && !_controller._isAttack2 && !_controller._isAttack3)
         {
             _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Damaged]);
