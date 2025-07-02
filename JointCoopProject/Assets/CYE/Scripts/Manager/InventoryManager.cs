@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,10 +15,12 @@ public class InventoryManager : TempSingleton<InventoryManager>
     // UI invisible
     private List<ItemDataSO> _invItemList = new List<ItemDataSO>();
 
-    private int coin;
-    public int _coin { get { return coin; } set { coin = value; } }
-    public int bomb;
-    public int _bomb { get { return bomb; } set { bomb = value; } }
+    private int coinCount;
+    public int _coinCount { get { return coinCount; } private set { coinCount = value; } }
+    [SerializeField] private GameObject _coinPrefab;
+    private int bombCount;
+    public int _bombCount { get { return bombCount; } private set { bombCount = value; } }
+    [SerializeField] private GameObject _bombPrefab;
 
     private struct ItemSlot
     {
@@ -82,10 +85,22 @@ public class InventoryManager : TempSingleton<InventoryManager>
 
     public void GetCoin()
     {
-
+        _coinCount += 1;
+    }
+    public void UseCoin(int useAmount)
+    {
+        _coinCount -= useAmount;
     }
     public void GetBomb()
-    { 
-        
+    {
+        _bombCount += 1;
+    }
+    public void UseBomb(Transform playerPos)
+    {
+        if (_bombCount >= 1)
+        { 
+            _bombCount -= 1;
+            _bombPrefab.GetComponent<Bomb>().Install(playerPos);
+        }
     }
 }
