@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2242306298237737323}
-  - component: {fileID: 1344563393208716512}
+  - component: {fileID: 2938308912354061933}
   - component: {fileID: 3165434885085374934}
   m_Layer: 0
   m_Name: AttackBlade
@@ -34,8 +34,8 @@ Transform:
   - {fileID: 8332524855720246926}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &1344563393208716512
-CircleCollider2D:
+--- !u!70 &2938308912354061933
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -66,9 +66,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.000000029802322}
-  serializedVersion: 2
-  m_Radius: 0.35467902
+  m_Offset: {x: 0.0032212748, y: 0.012443583}
+  m_Size: {x: 0.72112715, y: 0.6329224}
+  m_Direction: 1
 --- !u!114 &3165434885085374934
 MonoBehaviour:
   m_ObjectHideFlags: 0
