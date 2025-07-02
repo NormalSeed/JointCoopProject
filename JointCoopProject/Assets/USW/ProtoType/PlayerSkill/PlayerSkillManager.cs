@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 /// <summary>
 /// 플레이어가 현재 보유한 스킬 목록들을 보여줍니다.
@@ -11,6 +12,8 @@ public class PlayerSkillManager : MonoBehaviour
     // 플레이어가 현재 보유 중인 스킬 목록
     private List<SkillDataSO> ownedSkills = new();
     [SerializeField] PlayerMovement _playerMove;
+
+    public bool _isAttack = false;
 
    
     /// <summary>
@@ -23,9 +26,20 @@ public class PlayerSkillManager : MonoBehaviour
         public float cooldown = 5f;   // 쿨다운 간격 (초단위입니다!)
         public float timer;           // 현재 남은 시간
     }
-   
+
+    /// <summary>
+    /// 기존 검 공격 강화 스킬 정보를 저장하는 클래스
+    /// </summary>
+    [System.Serializable]
+    public class SwordUpgradeSkill
+    {
+        public SkillDataSO swordSkill;  // 강화할 스킬 데이터
+    }
+
     // 자동 발동 스킬들의 리스트
     public List<AutoSkill> autoskills = new();
+    // 기본 공격 강화 스킬들의 리스트
+    public List<SwordUpgradeSkill> swordUpgradeskills = new();
 
    
     /// <summary>
@@ -33,30 +47,7 @@ public class PlayerSkillManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        foreach (var skill in autoskills)
-        {         
-            skill.timer -= Time.deltaTime;
-            if (skill.timer <= 0)
-            {
-                if(!skill.skill._isTrace)
-                {
-                    Vector3 throwDir = _playerMove._moveInput;
-                    if (throwDir == Vector3.zero)
-                    {
-                        throwDir = Vector3.right;
-                    }
-                    // 플레이어 방향으로 스킬 사용
-                    skill.skill.UseSkill(transform, throwDir);
-                }
-                else
-                {
-                    // 적 추적 스킬 사용
-                    skill.skill.UseSkill(transform);
-                }
-                // 스킬 쿨타임
-                skill.timer = skill.cooldown;
-            }
-        }
+        AutoSkillAttack();
     }
    
     /// <summary>
@@ -69,22 +60,27 @@ public class PlayerSkillManager : MonoBehaviour
         {
             ownedSkills.Add(newSkill);
         }
-
-            AutoSkill autoSkill = new AutoSkill()
+        // 획득한 스킬이 기본 공격 강화 스킬이면 리스트에 추가
+        if (newSkill._isSwordAttack)
         {
-            skill = newSkill
-        };
+            SwordUpgradeSkill swordUpgradeSkill = new SwordUpgradeSkill()
+            {
+                swordSkill = newSkill
+            };
 
-        // 뭐지 ? skilldataso 에서 받아와서 skillpickupitem이 얘 호출하면 받아와야하는거아닌가 ? 
-        // 아니 collsion2d 해서 받아오는게 맞잖아 
-        // 디버그도 안찍히고이게뭐야
-        // 랩핑에 문제가있었나 ? 아니잖아 
-        // 뭔데 그럼 
-        // skillpickupitem 에서 얘가 안불러와지는건가 ? 
+            swordUpgradeskills.Add(swordUpgradeSkill);
+            Debug.Log($"공격 강화 스킬 {newSkill.skillName} 추가됨");
+        }
+        else    // 공격 강화 스킬이 아니면 패시브 리스트에 추가
+        {
+            AutoSkill autoSkill = new AutoSkill()
+            {
+                skill = newSkill
+            };
 
-
-        autoskills.Add(autoSkill);
-        Debug.Log($"{newSkill.skillName} 추가됨");
+            autoskills.Add(autoSkill);
+            Debug.Log($"패시브 스킬 {newSkill.skillName} 추가됨");
+        }
     }
    
     /// <summary>
@@ -103,6 +99,52 @@ public class PlayerSkillManager : MonoBehaviour
             skill.UseSkill(transform);
         }
    
+    }
+
+    /// <summary>
+    /// 플레이어의 패시브 스킬 공격
+    /// </summary>
+    public void AutoSkillAttack()
+    {
+        foreach (var skill in autoskills)
+        {
+            skill.timer -= Time.deltaTime;
+            if (skill.timer <= 0)
+            {
+                if (!skill.skill._isTrace)
+                {
+                    Vector3 throwDir = _playerMove._moveInput;
+                    // 플레이어가 움직이지 않으면 오른쪽으로 공격함
+                    if (throwDir == Vector3.zero)
+                    {
+                        throwDir = Vector3.right;
+                    }
+                    // 플레이어 방향으로 스킬 사용
+                    skill.skill.UseSkill(transform, throwDir);
+                }
+                else
+                {
+                    // 적 추적 스킬 사용
+                    skill.skill.UseSkill(transform);
+                }
+                // 스킬 쿨타임
+                skill.timer = skill.cooldown;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 플레이어의 기존 검 공격 강화 스킬
+    /// </summary>
+    public void SwordUpgradeAttack()
+    {
+        Debug.Log("근접공격 맞음");
+        foreach (var skill in swordUpgradeskills)
+        {
+            Vector3 attackDir = _playerMove._attackDirection;
+
+            skill.swordSkill.UseSkill(transform, attackDir);
+        }
     }
 }
 

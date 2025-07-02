@@ -6,25 +6,25 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour, IDamagable
 {
     [Header("Player Weapon Status")]
-    [SerializeField] GameObject _tearPrefab;
     [SerializeField] GameObject _swordPrefab;
-    [SerializeField] float _tearAttackDelay = 0.3f;     // 눈물 공격 딜레이
     [SerializeField] float _swordAttackDelay = 0.5f;    // 근접 공격 딜레이
-    [SerializeField] bool _isMeleeWeapon;
 
     [Header("Player KnockBack & Invincible")]
     [SerializeField] public float _hitCoolTime = 0.5f;
     [SerializeField] float _knockBackForce = 3f;
     [SerializeField] float _knockBackTime = 0.2f;
 
+    [Header("skill Manager Reference")]
+    [SerializeField] PlayerSkillManager _skillManager;
+
     SpriteRenderer _PlayerSprite;
     Rigidbody2D _playerRigid;
     Animator _playerAnimator;
 
     public Vector2 _moveInput;
+    public Vector2 _attackDirection;
     Vector2 _targetVelocity;
     Vector2 _curVelocity;
-    Vector2 _attackDirection;
     Vector2 _dashDirection;
 
     float _shotTimer;
@@ -76,7 +76,6 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         _playerRigid = GetComponent<Rigidbody2D>();
         _playerAnimator = GetComponent<Animator>();
         _PlayerSprite = GetComponent<SpriteRenderer>();
-        _isMeleeWeapon = true;
     }
 
     // Player Move Input
@@ -199,32 +198,21 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     {
         if (_isKnockBack) return;
 
-        if (_isMeleeWeapon)
+        if (_attackDirection != Vector2.zero && _wieldTimer <= 0f)
         {
-            if (_attackDirection != Vector2.zero && _wieldTimer <= 0f)
-            {
-                GameObject sword = Instantiate(_swordPrefab, transform.position, Quaternion.identity);
-                // 검의 데이터 초기화
-                sword.GetComponent<PlayerSwordController>().Init(transform, _attackDirection, PlayerStatManager.Instance._attackSpeed, PlayerStatManager.Instance._attackDamage);
-                
-                // Attack Animation
-                AttackDirection(_selectAttackDir);
+            GameObject sword = Instantiate(_swordPrefab, transform.position, Quaternion.identity);
+            // 검의 데이터 초기화
+            sword.GetComponent<PlayerSwordController>().Init(transform, _attackDirection, PlayerStatManager.Instance._attackSpeed, PlayerStatManager.Instance._attackDamage, _skillManager);
 
-                // 공격속도에 비례하여 근접 공격 쿨타임 계산
-                _wieldTimer = _swordAttackDelay / PlayerStatManager.Instance._attackSpeed;   
-            }
-            _wieldTimer -= Time.deltaTime;
+            // Attack Animation
+            AttackDirection(_selectAttackDir);
+
+            // 공격속도에 비례하여 근접 공격 쿨타임 계산
+            _wieldTimer = _swordAttackDelay / PlayerStatManager.Instance._attackSpeed;
         }
-        else
-        {
-            if (_attackDirection != Vector2.zero && _shotTimer <= 0f)
-            {
-                GameObject tearGeneration = Instantiate(_tearPrefab, transform.position, Quaternion.identity);
-                tearGeneration.GetComponent<Rigidbody2D>().velocity = _attackDirection * PlayerStatManager.Instance._shotSpeed;
-                _shotTimer = _tearAttackDelay;
-            }
-            _shotTimer -= Time.deltaTime;
-        }
+        _wieldTimer -= Time.deltaTime;
+        
+        // 플레이어 공격 애니메이션 속도 원복
         _playerAnimator.speed = 1f;
     }
 
