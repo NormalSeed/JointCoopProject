@@ -164,7 +164,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
             IDamagable damagable = collision.gameObject.GetComponent<IDamagable>();
             if (damagable != null)
             {
-                damagable.TakeDamage(1, transform.position);
+                damagable.TakeDamage(_model._bodyDamage, transform.position);
             }
         }
     }
@@ -193,7 +193,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _isDamaged = false;
     }
 
-    public void Die()
+    public virtual void Die()
     {
         _isDead = true;
         
