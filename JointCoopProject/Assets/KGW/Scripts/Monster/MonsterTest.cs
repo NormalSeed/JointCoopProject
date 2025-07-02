@@ -4,24 +4,12 @@ using UnityEngine;
 
 public class MonsterTest : MonoBehaviour, IDamagable
 {
-    [SerializeField] float _knockBackForce = 1.5f;
-    [SerializeField] float _knockBackTime = 0.5f;
-    Rigidbody2D _monsterRigid;
-
-    private void Awake()
-    {
-        Init();
-    }
-
-    private void Init()
-    {
-        _monsterRigid = GetComponent<Rigidbody2D>();
-    }
+    [SerializeField] int _monsterHp = 100;
 
     public void TakeDamage(int damage, Vector2 targetPos)
     {
-        Vector2 hitDirection = ((Vector2)transform.position - targetPos).normalized;
-
+        _monsterHp -= damage;
+        Debug.Log($"몬스터 체력 [{_monsterHp}]");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

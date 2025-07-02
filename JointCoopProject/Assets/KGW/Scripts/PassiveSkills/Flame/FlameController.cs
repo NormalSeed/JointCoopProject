@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FlameController : MonoBehaviour
@@ -9,15 +10,13 @@ public class FlameController : MonoBehaviour
     float _FlameSpeed;
     int _FlameDamage;
     Vector3 _FlameDirection;
-    int _FlameDamageCount = 3;
-    Coroutine _flameCoroutine;
 
     public void Init(Vector3 dir, float speed, int damage)
     {
         _FlameSpeed = speed;
         _FlameDamage = damage;
         _FlameDirection = dir;
-        //Destroy(gameObject, _throwTimer);
+        Destroy(gameObject, _throwTimer);
     }
 
     private void Update()
@@ -29,31 +28,19 @@ public class FlameController : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-            _FlameDirection = Vector3.zero;
             Debug.Log($"적을 {_FlameDamage}로 공격했습니다.");
             IDamagable damagable = collision.GetComponent<IDamagable>();
             if (damagable != null)
             {
-                if(_flameCoroutine != null)
+                // 공격 받은 대상이 FlameMultiDamage Component가 없으면 생성
+                if(!collision.gameObject.GetComponent<FlameMultiDamage>())
                 {
-                    _flameCoroutine = null;
+                    FlameMultiDamage flameMultiDamage = collision.AddComponent<FlameMultiDamage>();
+                    // 화염 다단히트 적용
+                    flameMultiDamage.Apply(damagable, _FlameDamage);
                 }
-                else
-                {
-                    _flameCoroutine = StartCoroutine(FlameDamageCoroutine(damagable));
-                }
-                StopCoroutine(_flameCoroutine);
+                Destroy(gameObject);
             }
-            //Destroy(gameObject);
         }
-    }
-    private IEnumerator FlameDamageCoroutine(IDamagable damagable)
-    {
-        damagable.TakeDamage(_FlameDamage, transform.position);
-        yield return new WaitForSeconds(1.5f);
-        damagable.TakeDamage(_FlameDamage, transform.position);
-        yield return new WaitForSeconds(1.5f);
-        damagable.TakeDamage(_FlameDamage, transform.position);
-        _flameCoroutine = null;
     }
 }
