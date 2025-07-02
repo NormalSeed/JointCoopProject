@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -12,10 +13,11 @@ public class PlayerSkillManager : MonoBehaviour
     // 플레이어가 현재 보유 중인 스킬 목록
     private List<SkillDataSO> ownedSkills = new();
     [SerializeField] PlayerMovement _playerMove;
+    [SerializeField] AttackRange _attackRange;
 
-    public bool _isAttack = false;
+    // 현재 레벨 확인
+    int _curLevel;
 
-   
     /// <summary>
     /// 자동으로 발동되는 스킬 정보를 저장하는 클래스
     /// </summary>
@@ -48,6 +50,7 @@ public class PlayerSkillManager : MonoBehaviour
     private void Update()
     {
         AutoSkillAttack();
+        SwordRangeUpgrade();
     }
    
     /// <summary>
@@ -138,12 +141,50 @@ public class PlayerSkillManager : MonoBehaviour
     /// </summary>
     public void SwordUpgradeAttack()
     {
-        Debug.Log("근접공격 맞음");
         foreach (var skill in swordUpgradeskills)
         {
-            Vector3 attackDir = _playerMove._attackDirection;
+            if(skill.swordSkill.skillName == "Poison Attack")
+            {
+                Vector3 attackDir = _playerMove._attackDirection;
 
-            skill.swordSkill.UseSkill(transform, attackDir);
+                skill.swordSkill.UseSkill(transform, attackDir);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 플레이어의 기존 검 공격시 검기 발동 스킬
+    /// </summary>
+    public void SwordEnergyAttack()
+    {
+        foreach (var skill in swordUpgradeskills)
+        {
+            if(skill.swordSkill.skillName == "Long Distance Sword")
+            {
+                Vector3 attackDir = _playerMove._attackDirection;
+                skill.swordSkill.UseSkill(transform, attackDir);
+            }
+
+        }
+    }
+    /// <summary>
+    /// 플레이어의 기존 공격 사거리 증가 항시 발동
+    /// </summary>
+    public void SwordRangeUpgrade()
+    {        
+        foreach (var skill in swordUpgradeskills)
+        {
+            if (skill.swordSkill.skillName == "Attack Range")
+            {
+                // 레벨이 변하지 않으면 중복실행 금지
+                if (_curLevel == _attackRange._skillLevel) return;
+
+                Vector3 attackDir = _playerMove._attackDirection;
+                skill.swordSkill.UseSkill(transform, attackDir);
+
+                // 현재 레벨 저장
+                _curLevel = _attackRange._skillLevel;
+            }
         }
     }
 }

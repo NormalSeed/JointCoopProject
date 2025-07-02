@@ -221,15 +221,19 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         {
             case "Up":
                 _playerAnimator.Play(UP_ATTACK_HASH);
+                _skillManager.SwordEnergyAttack();
                 break;
             case "Down":
                 _playerAnimator.Play(DOWN_ATTACK_HASH);
+                _skillManager.SwordEnergyAttack();
                 break;
             case "Left":
                 _playerAnimator.Play(LEFT_ATTACK_HASH);
+                _skillManager.SwordEnergyAttack();
                 break;
             case "Right":
                 _playerAnimator.Play(RIGHT_ATTACK_HASH);
+                _skillManager.SwordEnergyAttack();
                 break;
             default:
                 break;

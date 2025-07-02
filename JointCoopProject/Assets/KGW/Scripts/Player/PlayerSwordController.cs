@@ -6,11 +6,11 @@ using UnityEngine;
 
 public class PlayerSwordController : MonoBehaviour
 {
-    Transform _playerPos;
-    Vector2 _attackDirection;       // 공격 방향
-    float _attackSpeed;       // 공격 속도
-    float _attackRange;
-    int _attackDamage;  
+    Transform _playerPos;   // 플레이어 위치
+    Vector2 _attackDirection;   // 공격 방향
+    float _attackSpeed; // 공격 속도
+    float _attackRange; // 공격 사거리
+    int _attackDamage;  // 공격 대미지
     PlayerSkillManager _skillManager;
 
     // 데이터 초기화

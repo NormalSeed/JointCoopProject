@@ -91,7 +91,6 @@ public class EliteOrc_Stun : EliteOrcState
 
     public override void Exit()
     {
-        base.Exit();
         stunDuration = 4f;
     }
 }

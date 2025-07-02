@@ -26,7 +26,7 @@ public class DaggerController : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-            Debug.Log($"적을 {_daggerDamage}로 공격했습니다.");
+            Debug.Log($"[단검 대미지] {_daggerDamage} 피해 적용됨.");
             IDamagable damagable = collision.GetComponent<IDamagable>();
             if (damagable != null)
             {

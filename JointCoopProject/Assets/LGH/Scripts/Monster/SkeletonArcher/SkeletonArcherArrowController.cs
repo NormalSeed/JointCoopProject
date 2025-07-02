@@ -20,7 +20,7 @@ public class SkeletonArcherArrowController : MonoBehaviour
         Arrow arrow = GetArrow();
         arrow._damage = damage;
         arrow.transform.position = transform.position;
-        // 발사 방향에 맞춰 화살의 roatation 조정
+        // 발사 방향에 맞춰 화살의 rotation 조정
         float angle = Mathf.Atan2(shootDir.y, shootDir.x) * Mathf.Rad2Deg;
         arrow.transform.rotation = Quaternion.Euler(0, 0, angle);
 
