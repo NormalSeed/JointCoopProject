@@ -15,11 +15,6 @@ public class CompoundedSlimeController : MonsterBase
     protected override void Update()
     {
         base.Update();
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Die();
-        }
     }
 
     public void SpawnInfectedSlime()

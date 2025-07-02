@@ -157,14 +157,14 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _stateMachine.FixedUpdate();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             IDamagable damagable = collision.gameObject.GetComponent<IDamagable>();
             if (damagable != null)
             {
-                damagable.TakeDamage(1, transform.position);
+                damagable.TakeDamage(_model._bodyDamage, transform.position);
             }
         }
     }
@@ -193,7 +193,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _isDamaged = false;
     }
 
-    public void Die()
+    public virtual void Die()
     {
         _isDead = true;
         

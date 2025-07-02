@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 329425975746390107}
   - component: {fileID: 6286290414304799025}
   - component: {fileID: 6746592649774607402}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: InfectedSlime
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -124,6 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c5bd69720330cb48a61ce2fa0e5b6d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _activeDelay: 0
   _isActivated: 0
   _movement: {fileID: 0}
   _model: {fileID: 0}

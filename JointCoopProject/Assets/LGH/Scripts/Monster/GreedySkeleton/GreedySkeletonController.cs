@@ -7,6 +7,6 @@ public class GreedySkeletonController : MonsterBase
     protected override void Init()
     {
         base.Init();
-        _monsterID = 10105;
+        _monsterID = 10106;
     }
 }

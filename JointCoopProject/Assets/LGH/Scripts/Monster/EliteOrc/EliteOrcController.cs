@@ -9,7 +9,6 @@ public class EliteOrcController : MonsterBase
     private Coroutine _coAttack1;
     public float _attack1Cooldown = 0f;
     public Vector2 _rushDestination = Vector2.zero;
-    public float _stopDistance = 0.05f;
 
     public readonly int ATTACK1_HASH = Animator.StringToHash("Attack1");
 
@@ -66,7 +65,7 @@ public class EliteOrcController : MonsterBase
         _view.PlayAnimation(ATTACK1_HASH);
         
         yield return _attackDelay;
-        _attack1Cooldown = 3f;
+        _attack1Cooldown = 6f;
         _movement._isTrace = true;
         _isAttack1 = false;
         _rushDestination = Vector2.zero;
