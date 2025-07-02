@@ -81,8 +81,16 @@ public class SlotMachine : MonoBehaviour
     private void CheckValidation()
     {
         if (_minCoin > _maxCoin)
+        {
+            throw new Exception("Invalid Value Exception: SlotMachine._maxCoin value must be bigger than SlotMachine._minCoin.");
+        }
+        if (_coinPrefab == null)
+        {
+            throw new Exception("Null Reference Exception: Object reference of SlotMachine._coinPrefab not set.");
+        }
+        if (_itemArray.Length < 1)
         { 
-            throw new Exception("Invalid value specified: _minCoin, _maxCoin");
+            throw new Exception("Null Reference Exception: SlotMachine._coinPrefab");
         }
         
     }
