@@ -22,7 +22,6 @@ public class PoisonAttack : SkillDataSO
         {
             return;
         }
-        Debug.Log($"공격 확률은 {_randomValue}");
         // 독 대미지 (스킬레벨 +1 == 대미지 +2)
         _totalDamage = _skillDamage + (_skillLevel * 2);
         Vector3 poisonSpawnPos = caster.position + dir;
