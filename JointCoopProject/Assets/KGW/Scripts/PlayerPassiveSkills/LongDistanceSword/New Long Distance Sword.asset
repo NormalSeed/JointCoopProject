@@ -9,15 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a488129e33e0cd543824090385b7955e, type: 3}
-  m_Name: New Poison Attack
+  m_Script: {fileID: 11500000, guid: cdfd009ef95ff0347a9e72886b7605ce, type: 3}
+  m_Name: New Long Distance Sword
   m_EditorClassIdentifier: 
-  skillName: Poison Attack
+  skillName: Long Distance Sword
   skillCooldown: 0
   skillPossibility: 20
   skillIcon: {fileID: 0}
   _isTrace: 0
   _isSwordAttack: 1
-  skillPrefab: {fileID: 6092117211213480904, guid: e92ddfc9be8b0744caa3eba85bfab5a2, type: 3}
+  skillPrefab: {fileID: 3716943938783933269, guid: f0fa25cf0de774e43ba36d35e826dd6d, type: 3}
   _skillLevel: 1
-  _skillDamage: 3
+  _skillDamage: 20
+  _projectileSpeed: 5

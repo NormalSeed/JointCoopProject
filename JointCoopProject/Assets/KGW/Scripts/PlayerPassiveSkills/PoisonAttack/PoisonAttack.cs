@@ -16,6 +16,8 @@ public class PoisonAttack : SkillDataSO
     public override void UseSkill(Transform caster, Vector3 dir)
     {
         int _totalDamage;
+        // Level +1 == È®·ü +20%
+        skillPossibility *= _skillLevel;
 
         int _randomValue = Random.Range(0, 100);
         if (_randomValue > skillPossibility)
