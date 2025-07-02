@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -40,10 +39,6 @@ public class PlayerRoomMovement : MonoBehaviour
         if (mapGen != null)
         {
             currentRoom = mapGen.startPosition;
-        }
-        else
-        {
-            Debug.LogError("MapGenerator를 찾을 수 없음!");
         }
     }
     
@@ -101,7 +96,6 @@ public class PlayerRoomMovement : MonoBehaviour
             
             if (mapGen.generatedRooms.ContainsKey(targetRoom))
             {
-                if (debugMode) Debug.Log($"{doorName} 문으로 방 이동: {currentRoom} → {targetRoom}");
                 StartTransition(targetRoom, direction);
             }
         }
@@ -135,7 +129,6 @@ public class PlayerRoomMovement : MonoBehaviour
         // 방 클리어 체크 (아직 구현 안됨)
         if (!CanEnterRoom())
         {
-            if (debugMode) Debug.Log("방이 클리어되지 않아서 이동 불가");
             return;
         }
         
@@ -147,7 +140,6 @@ public class PlayerRoomMovement : MonoBehaviour
         moving = true;
         transitionCount++;
         
-        if (debugMode) Debug.Log($"방 전환 #{transitionCount}: {currentRoom} → {targetRoom}");
         
         // 플레이어 이동 (문 모드일 때만)
         if (doorActive)
@@ -166,10 +158,6 @@ public class PlayerRoomMovement : MonoBehaviour
             {
                 yield return null;
             }
-        }
-        else
-        {
-            if (debugMode) Debug.LogWarning("카메라 시스템이 없음");
         }
         
         // 현재 방 업데이트
@@ -225,7 +213,6 @@ public class PlayerRoomMovement : MonoBehaviour
         if (!mapGen.generatedRooms.ContainsKey(roomPos)) return;
         
         var roomData = mapGen.generatedRooms[roomPos];
-        if (debugMode) Debug.Log($"방 입장: {roomData.roomType} at {roomPos}");
         
         // 방 타입별 처리
         switch (roomData.roomType)

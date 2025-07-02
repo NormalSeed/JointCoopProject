@@ -13,10 +13,11 @@ public class MapGenerator : MonoBehaviour
     public GameObject secretRoomPrefab;
     public GameObject[] bossRoomPrefabs = new GameObject[3];
 
-    [Header("맵 설정")] public int mapSize = 13;
+    [Header("맵 설정")] 
+    public int mapSize = 13;
     public Vector2Int startPosition = new Vector2Int(7, 7);
     public int totalRooms;
-    public float roomGenerationChance = 0.7f; // 방 생성 확률
+    public float roomGenerationChance = 0.7f; 
 
     [Header("프리팹 설정")] public Vector2 prefabSize = new Vector2(15, 9); // 방 프리팹 크기
 
@@ -171,7 +172,7 @@ public class MapGenerator : MonoBehaviour
         SetupSystems();
 
         currentAttempts = 0; // 성공하면 시도 횟수 리셋
-        Debug.Log("맵 생성 성공! 총 방 개수: " + generatedRooms.Count);
+        Debug.Log("맵 생성 성공 총 방 개수: " + generatedRooms.Count);
     }
 
     bool GenerateBasicMapStructure()
@@ -210,7 +211,6 @@ public class MapGenerator : MonoBehaviour
 
             if (currentDeadEnds.Count >= minDeadEnds && generated >= 2)
             {
-                if (enableDebugLogs) Debug.Log("초기 방 생성 완료");
                 return true;
             }
 
@@ -236,7 +236,6 @@ public class MapGenerator : MonoBehaviour
         // 최종 결과 확인
         List<Vector2Int> finalDeadEnds = FindDeadEndPositions();
         bool success = finalDeadEnds.Count >= minDeadEnds && generated >= 2;
-        if (enableDebugLogs) Debug.Log($"최종 결과 - 막다른길: {finalDeadEnds.Count}개, 기본방: {generated}개, 성공: {success}");
         return success;
     }
 
@@ -682,8 +681,6 @@ public class MapGenerator : MonoBehaviour
         {
             if (Application.isPlaying)
                 Destroy(spawnedPlayer);
-            else
-                DestroyImmediate(spawnedPlayer);
         }
 
         // 데이터 초기화
@@ -752,7 +749,7 @@ public class MapGenerator : MonoBehaviour
             SpriteRenderer spriteRenderer = door.AddComponent<SpriteRenderer>();
             spriteRenderer.sprite = doorSprite;
 
-            // 정렬 순서 설정 (방보다 앞에 보이게)
+            // 정렬 순서 설정
             spriteRenderer.sortingOrder = 1;
 
             roomDoors[roomPos][direction] = door;
