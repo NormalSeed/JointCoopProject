@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using UnityEngine;
 using UnityEngine.Events;
 
+[System.Serializable]
 public class ObservableProperty<T>
 {
     private T _value;
