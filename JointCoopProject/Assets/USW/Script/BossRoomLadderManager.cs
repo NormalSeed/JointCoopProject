@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
 
 
 public class BossRoomLadderManager : MonoBehaviour
@@ -15,17 +17,17 @@ public class BossRoomLadderManager : MonoBehaviour
     public float ladderDropTime = 2f;
 
     public bool enablePlayerToggle = true;
-    public float deactivateDelay = 1f;
-    public float activateDelay = 1f;
     
     private bool ladderDropped = false;
 
 
     private void Start()
     {
-        // 사다리 먼저 설정하고 
-        // 보스방 연결하고 
-        // 보스 죽었는지 확인
+        SetupLadder();
+        
+        SetupBoss();
+
+        StartCoroutine(CheckIsBossDead());
     }
 
     void SetupLadder()
@@ -68,30 +70,27 @@ public class BossRoomLadderManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         ladder.gameObject.SetActive(true);
-        ladder.transform.position = ladderStartPos;
+        
+        // 보스룸 기준으로 월드 좌표 계산
+        
+        Vector3 roomPosition = transform.position;
+        Vector3 startPos = roomPosition + ladderStartPos;
+        Vector3 endPos = roomPosition + ladderEndPos;
+
+        ladder.transform.position = startPos;
 
         float elapsedTime = 0f;
         while (elapsedTime < ladderDropTime)
         {
             elapsedTime += Time.deltaTime;
-            // smoothstep 에서 
+            // smoothstep 에서 츤츤히 가기.
             float lerpProgress = Mathf.SmoothStep(0f, 1f, elapsedTime / ladderDropTime);
-            ladder.transform.position = Vector3.Lerp(ladderStartPos, ladderEndPos, lerpProgress);
+            ladder.transform.position = Vector3.Lerp(startPos, endPos, lerpProgress);
             yield return null;
         }
 
-        ladder.transform.position = ladderEndPos;
+        ladder.transform.position = endPos;
         
         //플레이어 토글 설정해보기
-    }
-
-
-    void SetupPlayerToggle()
-    {
-        // 콜라이더 붙여주는거하고 
-        // 박스콜라이더도 설정해야하나 ? 
-        // 여기에서 또 미리 설정해야하나 ? 
-        
-        //
     }
 }
