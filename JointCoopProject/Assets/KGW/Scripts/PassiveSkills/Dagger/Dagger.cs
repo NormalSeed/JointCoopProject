@@ -15,11 +15,13 @@ public class Dagger : SkillDataSO
     // 관통 없음 (적중 시 즉시 파괴)
     public int _skillLevel = 1;
     public int _skillDamage = 20;
-    public float _projectileSpeed = 5f;
+    public float _projectileSpeed = 5f; // 투사체 속도
     
     public override void UseSkill(Transform caster, Vector3 dir)
     {
         int _totalDamage;
+        // Level +1 == 확률 +5%
+        skillPossibility += (_skillLevel * 5f);
 
         int _randomValue = Random.Range(0, 100);
         if (_randomValue > skillPossibility)

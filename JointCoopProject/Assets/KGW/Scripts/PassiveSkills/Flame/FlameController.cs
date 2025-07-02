@@ -28,7 +28,6 @@ public class FlameController : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-            Debug.Log($"적을 {_FlameDamage}로 공격했습니다.");
             IDamagable damagable = collision.GetComponent<IDamagable>();
             if (damagable != null)
             {

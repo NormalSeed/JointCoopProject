@@ -138,12 +138,29 @@ public class PlayerSkillManager : MonoBehaviour
     /// </summary>
     public void SwordUpgradeAttack()
     {
-        Debug.Log("근접공격 맞음");
         foreach (var skill in swordUpgradeskills)
         {
-            Vector3 attackDir = _playerMove._attackDirection;
+            if(skill.swordSkill.skillName == "Poison Attack")
+            {
+                Vector3 attackDir = _playerMove._attackDirection;
 
-            skill.swordSkill.UseSkill(transform, attackDir);
+                skill.swordSkill.UseSkill(transform, attackDir);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 플레이어의 기존 검 공격시 검기 발동 스킬
+    /// </summary>
+    public void SwordEnergyAttack()
+    {
+        foreach (var skill in swordUpgradeskills)
+        {
+            if(skill.swordSkill.skillName == "Long Distance Sword")
+            {
+                Vector3 attackDir = _playerMove._attackDirection;
+                skill.swordSkill.UseSkill(transform, attackDir);
+            }
         }
     }
 }
