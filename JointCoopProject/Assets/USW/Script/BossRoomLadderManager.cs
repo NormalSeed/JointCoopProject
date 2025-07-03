@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Video;
 using Vector3 = UnityEngine.Vector3;
 
 
@@ -37,12 +38,6 @@ public class BossRoomLadderManager : MonoBehaviour
         if (ladder == null) return;
 
         ladder.gameObject.SetActive(false);
-
-        var sceneChanger = ladder.GetComponent<ChangeSceneManager>();
-        if (sceneChanger == null)
-        {
-            sceneChanger = ladder.GetComponent<ChangeSceneManager>();
-        }
         
     }
 
@@ -99,6 +94,6 @@ public class BossRoomLadderManager : MonoBehaviour
         }
 
         ladder.transform.position = endPos;
-        
     }
+    
 }

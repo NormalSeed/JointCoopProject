@@ -103,6 +103,9 @@ public class MapGenerator : MonoBehaviour
     void Start()
     {
         GenerateMap();
+        
+        ReinitializePlayerRoom();
+        
     }
 
     void Update()
@@ -821,5 +824,18 @@ public class MapGenerator : MonoBehaviour
         }
 
         return roomWorldPos + doorLocalPos;
+    }
+
+    void ReinitializePlayerRoom()
+    {
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player != null)
+        {
+            var playerRoomMove = player.GetComponent<PlayerRoomMovement>();
+            if (playerRoomMove != null)
+            {
+                playerRoomMove.PlayerRoomReinitialize();
+            }
+        }
     }
 }
