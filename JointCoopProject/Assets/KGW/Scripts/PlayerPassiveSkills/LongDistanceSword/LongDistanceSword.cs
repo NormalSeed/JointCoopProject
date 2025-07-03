@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Skills/Player Passive/Long Distance Sword")]
@@ -28,7 +27,12 @@ public class LongDistanceSword : SkillDataSO
         }
         // 검기 대미지 (1~3Level 기존 대미지, 4Level +10, 5Level + 20)
         _totalDamage = _skillLevel == 4 ? 30 : _skillLevel == 5 ? 50 : _skillDamage;
-        GameObject swordEnergyThrow = Instantiate(skillPrefab, caster.position, caster.rotation);
+
+        // 검기 생성 위치를 공격 이펙트에서 생성
+        Vector3 swordEnergyPos = caster.transform.position;
+        swordEnergyPos += dir;
+
+        GameObject swordEnergyThrow = Instantiate(skillPrefab, swordEnergyPos, caster.rotation);
         LongDistanceSwordController poisonAttackController = swordEnergyThrow.GetComponent<LongDistanceSwordController>();
         poisonAttackController.Init(dir, _projectileSpeed, _totalDamage);
 
