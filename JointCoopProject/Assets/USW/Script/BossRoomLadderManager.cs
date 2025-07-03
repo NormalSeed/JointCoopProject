@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Vector3 = UnityEngine.Vector3;
 
 
@@ -16,7 +17,8 @@ public class BossRoomLadderManager : MonoBehaviour
 
     public float ladderDropTime = 2f;
 
-    public bool enablePlayerToggle = true;
+    public bool useNextScene = true;
+    public string targetSceneName = "";
     
     private bool ladderDropped = false;
 
@@ -35,6 +37,14 @@ public class BossRoomLadderManager : MonoBehaviour
         if (ladder == null) return;
 
         ladder.gameObject.SetActive(false);
+
+        var sceneChanger = ladder.GetComponent<ChangeSceneManager>();
+        if (sceneChanger == null)
+        {
+            sceneChanger = ladder.GetComponent<ChangeSceneManager>();
+        }
+        
+        sceneChanger.useNextStage = useNe
     }
 
     void SetupBoss()
@@ -56,7 +66,7 @@ public class BossRoomLadderManager : MonoBehaviour
                 // 아니 맞잖아 보스몬스터 죽었는지 안죽었는지 확인하고 
                 // 사다리 내리는거 코루틴 애니메이션 스근허이 내려와야하는데
                 // 왜 애니메이션이 작동이 안하는거야 ? 
-                // Debug 했짢아 다해줫짢아
+                // Debug에서도 된다 했짢아 다해줫짢아
                 
                 StartCoroutine(DropLadder());
                 ladderDropped = true;
@@ -91,6 +101,5 @@ public class BossRoomLadderManager : MonoBehaviour
 
         ladder.transform.position = endPos;
         
-        //플레이어 토글 설정해보기
     }
 }

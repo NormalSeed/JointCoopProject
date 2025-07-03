@@ -13,11 +13,10 @@ public class MapGenerator : MonoBehaviour
     public GameObject secretRoomPrefab;
     public GameObject[] bossRoomPrefabs = new GameObject[3];
 
-    [Header("맵 설정")] 
-    public int mapSize = 13;
+    [Header("맵 설정")] public int mapSize = 13;
     public Vector2Int startPosition = new Vector2Int(7, 7);
     public int totalRooms;
-    public float roomGenerationChance = 0.7f; 
+    public float roomGenerationChance = 0.7f;
 
     [Header("프리팹 설정")] public Vector2 prefabSize = new Vector2(15, 9); // 방 프리팹 크기
 
@@ -62,24 +61,24 @@ public class MapGenerator : MonoBehaviour
         new Dictionary<Vector2Int, Dictionary<Direction, GameObject>>();
 
     public Dictionary<Vector2Int, RoomData> generatedRooms = new Dictionary<Vector2Int, RoomData>();
-    private List<Vector2Int> availablePositions = new List<Vector2Int>(); 
+    private List<Vector2Int> availablePositions = new List<Vector2Int>();
     private GameObject spawnedPlayer;
-    private int currentAttempts = 0; 
-    private int maxGenerationAttempts = 50; 
+    private int currentAttempts = 0;
+    private int maxGenerationAttempts = 50;
 
     // 디버그 관련
-    public bool enableDebugLogs = false; 
+    public bool enableDebugLogs = false;
     private int failsafe = 0; // 무한루프 방지
 
     [System.Serializable]
     public class RoomData
     {
-        public Vector2Int position; 
-        public RoomType roomType; 
-        public GameObject roomPrefab; 
-        public GameObject instantiatedRoom; 
-        public bool isGenerated; 
-        public bool isDeadEnd; 
+        public Vector2Int position;
+        public RoomType roomType;
+        public GameObject roomPrefab;
+        public GameObject instantiatedRoom;
+        public bool isGenerated;
+        public bool isDeadEnd;
 
         public RoomData(Vector2Int pos, RoomType type, GameObject prefab)
         {
@@ -193,7 +192,7 @@ public class MapGenerator : MonoBehaviour
         int attempts = 0;
         int generated = 0;
         int maxAttempts = 200;
-        int minDeadEnds = 5; 
+        int minDeadEnds = 5;
 
         while (attempts < maxAttempts && availablePositions.Count > 0)
         {
@@ -301,7 +300,7 @@ public class MapGenerator : MonoBehaviour
         specialRoom.isDeadEnd = true;
         generatedRooms.Add(targetPos, specialRoom);
         availablePositions.Remove(targetPos);
-        
+
         return true;
     }
 
@@ -439,9 +438,10 @@ public class MapGenerator : MonoBehaviour
     {
         if (playerPrefab == null || !generatedRooms.ContainsKey(startPosition))
         {
-           
             return;
         }
+
+        GameObject existingPlayer = GameObject.FindWithTag("Player");
 
         // 기존 플레이어가 있으면 제거
         if (spawnedPlayer != null)
@@ -459,11 +459,17 @@ public class MapGenerator : MonoBehaviour
                                  new Vector3(playerSpawnOffset.x - prefabSize.x * 0.5f,
                                      playerSpawnOffset.y - prefabSize.y * 0.5f, 0);
 
-        spawnedPlayer = Instantiate(playerPrefab, playerSpawnPos, Quaternion.identity);
-        spawnedPlayer.name = "Player";
-        spawnedPlayer.tag = "Player";
-
-       
+        if (existingPlayer != null)
+        {
+            existingPlayer.transform.position = playerSpawnPos;
+            spawnedPlayer = existingPlayer; // 참조 업데이트
+        }
+        else
+        {
+            spawnedPlayer = Instantiate(playerPrefab, playerSpawnPos, Quaternion.identity);
+            spawnedPlayer.name = "Player";
+            spawnedPlayer.tag = "Player";
+        }
     }
 
     void SetupSystems()
@@ -472,6 +478,7 @@ public class MapGenerator : MonoBehaviour
         {
             cameraSystem.SetupForRoom(startPosition);
         }
+
         if (minimapManager != null)
         {
             StartCoroutine(DelayedMinimapSetup());
@@ -687,7 +694,7 @@ public class MapGenerator : MonoBehaviour
         generatedRooms.Clear();
         availablePositions.Clear();
         roomDoors.Clear();
-        failsafe = 0; 
+        failsafe = 0;
     }
 
     [ContextMenu("맵 재생성")]
@@ -740,12 +747,11 @@ public class MapGenerator : MonoBehaviour
 
         if (doorSprite != null)
         {
-           
             GameObject door = new GameObject($"Door_{direction}_{roomPos.x}_{roomPos.y}");
             door.transform.position = doorWorldPos;
             door.transform.parent = generatedRooms[roomPos].instantiatedRoom.transform;
 
-           
+
             SpriteRenderer spriteRenderer = door.AddComponent<SpriteRenderer>();
             spriteRenderer.sprite = doorSprite;
 
