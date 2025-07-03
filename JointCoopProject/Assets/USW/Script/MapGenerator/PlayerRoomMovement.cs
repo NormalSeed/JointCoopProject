@@ -6,121 +6,124 @@ using UnityEngine;
 
 public class PlayerRoomMovement : MonoBehaviour
 {
-    [Header("문 위치 설정")]
-    public Vector2 topDoorPos = new Vector2(7, 8);         // 위쪽 문 위치
-    public Vector2 bottomDoorPos = new Vector2(7, 1);      // 아래쪽 문 위치
-    public Vector2 leftDoorPos = new Vector2(1, 4);        // 왼쪽 문 위치
-    public Vector2 rightDoorPos = new Vector2(14, 5);      // 오른쪽 문 위치
-    public float doorDetectionDistance = 1.5f;             // 문 감지 거리
-    
-    [Header("이동 설정")]
-    public float transitionSpeed = 2f;                     // 방 전환 속도
-    public bool doorActive = true;                         // true: 문 감지, false: 자동 감지
-    
+    [Header("문 위치 설정")] public Vector2 topDoorPos = new Vector2(7, 8); // 위쪽 문 위치
+    public Vector2 bottomDoorPos = new Vector2(7, 1); // 아래쪽 문 위치
+    public Vector2 leftDoorPos = new Vector2(1, 4); // 왼쪽 문 위치
+    public Vector2 rightDoorPos = new Vector2(14, 5); // 오른쪽 문 위치
+    public float doorDetectionDistance = 1.5f; // 문 감지 거리
+
+    [Header("이동 설정")] public float transitionSpeed = 2f;
+    public bool doorActive = true;
+
     // 시스템들 참조
-    private MapGenerator mapGen;                           // 맵 생성기
-    private CameraController camSystem;                    // 카메라 컨트롤러
-    private MinimapManager minimap;                        // 미니맵 매니저
-    
+    private MapGenerator mapGen;
+    private CameraController camSystem;
+    private MinimapManager minimap;
+
     // 현재 상태
-    private Vector2Int currentRoom;                        // 현재 방 위치
-    private bool moving = false;                           // 이동 중인지 여부
-    
-    // 디버그용
-    public bool debugMode = false;                         // 디버그 모드
-    private int transitionCount = 0;                       // 방 이동 횟수
-    
-    void Start()
+    private Vector2Int currentRoom;
+    private bool moving = false;
+    private bool isInitialized = false;
+    private bool hasMapGenerator = false;
+
+    // 유틸리티
+    public bool disableRoomTransition = false;
+    public bool autoDetectMapGenerator = true;
+
+
+    private void Start()
     {
-        // 필요한 컴포넌트들 찾기
-        mapGen = FindObjectOfType<MapGenerator>();
-        camSystem = FindObjectOfType<CameraController>();
-        minimap = FindObjectOfType<MinimapManager>();
+        InitialzedComponents();
+    }
+
+    void InitialzedComponents()
+    {
+        FindRequiredComponents();
+        InitializedWithMapGenerator();
+        RealSetFinal();
         
+    }
+    
+    void FindRequiredComponents()
+    {
+        if (autoDetectMapGenerator)
+        {
+            mapGen = FindObjectOfType<MapGenerator>();
+            camSystem = FindObjectOfType<CameraController>();
+            minimap = FindObjectOfType<MinimapManager>();
+        }
+    }
+
+
+    void InitializedWithMapGenerator()
+    {
         if (mapGen != null)
         {
+            hasMapGenerator = true;
+
+            // 처음부터 초기화 ( 현재 노드에 따른 시작 포인트도 따라오는거면 offset 도 줘야하나 ? ) 
+
             currentRoom = mapGen.startPosition;
         }
         else
         {
-            Debug.LogError("MapGenerator를 찾을 수 없음!");
+            hasMapGenerator = false;
+
+            // 방 전환 비활성화
+            disableRoomTransition = true;
         }
     }
-    
-    void Update()
+
+    void RealSetFinal()
     {
-        if (mapGen == null || moving) return;
-        
-        // 디버그 키 (나중에 지울 예정)
-        if (Input.GetKeyDown(KeyCode.F2))
+        isInitialized = true;
+
+        if (!hasMapGenerator)
         {
-            debugMode = !debugMode;
-            Debug.Log("디버그 모드: " + debugMode);
+            enabled = false;
         }
         
+    }
+
+
+    // required 넣고
+    // 맵 초기화까지 넣어버리면 이게 
+    // 아 방전환 기능자체를 비활성화 해서 하면 되긴해 , 그러면 여기에서 그걸 잡아도 되는걸까 ? 
+    // 아 맞네 해야겠네 
+    // null 하는게 좋겠지 ? 아 근데 굳이 할필요  없긴한것같아 신원아
+
+    private void Update()
+    {
+        if (!isInitialized || moving) return;
         if (doorActive)
         {
-            CheckDoors();           // 문 감지 방식
+            CheckDoors();
         }
         else
         {
-            CheckAutoTransition();  // 자동 감지 방식
-        }
-    }
-    
-    void CheckDoors()
-    {
-        if (!mapGen.generatedRooms.ContainsKey(currentRoom)) return;
-        
-        var roomData = mapGen.generatedRooms[currentRoom];
-        if (roomData.instantiatedRoom == null) return;
-        
-        Vector3 roomPos = roomData.instantiatedRoom.transform.position;
-        Vector2 playerLocalPos = GetLocalPos(transform.position, roomPos);
-        
-        // 각 문별로 체크
-        CheckSingleDoor(playerLocalPos, topDoorPos, Vector2Int.up, "위쪽");
-        CheckSingleDoor(playerLocalPos, bottomDoorPos, Vector2Int.down, "아래쪽");
-        CheckSingleDoor(playerLocalPos, leftDoorPos, Vector2Int.left, "왼쪽");
-        CheckSingleDoor(playerLocalPos, rightDoorPos, Vector2Int.right, "오른쪽");
-    }
-    
-    Vector2 GetLocalPos(Vector3 worldPos, Vector3 roomWorldPos)
-    {
-        Vector3 localPos = worldPos - roomWorldPos;
-        return new Vector2(localPos.x, localPos.y);
-    }
-    
-    void CheckSingleDoor(Vector2 playerPos, Vector2 doorPos, Vector2Int direction, string doorName)
-    {
-        float distance = Vector2.Distance(playerPos, doorPos);
-        
-        if (distance <= doorDetectionDistance)
-        {
-            Vector2Int targetRoom = currentRoom + direction;
-            
-            if (mapGen.generatedRooms.ContainsKey(targetRoom))
+            Vector2Int detectedRoom = GetGridPos(transform.position);
+
+            if (detectedRoom != currentRoom)
             {
-                if (debugMode) Debug.Log($"{doorName} 문으로 방 이동: {currentRoom} → {targetRoom}");
-                StartTransition(targetRoom, direction);
+                if (mapGen.generatedRooms.ContainsKey(detectedRoom))
+                {
+                    Vector2Int direction = detectedRoom - currentRoom;
+                    StartTransition(detectedRoom, direction);
+                }
             }
+            //
+            //  월드 좌표 그리드 좌표로 변환해서 그리드 가져와야하지않나 ?
+            // 그러면 현재 위치 ( detected 가져와서 그리드 좌표로 변환하고
+            // 감지된 방이 현재하고 다른지 체크하고 ? 
+            // 그방이 진짜로 있는지 확인하고
+            // 이동방향 계산치고 방 전환 하려면 아까 Start코루틴 가져오면 된다 신원아 
+            // 아니 다해줬잖아 . 
+            // 왜 안되는데
+            // 왜 감지가 안되는데
+            // Detectedroom 왜 안되는데 
         }
     }
-    
-    void CheckAutoTransition()
-    {
-        Vector2Int detectedRoom = GetGridPos(transform.position);
-        
-        if (detectedRoom != currentRoom)
-        {
-            if (mapGen.generatedRooms.ContainsKey(detectedRoom))
-            {
-                Vector2Int direction = detectedRoom - currentRoom;
-                StartTransition(detectedRoom, direction);
-            }
-        }
-    }
-    
+
     Vector2Int GetGridPos(Vector3 worldPos)
     {
         int x = Mathf.RoundToInt(worldPos.x / mapGen.prefabSize.x);
@@ -128,153 +131,169 @@ public class PlayerRoomMovement : MonoBehaviour
         return new Vector2Int(x, y);
     }
     
+    
+
+    void CheckDoors()
+    {
+        if (!mapGen.generatedRooms.ContainsKey(currentRoom)) return;
+        
+        var roomData = mapGen.generatedRooms[currentRoom];
+
+        if (roomData.instantiatedRoom == null) return;
+        
+        Vector3 roomPos = roomData.instantiatedRoom.transform.position;
+        Vector2 playerLocalPos = GetLocalPos(transform.position, roomPos);
+        
+        CheckSingleDoor(playerLocalPos,topDoorPos,Vector2Int.up);
+        CheckSingleDoor(playerLocalPos,bottomDoorPos,Vector2Int.down);
+        CheckSingleDoor(playerLocalPos,leftDoorPos,Vector2Int.left);
+        CheckSingleDoor(playerLocalPos,rightDoorPos,Vector2Int.right);
+    }
+
+    Vector2 GetLocalPos(Vector3 worldPos, Vector3 roomWorldPos)
+    {
+        // 월드좌표 에서 룸 
+        Vector3 localPos = worldPos - roomWorldPos;
+        return new Vector2(localPos.x, localPos.y);
+    }
+
+    void CheckSingleDoor(Vector2 playerPos, Vector2 doorPos, Vector2Int direction)
+    {
+        float distance = Vector2.Distance(playerPos, doorPos);
+
+        if (distance <= doorDetectionDistance)
+        {
+            Vector2Int targetRoom = currentRoom + direction;
+
+            if (mapGen.generatedRooms.ContainsKey(targetRoom))
+            {
+                StartTransition(targetRoom, direction);
+            }
+        }
+    }
+
     void StartTransition(Vector2Int targetRoom, Vector2Int direction)
     {
         if (moving) return;
+
+        if (!MayIEnterThisRoom()) return;
         
-        // 방 클리어 체크 (아직 구현 안됨)
-        if (!CanEnterRoom())
-        {
-            if (debugMode) Debug.Log("방이 클리어되지 않아서 이동 불가");
-            return;
-        }
-        
-        StartCoroutine(DoTransition(targetRoom, direction));
+        StartCoroutine(Dotransition(targetRoom, direction));
     }
-    
-    IEnumerator DoTransition(Vector2Int targetRoom, Vector2Int direction)
+
+    IEnumerator Dotransition(Vector2Int targetRoom, Vector2Int direction)
     {
         moving = true;
-        transitionCount++;
         
-        if (debugMode) Debug.Log($"방 전환 #{transitionCount}: {currentRoom} → {targetRoom}");
-        
-        // 플레이어 이동 (문 모드일 때만)
+        // 생각해보자 문이 열려있으면 일드 리턴을 또 player자체 pos 를 또 옮겨야하잖아 그 애니메이션이 
         if (doorActive)
         {
             Vector3 newPos = GetNewPlayerPos(targetRoom, direction);
             yield return StartCoroutine(MovePlayerToPos(newPos));
+            // 여기에다가 는 또 player를 포지션까지 넘겨주는 코루틴 까지 해야되넹 애니메이션 주려면 ? 
         }
-        
-        // 카메라 전환
+
         if (camSystem != null)
         {
             camSystem.TransitionToRoom(targetRoom);
-            
-            // 카메라 이동 완료까지 대기
+
             while (camSystem.IsTransitioning())
             {
                 yield return null;
             }
         }
-        else
-        {
-            if (debugMode) Debug.LogWarning("카메라 시스템이 없음");
-        }
-        
-        // 현재 방 업데이트
+        // 움직였으니깐 카메라도 넘어가고 
+        // 미니맵도 넘어가는거 알려줘야함 . 
+        // 잠시만 카메라 움직이고 ? 포지션 업데이트 했고 ? 현재 방 업데이트 했잖아 그러면 
+        // 미니맵 업데이트 
         currentRoom = targetRoom;
-        
-        // 미니맵 업데이트
+
         if (minimap != null)
         {
             minimap.SetCurrentRoom(currentRoom);
         }
         
-        // 방 입장 처리
-        HandleRoomEnter(targetRoom);
-        
         moving = false;
     }
-    
+
     Vector3 GetNewPlayerPos(Vector2Int targetRoom, Vector2Int direction)
     {
         var roomData = mapGen.generatedRooms[targetRoom];
         Vector3 roomPos = roomData.instantiatedRoom.transform.position;
-        
-        // 반대편 문으로 이동
+
         Vector2 targetDoor = Vector2.zero;
-        
-        if (direction == Vector2Int.up) targetDoor = bottomDoorPos;      // 위로 갔으면 아래 문으로
-        else if (direction == Vector2Int.down) targetDoor = topDoorPos;  // 아래로 갔으면 위 문으로
-        else if (direction == Vector2Int.left) targetDoor = rightDoorPos;  // 왼쪽으로 갔으면 오른쪽 문으로
-        else if (direction == Vector2Int.right) targetDoor = leftDoorPos;  // 오른쪽으로 갔으면 왼쪽 문으로
-        
-        return roomPos + new Vector3(targetDoor.x, targetDoor.y, 0);
+
+        if (direction == Vector2Int.up) targetDoor = bottomDoorPos;
+        else if (direction == Vector2Int.down) targetDoor = topDoorPos;
+        else if (direction == Vector2Int.left) targetDoor = rightDoorPos;
+        else if (direction == Vector2Int.right) targetDoor = leftDoorPos;
+        // roompos 에서 잠시만 잠시만 잠시만 잠시만 roompos 에서 ? ? ? ? ? ?\
+        // 음 음 음 음 음 으므므므므므므므므므므 아 근데 벡터3가 무조건 맞는데 이거 뭐지 뭐지 뭐지 qweqwewqewqeqweqwewqeqweqweqweqweqwe qwewqeqwe qwe qwe wqesafaxvadfasd faqwewqasfa qw eqwe as
+        // 엥 ???? 아니 근데 이거 
+        return roomPos + new Vector3(targetDoor.x, targetDoor.y,0);
     }
-    
+
     IEnumerator MovePlayerToPos(Vector3 targetPos)
     {
         Vector3 startPos = transform.position;
         float elapsed = 0f;
         float duration = 1f / transitionSpeed;
-        
+
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            float t = Mathf.SmoothStep(0, 1, elapsed / duration);
+            float t = Mathf.SmoothStep(0,1,elapsed/duration);
             transform.position = Vector3.Lerp(startPos, targetPos, t);
             yield return null;
         }
         
         transform.position = targetPos;
     }
-    
-    void HandleRoomEnter(Vector2Int roomPos)
+
+    bool MayIEnterThisRoom()
     {
-        if (!mapGen.generatedRooms.ContainsKey(roomPos)) return;
-        
-        var roomData = mapGen.generatedRooms[roomPos];
-        if (debugMode) Debug.Log($"방 입장: {roomData.roomType} at {roomPos}");
-        
-        // 방 타입별 처리
-        switch (roomData.roomType)
-        {
-            case MapGenerator.RoomType.Boss:
-                // TODO: 보스 스폰
-                break;
-                
-            case MapGenerator.RoomType.Shop:
-                // TODO: 상점 UI 표시
-                break;
-                
-            case MapGenerator.RoomType.Item:
-                // TODO: 아이템 생성
-                break;
-                
-            case MapGenerator.RoomType.Secret:
-                // TODO: 비밀방 로직
-                break;
-        }
-    }
-    
-    bool CanEnterRoom()
-    {
-        // TODO: 진짜 방 클리어 조건 구현하기
         if (mapGen.generatedRooms.ContainsKey(currentRoom))
         {
             var roomData = mapGen.generatedRooms[currentRoom];
-            if (roomData.roomType == MapGenerator.RoomType.Start)
+            
+            if(roomData.roomType == MapGenerator.RoomType.Start)
                 return true;
         }
-        
-        // 지금은 모든 방이 클리어된 것으로 처리
+
         return true;
     }
     
-    // Public 메서드들
-    public Vector2Int GetCurrentRoom() 
-    { 
-        return currentRoom; 
+    // 퍼블릭 메서드들 여기에서 가져갈것이..
+
+    public Vector2Int GetCurrentRoom()
+    {
+        return currentRoom;
     }
     
-    public bool IsMoving() 
-    { 
-        return moving; 
+    // 방이동중 플레이어 조작 막기 , 인벤토리 같은거 못열게 불러도 됨 
+    public bool IsMoving()
+    {
+        return moving;
     }
-    
-    public int GetTransitionCount() 
-    { 
-        return transitionCount; 
+
+    public void SetRoomTransitionEnabled(bool enable)
+    {
+        disableRoomTransition = !enable;
+    }
+
+    public void PrepareForScene()
+    {
+        StopAllCoroutines();
+        moving = false;
+    }
+
+    public void PlayerRoomReinitialize()
+    {
+        isInitialized = false;
+        hasMapGenerator = false;
+        moving = false;
+        disableRoomTransition = false;
+        
+        InitialzedComponents();
     }
 }

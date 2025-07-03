@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,6 +33,8 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     public bool _isDead;
     private Coroutine _coOffDamage;
     private WaitForSeconds _damageDelay = new WaitForSeconds(1f);
+    public bool isBoss = false;
+    public Action OnBossDied;
     
     //Monster RoomManager
     private RoomMonsterManager roomMonsterManager;
@@ -201,6 +204,12 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         {
             roomMonsterManager.MonsterDied(this, myRoom);
         }
+        if (isBoss)
+        {
+            OnBossDied?.Invoke();
+        }
+        
+      
     }
 
     public void UnactivateSelf()

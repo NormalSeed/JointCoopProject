@@ -180,11 +180,9 @@ MonoBehaviour:
   secretRoomPrefab: {fileID: 3355924642886105236, guid: 7a3a92c11a14a344995b082e5bbf32b6, type: 3}
   bossRoomPrefabs:
   - {fileID: 364444732076836908, guid: 350d82a9739ecb7479a59bda9594cb02, type: 3}
-  - {fileID: 3450307805516143820, guid: 7b98a08bb77fa694686d38d56db54322, type: 3}
-  - {fileID: 2172918372985044807, guid: 5a369fb1c1fb19b44a92a5d5d3d28ad5, type: 3}
   mapSize: 13
   startPosition: {x: 7, y: 7}
-  totalRooms: 9
+  totalRooms: 10
   roomGenerationChance: 0.7
   prefabSize: {x: 17, y: 9}
   playerPrefab: {fileID: 2443373463263467340, guid: 28c93c198489ed64f8e94a40600f8f48, type: 3}
@@ -307,75 +305,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1566889538}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &458939842
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 458939844}
-  - component: {fileID: 458939843}
-  m_Layer: 0
-  m_Name: MapGenerator
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &458939843
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 458939842}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ca65ca920a2be84394fffa5addfed90, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomPrefabs:
-  - {fileID: 705861012767888997, guid: 5738e8105394df145a43b569daf0961e, type: 3}
-  - {fileID: 3888920506856798881, guid: 3581a6bd54e069e448b3f66f779463e5, type: 3}
-  - {fileID: 6143719404621961417, guid: 429719d4dc3eb304ab2f7590e40fa79c, type: 3}
-  - {fileID: 9197960725872469246, guid: 4aa582d39d7ed294b8b92eb3585ac18d, type: 3}
-  - {fileID: 5672596921377248777, guid: 6ef1a06e0646c4145b43a1b0d1feb871, type: 3}
-  - {fileID: 5799145602857332841, guid: 5748ef4937c41ff47bd2885daaa04595, type: 3}
-  - {fileID: 7737972112458157208, guid: 2fb979407650f85448d90eb9839ca60c, type: 3}
-  - {fileID: 2638197462021651804, guid: 81722ccb60493e44494d21254a7380a5, type: 3}
-  - {fileID: 7885509548282198823, guid: ccfb9e01957e00648b2f104c0691dc9a, type: 3}
-  - {fileID: 413501770259619734, guid: 04a76a6267200c44097b12901d0adfae, type: 3}
-  - {fileID: 6702247810862450760, guid: a8bba3ac6ac124146961a0b7cf86d185, type: 3}
-  - {fileID: 8160490691838176488, guid: dc43c11b9a4df2c4293bade2e86ed019, type: 3}
-  - {fileID: 2679741096999890205, guid: 3b09b6b5fab7adc4e8071c0978f62f3f, type: 3}
-  - {fileID: 6946132253604310368, guid: ac78ce62ac90ed14ea4e62079623c41d, type: 3}
-  - {fileID: 6403309768827368999, guid: 6704eecdddaedc84dadbdd36dafc1d58, type: 3}
-  - {fileID: 6197443317038475425, guid: 4096719f6f4a23449b1f022df1603890, type: 3}
-  - {fileID: 6328640553277314616, guid: b121ccd3cdbac374aa4f506e741a3592, type: 3}
-  - {fileID: 7819079941074191824, guid: e9a290796295e834aab17be90f01bbc9, type: 3}
-  - {fileID: 2438091008558700628, guid: 510b7ce1e7c7d894f9ebf62e42eeaaa0, type: 3}
-  - {fileID: 7953729796361370838, guid: dcf437f3df832ad4cb346d39761c6f1c, type: 3}
-  numberOfRooms: 30
-  tileWidth: 1
-  tileHeight: 1
-  roomTileSize: {x: 15, y: 9}
---- !u!4 &458939844
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 458939842}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &747559092
@@ -1119,7 +1048,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 1911344673}
   - {fileID: 431469761}
-  - {fileID: 458939844}
   - {fileID: 35709995}
   - {fileID: 747559093}
   - {fileID: 350239012}
