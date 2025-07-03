@@ -15,7 +15,7 @@ public class InventoryManager : TempSingleton<InventoryManager>
     private List<ItemSlot> _visItemList = new List<ItemSlot>(SLOT_COUNT);
 
     // UI invisible
-    private List<ItemDataSO> _invItemList = new List<ItemDataSO>();
+    private List<ItemSlot> _invItemList = new List<ItemSlot>();
 
     // Expend Items Info
     private int coinCount;
@@ -50,8 +50,6 @@ public class InventoryManager : TempSingleton<InventoryManager>
         switch (insertItem._itemType)
         {
             case ItemType.Active:
-                Debug.Log($"Before: {_activeItem}");
-
                 if (_activeItem != null)
                 {
                     _activeItem.Drop(itemPos);
@@ -59,8 +57,6 @@ public class InventoryManager : TempSingleton<InventoryManager>
                 _activeItem = insertItem;
                 _activeItemData = insertItem._itemData;
                 insertResult = true;
-
-                Debug.Log($"After: {_activeItem}");
                 break;
             case ItemType.PassiveAttack:
             case ItemType.PassiveAuto:
@@ -70,26 +66,65 @@ public class InventoryManager : TempSingleton<InventoryManager>
                     {
                         item.UpgradeStackCount();
                         insertResult = true;
-                        break;
+                        break; // >> foreach break;
                     }
                 }
-                if (_visItemList.Count < _visItemList.Capacity)
+                if (!insertResult && _visItemList.Count < _visItemList.Capacity)
                 {
                     ItemSlot newItem = new ItemSlot(insertItem._itemData, 1);
                     _visItemList.Add(newItem);
                     insertResult = true;
-                    break;
                 }
-                break;
-            case ItemType.shop:
-                _invItemList.Add(insertItem._itemData);
                 break;
             default:
                 break;
         }
         return insertResult;
     }
-
+    public bool TryBuyItem(ShopItem insertItem)
+    { 
+        bool insertResult = false;
+        if (TempManager.inventory._coinCount > insertItem._itemData._itemPrice)
+        {
+            if (insertItem._isVisibleInInventory)
+            {
+                insertResult = InsertItemToList(insertItem, ref _visItemList, insertItem._itemData._canStack, insertItem._isVisibleInInventory);
+            }
+            else
+            { 
+                insertResult = InsertItemToList(insertItem, ref _invItemList, insertItem._itemData._canStack);
+            }
+        }
+        return insertResult;
+    }
+    private bool InsertItemToList(Item insertItem, ref List<ItemSlot> insertedList, bool stackable = false, bool checkCapacity = false)
+    {
+        bool insertResult = false;
+        if (stackable)
+        {
+            foreach (ItemSlot item in insertedList)
+            {
+                if (insertItem._itemData._itemID == item.itemDataSO._itemID)
+                {
+                    item.UpgradeStackCount();
+                    insertItem._itemSkill.UseSkill(insertItem.transform);
+                    insertResult = true;
+                    break;
+                }
+            }
+        }
+        else
+        { 
+            if (!checkCapacity || insertedList.Count < insertedList.Capacity)
+            {
+                ItemSlot newItem = new ItemSlot(insertItem._itemData, 1);
+                insertedList.Add(newItem);
+                insertItem._itemSkill.UseSkill(insertItem.transform);
+                insertResult = true;
+            }
+        }
+        return insertResult;
+    }
     public void GetCoin()
     {
         _coinCount += 1;
