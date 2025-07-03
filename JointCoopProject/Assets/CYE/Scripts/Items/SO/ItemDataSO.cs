@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-// [CreateAssetMenu(menuName = "Items/ItemDataSO", order = 1)]
+[CreateAssetMenu(menuName = "Items/ItemDataSO", order = 1)]
 public class ItemDataSO : ScriptableObject
 {
     #region // Item Info
@@ -16,5 +16,11 @@ public class ItemDataSO : ScriptableObject
     public Sprite _itemIcon;
     [Multiline(3)]
     public string _itemDesc;
+    
+    [Space(10f)]
+    [SerializeField]
+    [Tooltip("아이템 중복 획득 가능 여부를 결정합니다.")]
+    private bool canStack;
+    public bool _canStack { get { return canStack; } }
     #endregion
 }

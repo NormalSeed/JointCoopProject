@@ -1,0 +1,13 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+// [CreateAssetMenu(menuName = "Skills/Shop/Luck Up Skill")]
+public class LuckUpSkillSO : SkillDataSO
+{
+    public override void UseSkill(Transform caster)
+    {
+        // base.UseSkill(caster);
+        // Player Luck Up
+    }
+}

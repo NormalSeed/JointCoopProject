@@ -1,11 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using Unity.Mathematics;
 using UnityEngine;
 
-public class GameItem : Item, IPickable
+public class ShopItem : Item, IPickable
 {
+    [SerializeField]
+    [Tooltip("아이템 중복 획득 가능 여부를 결정합니다.")]
+    private bool isVisibleInInventory;
+    public bool _isVisibleInInventory { get { return isVisibleInInventory; } }
+    
     #region // Unity Message Function
     void Awake()
     {
@@ -16,17 +20,18 @@ public class GameItem : Item, IPickable
     #region // IPickable
     public void PickUp(Transform pickupPos)
     {
-        bool insertResult = TempManager.inventory.TryGetItem(this, transform);
-        if (insertResult) // true - 아이템 획득 성공, false - 아이템 획득 실패
+        bool insertResult = TempManager.inventory.TryBuyItem(this);
+        if (insertResult)
         {
-            Destroy(gameObject);
+            TempManager.inventory.UseCoin(_itemData._itemPrice);
         }
     }
-    public void Drop(Transform dropPos)
+    public void Drop(Transform dropPos) // 사실 필요없음
     {
         GameObject itemObject = Instantiate(gameObject, dropPos.position, Quaternion.identity);
         itemObject.SetActive(true);
         itemObject.GetComponent<Rigidbody2D>().AddForce(0.5f * transform.forward);
     }
     #endregion 
+    
 }
