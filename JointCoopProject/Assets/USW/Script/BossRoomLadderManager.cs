@@ -31,7 +31,7 @@ public class BossRoomLadderManager : MonoBehaviour
 
         StartCoroutine(CheckIsBossDead());
     }
-
+    
     void SetupLadder()
     {
         if (ladder == null) return;
@@ -44,7 +44,6 @@ public class BossRoomLadderManager : MonoBehaviour
             sceneChanger = ladder.GetComponent<ChangeSceneManager>();
         }
         
-        sceneChanger.useNextStage = useNe
     }
 
     void SetupBoss()
