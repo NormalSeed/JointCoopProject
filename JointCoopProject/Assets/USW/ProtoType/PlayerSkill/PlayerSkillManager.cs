@@ -114,7 +114,7 @@ public class PlayerSkillManager : MonoBehaviour
             skill.timer -= Time.deltaTime;
             if (skill.timer <= 0)
             {
-                if (!skill.skill._isTrace)
+                if (skill.skill._isTrace)
                 {
                     Vector3 throwDir = _playerMove._moveInput;
                     // 플레이어가 움직이지 않으면 오른쪽으로 공격함
