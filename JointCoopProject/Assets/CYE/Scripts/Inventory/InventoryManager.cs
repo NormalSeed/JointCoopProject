@@ -2,19 +2,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class InventoryManager : TempSingleton<InventoryManager>
 {
     private const int SLOT_COUNT = 12;
 
     // UI visible
-    private Item _activeItem = null;
+    private GameItem activeItem;
+    public GameItem _activeItem { get { return activeItem; } set { activeItem = value; } }
     private ItemDataSO _activeItemData;
     private List<ItemSlot> _visItemList = new List<ItemSlot>(SLOT_COUNT);
 
     // UI invisible
     private List<ItemDataSO> _invItemList = new List<ItemDataSO>();
 
+    // Expend Items Info
     private int coinCount;
     public int _coinCount { get { return coinCount; } private set { coinCount = value; } }
     [SerializeField] private GameObject _coinPrefab;
@@ -41,19 +44,23 @@ public class InventoryManager : TempSingleton<InventoryManager>
         }
     }
 
-    public bool TryGetItem(Item insertItem)
+    public bool TryGetItem(GameItem insertItem, Transform itemPos)
     {
         bool insertResult = false;
         switch (insertItem._itemType)
         {
             case ItemType.Active:
+                Debug.Log($"Before: {_activeItem}");
+
                 if (_activeItem != null)
                 {
-                    // _activeItem.Drop(PlayerTransform);
+                    _activeItem.Drop(itemPos);
                 }
                 _activeItem = insertItem;
                 _activeItemData = insertItem._itemData;
                 insertResult = true;
+
+                Debug.Log($"After: {_activeItem}");
                 break;
             case ItemType.PassiveAttack:
             case ItemType.PassiveAuto:

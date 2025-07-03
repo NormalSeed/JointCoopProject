@@ -20,7 +20,7 @@ public class GameItem : Item, IPickable
     #region // IPickable
     public void PickUp(Transform pickupPos)
     {
-        bool insertResult = TempManager.inventory.TryGetItem(this);
+        bool insertResult = TempManager.inventory.TryGetItem(this, transform);
         if (insertResult) // true - 아이템 획득 성공, false - 아이템 획득 실패
         {
             Destroy(gameObject);
