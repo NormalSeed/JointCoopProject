@@ -37,12 +37,6 @@ public class BossRoomLadderManager : MonoBehaviour
         if (ladder == null) return;
 
         ladder.gameObject.SetActive(false);
-
-        var sceneChanger = ladder.GetComponent<ChangeSceneManager>();
-        if (sceneChanger == null)
-        {
-            sceneChanger = ladder.GetComponent<ChangeSceneManager>();
-        }
         
     }
 

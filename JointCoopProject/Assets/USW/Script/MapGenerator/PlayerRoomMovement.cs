@@ -6,10 +6,10 @@ using UnityEngine;
 
 public class PlayerRoomMovement : MonoBehaviour
 {
-    [Header("문 위치 설정")] public Vector2 topDoorPos = new Vector2(7, 8); // 위쪽 문 위치
-    public Vector2 bottomDoorPos = new Vector2(7, 1); // 아래쪽 문 위치
-    public Vector2 leftDoorPos = new Vector2(1, 4); // 왼쪽 문 위치
-    public Vector2 rightDoorPos = new Vector2(14, 5); // 오른쪽 문 위치
+    [Header("문 위치 설정")] public Vector2 topDoorPos = new Vector2(7, 8); 
+    public Vector2 bottomDoorPos = new Vector2(7, 1); 
+    public Vector2 leftDoorPos = new Vector2(1, 4); 
+    public Vector2 rightDoorPos = new Vector2(14, 5); 
     public float doorDetectionDistance = 1.5f; // 문 감지 거리
 
     [Header("이동 설정")] public float transitionSpeed = 2f;
