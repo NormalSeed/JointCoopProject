@@ -58,7 +58,7 @@ public class Bomb : Item, IPickable, IInstallable
     #region // IPickable
     public void PickUp(Transform pickupPos)
     {
-        if (_isSetUp)
+        if (!_isSetUp)
         {
             TempManager.inventory.GetBomb();
             Destroy(gameObject);
@@ -85,9 +85,10 @@ public class Bomb : Item, IPickable, IInstallable
         gameObject.GetComponent<Collider2D>().enabled = false;
         yield return new WaitForSeconds(_explosiveDelay);
 
+        _animator.SetBool("IsExplode", true);
         _spriteRenderer.enabled = true;
         _explosionFx.SetActive(true);
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.5f);
 
         _explosionFx.SetActive(false);
         if (_explodeRoutine != null)

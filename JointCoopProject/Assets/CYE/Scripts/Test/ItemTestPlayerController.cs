@@ -6,9 +6,9 @@ public class ItemTestPlayerController : MonoBehaviour
 {
     private void Update()
     {
-        if (Input.GetKey(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.B))
         {
-            TempManager.inventory.UseBomb(transform.GetChild(0).transform);
+            TempManager.inventory.UseBomb(transform);
         }
     }
     
