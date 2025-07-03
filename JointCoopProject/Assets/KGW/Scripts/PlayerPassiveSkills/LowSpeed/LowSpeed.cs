@@ -22,9 +22,7 @@ public class LowSpeed : SkillDataSO
         {
             return;
         }
-        // 독 대미지 (스킬레벨 +1 == 대미지 +2)
         Vector3 lowSpeedSpawnPos = caster.position + dir;
         GameObject lowSpeed = Instantiate(skillPrefab, lowSpeedSpawnPos, Quaternion.identity);
-        LowSpeedController lowSpeedController = lowSpeed.GetComponent<LowSpeedController>();
     }
 }
