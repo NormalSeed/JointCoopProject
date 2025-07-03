@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 7838429118171058606}
   - component: {fileID: 5113275346395688022}
   - component: {fileID: 9038899458068560779}
+  - component: {fileID: 5744381343675745475}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -216,15 +217,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10b9e8280e222564a8e87925c76493f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tearPrefab: {fileID: 5494932106409676983, guid: 68bd5dae829129a45999e61ef86a2e76, type: 3}
   _swordPrefab: {fileID: 7245640990072495586, guid: fd8bd6a4731d10c459ecfaac62fc50e4, type: 3}
-  _tearAttackDelay: 0.3
   _swordAttackDelay: 1
-  _isMeleeWeapon: 0
   _hitCoolTime: 0.5
   _knockBackForce: 3
   _knockBackTime: 0.2
-  _playerRigid: {fileID: 0}
+  _skillManager: {fileID: 0}
+  _moveInput: {x: 0, y: 0}
+  _attackDirection: {x: 0, y: 0}
 --- !u!114 &9038899458068560779
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,4 +237,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a531e5f5b2fa9ff438351cb7c0c61eb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerMove: {fileID: 0}
+  _attackRange: {fileID: 0}
   autoskills: []
+  swordUpgradeskills: []
+--- !u!114 &5744381343675745475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5957698803893682831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c056e6d672813845a82c990227d5e95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  topDoorPos: {x: 7, y: 8}
+  bottomDoorPos: {x: 7, y: 1}
+  leftDoorPos: {x: 1, y: 4}
+  rightDoorPos: {x: 14, y: 5}
+  doorDetectionDistance: 1.5
+  transitionSpeed: 2
+  doorActive: 1
+  debugMode: 0
