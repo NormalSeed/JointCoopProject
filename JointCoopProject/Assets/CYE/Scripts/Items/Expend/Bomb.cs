@@ -30,21 +30,18 @@ public class Bomb : Item, IPickable, IInstallable
     }
     void Update()
     {
-        if (_isSetUp)
+        if (_isSetUp && _explodeRoutine == null)
         {
-            if (_explodeRoutine == null)
-            {
-                _explodeRoutine = StartCoroutine(Explode());
-            }
+            _explodeRoutine = StartCoroutine(Explode());
         }
     }
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (!_isSetUp && collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-        {
-            PickUp(collision.transform);
-        }
-    }
+    // void OnCollisionEnter2D(Collision2D collision)
+    // {
+    //     if (!_isSetUp && collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+    //     {
+    //         PickUp(collision.transform);
+    //     }
+    // }
     #endregion
 
     #region // Item Class
@@ -61,9 +58,11 @@ public class Bomb : Item, IPickable, IInstallable
     #region // IPickable
     public void PickUp(Transform pickupPos)
     {
-        TempManager.inventory.GetBomb();
-        Debug.Log($"current bomb: {TempManager.inventory._bombCount}");
-        Destroy(gameObject);
+        if (_isSetUp)
+        {
+            TempManager.inventory.GetBomb();
+            Destroy(gameObject);
+        }
     }
     public void Drop(Transform dropPos)
     {
@@ -82,7 +81,6 @@ public class Bomb : Item, IPickable, IInstallable
 
     private IEnumerator Explode()
     {
-        Debug.Log("Explode Start");
         _animator.SetBool("IsSetUp", true);
         gameObject.GetComponent<Collider2D>().enabled = false;
         yield return new WaitForSeconds(_explosiveDelay);
@@ -91,7 +89,6 @@ public class Bomb : Item, IPickable, IInstallable
         _explosionFx.SetActive(true);
         yield return new WaitForSeconds(0.1f);
 
-        Debug.Log("Explode End");
         _explosionFx.SetActive(false);
         if (_explodeRoutine != null)
         {
