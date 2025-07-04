@@ -56,11 +56,11 @@ public class ShardSlayer_Attack1 : ShardSlayerState
     {
         if (_firstRushDuration > 0f)
         {
-            _controller.gameObject.transform.position = Vector2.MoveTowards(_controller.gameObject.transform.position, _controller._rushDestination1, _controller._model._attack1Range * Time.deltaTime);
+            _controller.gameObject.transform.position = Vector2.MoveTowards(_controller.gameObject.transform.position, _controller._rushDestination1, _controller._model._attack1Range * 1.5f * Time.deltaTime);
         }
         else
         {
-            _controller.gameObject.transform.position = Vector2.MoveTowards(_controller.gameObject.transform.position, _controller._rushDestination2, _controller._model._attack1Range * Time.deltaTime);
+            _controller.gameObject.transform.position = Vector2.MoveTowards(_controller.gameObject.transform.position, _controller._rushDestination2, _controller._model._attack1Range * 1.5f * Time.deltaTime);
         }
     }
 

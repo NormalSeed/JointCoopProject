@@ -31,9 +31,16 @@ public class InfectedGhostController : MonsterBase
 
     public void ShootFire()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_InfectedGhostAttack);
         _fireController.ShootFire(Vector2.up, _model._attack1Damage);
         _fireController.ShootFire(Vector2.down, _model._attack1Damage);
         _fireController.ShootFire(Vector2.right, _model._attack1Damage);
         _fireController.ShootFire(Vector2.left, _model._attack1Damage);
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_InfectedGhostDie);
     }
 }

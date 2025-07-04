@@ -53,6 +53,7 @@ public class WerewolfController : MonsterBase
     private IEnumerator CoAttack1()
     {
         yield return _attackstart;
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_WerewolfAttack);
         Vector2 attackDir = _player.transform.position - transform.position;
         Transform attackTransform = _player.transform;
         float xDir = attackDir.x;
@@ -81,5 +82,11 @@ public class WerewolfController : MonsterBase
     public void DisableAttackCollider()
     {
         _attackCollider.enabled = false;
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_WerewolfDie);
     }
 }

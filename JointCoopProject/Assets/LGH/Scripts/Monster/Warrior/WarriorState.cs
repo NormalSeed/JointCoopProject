@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static SoundManager;
 
 public class WarriorState : BaseState
 {
@@ -58,6 +59,7 @@ public class Warrior_Attack1 : WarriorState
 
     public override void Exit()
     {
+        SoundManager.Instance.RStopSFX();
         _controller._shieldDuration = 5f;
         _controller._curShield = 0;
         _controller.EndAttack1();

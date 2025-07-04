@@ -30,7 +30,7 @@ public class ArmoredOrcState : BaseState
 
 public class ArmoredOrc_Attack1 : ArmoredOrcState
 {
-    private float _rushDelay = 0.5f;
+    private float _rushDelay;
     public ArmoredOrc_Attack1(ArmoredOrcController controller) : base(controller)
     {
         _hasPhysics = true;
@@ -38,6 +38,7 @@ public class ArmoredOrc_Attack1 : ArmoredOrcState
 
     public override void Enter()
     {
+        _rushDelay = 0.5f;
         // Attack1 애니메이션 재생
         _controller._view.PlayAnimation(_controller.ATTACK1_HASH);
         // Attack1 기능 실행
@@ -58,13 +59,8 @@ public class ArmoredOrc_Attack1 : ArmoredOrcState
     {
         if (_rushDelay <= 0f)
         {
-            _controller.gameObject.transform.position = Vector2.MoveTowards(_controller.gameObject.transform.position, _controller._rushDestination, _controller._model._moveSpd * 2f * Time.deltaTime);
+            _controller.gameObject.transform.position = Vector2.MoveTowards(_controller.gameObject.transform.position, _controller._rushDestination, _controller._model._attack1Range * 2 * Time.deltaTime);
         }
-    }
-
-    public override void Exit()
-    {
-        _rushDelay = 0.5f;
     }
 }
 

@@ -71,6 +71,7 @@ public class GoblinKingController : MonsterBase
 
         yield return _attack1Delay;
         _attack1Warn.SetActive(false);
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_GoblinKingAttack1);
         _attack1AoE.SetActive(true);
 
         yield return _attack1Duration;
@@ -81,6 +82,7 @@ public class GoblinKingController : MonsterBase
         yield return _attack1Delay;
         _attack1Warn.transform.rotation = Quaternion.identity;
         _attack1Warn.SetActive(false);
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_GoblinKingAttack1);
         _attack1AoE.transform.rotation = Quaternion.Euler(0, 0, 45);
         _attack1AoE.SetActive(true);
 
@@ -120,6 +122,7 @@ public class GoblinKingController : MonsterBase
 
     public void ActivateAttack2Coll()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_GoblinKingAttack2);
         _attack2Warn.SetActive(false);
         _attack2Collider.SetActive(true);
     }
@@ -132,5 +135,11 @@ public class GoblinKingController : MonsterBase
     public void ActivateAttack2Warn()
     {
         _attack2Warn.SetActive(true);
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_GoblinKingDie);
     }
 }

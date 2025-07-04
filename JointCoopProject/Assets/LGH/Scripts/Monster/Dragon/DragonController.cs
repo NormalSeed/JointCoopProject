@@ -46,6 +46,7 @@ public class DragonController : MonsterBase
 
     public void GetAttack1Dir1()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_DragonAttack);
         _attack1Dir1 = (_player.transform.position - _mergePoint.transform.position).normalized;
         _attack1Cooldown = 3f;
         _coAttack1 = StartCoroutine(CoAttack1());
@@ -79,5 +80,11 @@ public class DragonController : MonsterBase
     {
         _flameController.ShootFlame(_attack1Dir1, _model._attack1Damage);
         _flameController.ShootFlame(_attack1Dir2, _model._attack1Damage);
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_DragonDie);
     }
 }

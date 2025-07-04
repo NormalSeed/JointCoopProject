@@ -80,6 +80,7 @@ public class IncubusController : MonsterBase
 
     public void EnableAttackCollider()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_IncubusAttack1);
         _attack1Collider.enabled = true;
     }
 
@@ -91,6 +92,7 @@ public class IncubusController : MonsterBase
     // Attack2: 회전공격하며 이동, 쿨타임 10초
     public void Attack2()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_IncubusAttack2);
         _model._moveSpd /= 2;
 
         if (_coAttack2 != null)
@@ -129,5 +131,11 @@ public class IncubusController : MonsterBase
         _model._moveSpd *= 2;
         _isAttack2 = false;
         _attack2Cooldown = 10f;
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_IncubusDie);
     }
 }

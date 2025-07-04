@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static SoundManager;
 
 public class SoundManager : TestSingleton<SoundManager>
 {
@@ -96,6 +97,7 @@ public class SoundManager : TestSingleton<SoundManager>
     public void PlayBGM(EBgm bgm)
     {
         audioBgm.clip = bgms[(int)bgm];
+        audioBgm.loop = true;
         audioBgm.Play();
     }
 
@@ -107,6 +109,18 @@ public class SoundManager : TestSingleton<SoundManager>
     public void PlaySFX(ESfx sfx)
     {
         audioSfx.PlayOneShot(sfxs[(int)sfx]);
+    }
+
+    public void RPlaySFX(ESfx sfx)
+    {
+        audioSfx.clip = sfxs[(int)sfx];
+        audioSfx.loop = true;
+        audioSfx.Play();
+    }
+    public void RStopSFX()
+    {
+        audioSfx.loop = false;
+        audioSfx.Stop();
     }
 
     public void BGM_Volume(float volume)
