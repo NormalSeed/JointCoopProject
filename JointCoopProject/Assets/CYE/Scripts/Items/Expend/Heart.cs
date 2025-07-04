@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using Unity.Mathematics;
 using UnityEngine;
 
-public class Coin : Item, IPickable
-{    
+public class Heart : Item, IPickable
+{
+    private enum HeartGauge
+    { 
+        Half = 1, Full = 2
+    }
+    [SerializeField] private HeartGauge _hpUpValue;
+
     #region // Unity Message Function
     void Awake()
     {
@@ -19,12 +23,12 @@ public class Coin : Item, IPickable
     //     }
     // }
     #endregion
-    
+
     #region // IPickable
     public void PickUp(Transform pickupPos)
     {
-        TempManager.inventory.GetCoin(_itemData._itemPrice);
-        Debug.Log($"current coin: {TempManager.inventory._coinCount}");
+        // TempManager.inventory.GetCoin(_itemData._itemPrice);
+        PlayerStatManager.Instance._playerHp += (int)_hpUpValue;
         Destroy(gameObject);
     }
     public void Drop(Transform dropPos)
