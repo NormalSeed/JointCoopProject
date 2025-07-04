@@ -20,7 +20,6 @@ public class OrcAttack1 : MonoBehaviour
             IDamagable damagable = collision.gameObject.GetComponent<IDamagable>();
             if (damagable != null)
             {
-                Debug.Log(collision.gameObject.name + "에게 데미지를 입힘!");
                 damagable.TakeDamage(_model._attack1Damage, transform.position);
             }
         }

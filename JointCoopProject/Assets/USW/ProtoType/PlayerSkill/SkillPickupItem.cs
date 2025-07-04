@@ -9,7 +9,7 @@ public class SkillPickupItem : MonoBehaviour
 {
    public SkillDataSO skillToGive;
 
-   private void OnTriggerEnter(Collider other)
+   private void OnTriggerEnter2D(Collider2D other)
    {
       if (other.TryGetComponent(out PlayerSkillManager playerSkillManager))
       {

@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - Item
+  - Explosive
+  - Shadow
   layers:
   - Default
   - TransparentFX
@@ -15,9 +18,9 @@ TagManager:
   - Player
   - Enemy
   - EvasionManeuver
-  - 
-  - 
-  - 
+  - Item
+  - PassiveSkill
+  - Explosive
   - 
   - 
   - 
@@ -41,4 +44,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Item
+    uniqueID: 1272248867
+    locked: 0
+  - name: Explosion
+    uniqueID: 105671353
     locked: 0

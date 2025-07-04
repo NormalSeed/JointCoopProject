@@ -9,7 +9,7 @@ using UnityEngine;
 /// <summary>
 /// 모든 스킬이 담겨져있는 Dictionary 라고 생각하시면 됩니다 ( ScriptableObject )
 /// </summary>
-[CreateAssetMenu(menuName = "PlayerSkill/SkillDictionarySO")]
+
 public class SkillDictionarySO : ScriptableObject
 {
         

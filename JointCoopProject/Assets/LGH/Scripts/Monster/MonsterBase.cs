@@ -1,34 +1,44 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class MonsterBase : MonoBehaviour, IDamagable
 {
-    // FSMÀ» ÅëÇØ ¿òÁ÷ÀÌ´Â MonsterµéÀÇ ±âº»
-    // StateMachineÀ» ¹Þ¾Æ¿À°í
-    // »óÅÂ º¯°æÀ» StateMachine¿¡ Àü´ÞÇØÁÖ´Â ¿ªÇÒ
-    // model, view, movement ÄÄÆ÷³ÍÆ® °¡Áü
-    // movement´Â MonsterMovement·Î ¸ðµç ¸ó½ºÅÍµéÀÇ ±âº»ÀûÀÎ »óÇÏÁÂ¿ì ¿òÁ÷ÀÓ AI¸¦ °¡Á®¾ß ÇÔ
-    // modelÀº ¸ó½ºÅÍÀÇ ½ºÅÈ(Ã¼·Â, °ø°Ý·Â, ÀÌµ¿¼Óµµ, »çÁ¤°Å¸® µî)
-    // view´Â ¸ó½ºÅÍ ¾Ö´Ï¸ÞÀÌ¼Ç, Ã¼·Â UI µî »ç¿ëÀÚ°¡ Á÷Á¢ ´«À¸·Î º¼ ¼ö ÀÖ´Â ¿ä¼Òµé
-    // ¸ðµç ¸ó½ºÅÍ´Â ÇÃ·¹ÀÌ¾î°¡ ¹æ¿¡ Ã³À½ ÁøÀÔÇßÀ» ¶§ 1ÃÊÀÇ µô·¹ÀÌ¸¦ °®°í È°¼ºÈ­µÈ´Ù.
-    // ¹æ¿¡ µé¾î°¬À» ¶§ SetActive(true) µÇ°í Start¿¡¼­ 1ÃÊ ´ë±â¸¦ °É¾îÁÖ¸é µÈ´Ù.
-    // µ¥¹ÌÁö¸¦ ¹ÞÀ» ¼ö ÀÖ°í ÁÙ ¼ö ÀÖÀ½
-    // curHP°¡ 0ÀÌ µÇ¸é »ç¸Á Ã³¸®
-    // TODO: »ç¸Á½Ã ·£´ý È®·ü·Î ÀçÈ­ ¶Ç´Â ¾ÆÀÌÅÛ µå·Ó
-    private float _activeDelay;
+    // FSMï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì´ï¿½ Monsterï¿½ï¿½ï¿½ï¿½ ï¿½âº»
+    // StateMachineï¿½ï¿½ ï¿½Þ¾Æ¿ï¿½ï¿½ï¿½
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ StateMachineï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½
+    // model, view, movement ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
+    // movementï¿½ï¿½ MonsterMovementï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ ï¿½âº»ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Â¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ AIï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+    // modelï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(Ã¼ï¿½ï¿½, ï¿½ï¿½ï¿½Ý·ï¿½, ï¿½Ìµï¿½ï¿½Óµï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ ï¿½ï¿½)
+    // viewï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½, Ã¼ï¿½ï¿½ UI ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½Òµï¿½
+    // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í´ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½æ¿¡ Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ 1ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­ï¿½È´ï¿½.
+    // ï¿½æ¿¡ ï¿½ï¿½î°¬ï¿½ï¿½ ï¿½ï¿½ SetActive(true) ï¿½Ç°ï¿½ Startï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½ ï¿½ï¿½â¸¦ ï¿½É¾ï¿½ï¿½Ö¸ï¿½ ï¿½È´ï¿½.
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö°ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    // curHPï¿½ï¿½ 0ï¿½ï¿½ ï¿½Ç¸ï¿½ ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+    // TODO: ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­ ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+    protected int _monsterID;
+    public float _activeDelay;
     public bool _isActivated;
     public MonsterMovement _movement;
     public MonsterModel _model;
+    public Dictionary<int, MonsterData> _dataDic = new();
     public MonsterView _view;
     public StateMachine _stateMachine;
     public GameObject _player;
     public bool _isAttack1;
     public bool _isAttack2;
+    public bool _isAttack3;
     public bool _isDamaged;
     public bool _isDead;
     private Coroutine _coOffDamage;
     private WaitForSeconds _damageDelay = new WaitForSeconds(1f);
+    public bool isBoss = false;
+    public Action OnBossDied;
+    
+    //Monster RoomManager
+    private RoomMonsterManager roomMonsterManager;
+    private Vector2Int myRoom;
 
     public readonly int IDLE_HASH = Animator.StringToHash("Idle");
     public readonly int MOVE_HASH = Animator.StringToHash("Walk");
@@ -38,6 +48,9 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
 
     private void Awake() => Init();
 
+    /// <summary>
+    /// ï¿½ï¿½ monster controllerï¿½ï¿½ï¿½ï¿½ _monsterID ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
+    /// </summary>
     protected virtual void Init()
     {
         _model = GetComponent<MonsterModel>();
@@ -45,10 +58,17 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _view = GetComponent<MonsterView>();
         _player = GameObject.Find("Player");
 
+        roomMonsterManager = FindObjectOfType<RoomMonsterManager>();
+        
+        LoadCSV("MonsterStats");
+
         StateMachineInit();
     }
 
-    // ¸ðµç MonsterµéÀÌ °øÅëÀûÀ¸·Î °¡Áú Idle, Patrol
+    /// <summary>
+    /// ï¿½ï¿½ï¿½ Monsterï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½âº» ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
+    /// ï¿½ï¿½ monster controllerï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+    /// </summary>
     protected virtual void StateMachineInit()
     {
         _stateMachine = new StateMachine();
@@ -61,16 +81,69 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _stateMachine._curState = _stateMachine._stateDic[EState.Idle];
     }
 
-    private void Start()
+    protected void Start()
     {
         _activeDelay = 1f;
         _isActivated = false;
         _isAttack1 = false;
         _isAttack2 = false;
+        _isAttack3 = false;
         _isDamaged = false;
         _isDead = false;
+
+        if (_dataDic.TryGetValue(_monsterID, out MonsterData data))
+        {
+            _model.ApplyData(data);
+        }
+        _model._curHP.Value = _model._maxHP;
+
+        FindMyRoom();
+    }
+    
+    void FindMyRoom()
+    {
+        MapGenerator mapGen = FindObjectOfType<MapGenerator>();
+        if (mapGen != null)
+        {
+            int x = Mathf.FloorToInt(transform.position.x / mapGen.prefabSize.x);
+            int y = Mathf.FloorToInt(transform.position.y / mapGen.prefabSize.y);
+            myRoom = new Vector2Int(x, y);
+        }
     }
 
+    private void LoadCSV(string path)
+    {
+        TextAsset csvFile = Resources.Load<TextAsset>(path);
+        string[] lines = csvFile.text.Split('\n');
+
+        for (int i = 1; i < lines.Length; i++)
+        {
+            if (string.IsNullOrWhiteSpace(lines[i])) continue;
+
+            string[] values = lines[i].Split(',');
+
+            MonsterData monster = new MonsterData
+            {
+                _ID = int.Parse(values[0]),
+                _name = values[1],
+                _maxHP = int.Parse(values[2]),
+                _bodyDamage = int.Parse(values[3]),
+                _attack1Damage = int.Parse(values[4]),
+                _attack2Damage = int.Parse(values[5]),
+                _attack3Damage = int.Parse(values[6]),
+                _attack1Range = float.Parse(values[7]),
+                _attack2Range = float.Parse(values[8]),
+                _attack3Range = float.Parse(values[9]),
+                _moveSpd = float.Parse(values[10])
+            };
+
+            _dataDic.Add(monster._ID, monster);
+        }
+    }
+
+    /// <summary>
+    /// ï¿½ï¿½ monsterï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(Attack1, Attack2 ï¿½ï¿½)ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
+    /// </summary>
     protected virtual void Update()
     {
         _activeDelay -= Time.deltaTime;
@@ -87,14 +160,14 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _stateMachine.FixedUpdate();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             IDamagable damagable = collision.gameObject.GetComponent<IDamagable>();
             if (damagable != null)
             {
-                damagable.TakeDamage(1, transform.position);
+                damagable.TakeDamage(_model._bodyDamage, transform.position);
             }
         }
     }
@@ -123,14 +196,28 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _isDamaged = false;
     }
 
-    public void Die()
+    public virtual void Die()
     {
         _isDead = true;
+        
+        if (roomMonsterManager != null)
+        {
+            roomMonsterManager.MonsterDied(this, myRoom);
+        }
+        if (isBoss)
+        {
+            OnBossDied?.Invoke();
+        }
+        
+      
     }
 
     public void UnactivateSelf()
     {
-        //TODO: ºñÈ°¼ºÈ­ÇÏ¸ç µ¿½Ã¿¡ ¾ÆÀÌÅÛ ¶Ç´Â ÀçÈ­¸¦ µå·ÓÇÏ´Â ±â´É ±¸Çö ÇÊ¿ä
-        gameObject.SetActive(false);
+        //TODO: ï¿½ï¿½È°ï¿½ï¿½È­ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½Ã¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
+        if (_isDead)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

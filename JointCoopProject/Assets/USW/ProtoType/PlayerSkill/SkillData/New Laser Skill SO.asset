@@ -12,10 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b952ff31ecf90a3489fafa339d08f86f, type: 3}
   m_Name: New Laser Skill SO
   m_EditorClassIdentifier: 
-  skillName: Laser
-  skillCooldown: 5
-  skillPrefab: {fileID: 5134774101569052748, guid: fc87e506ec6f8b14e9c72e749d456cc9, type: 3}
-  duration: 0.5
-  laserSpeed: 5
-  laserOffset: 5.01
-  enemyTag: Enemy
+  skillName: laser
+  skillCooldown: 3
+  skillPossibility: 100
+  skillIcon: {fileID: 0}
+  _isTrace: 0
+  skillPrefab: {fileID: 5599081506889803857, guid: 8814e1a8f36109945b3f50a0342c5b83, type: 3}
+  searchRadius: 4
+  laserCount: 3
+  laserDelay: 0.2
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 128

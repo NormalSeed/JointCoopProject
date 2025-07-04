@@ -13,11 +13,7 @@ public class OrcController : MonsterBase
     protected override void Init()
     {
         base.Init();
-        _model._maxHP = 30;
-        _model._curHP.Value = _model._maxHP;
-        _model._moveSpd = 2f;
-        _model._attack1Damage = 1;
-        _model._attackRange = 1f;
+        _monsterID = 10101;
     }
 
     protected override void StateMachineInit()
@@ -29,17 +25,17 @@ public class OrcController : MonsterBase
     protected override void Update()
     {
         base.Update();
-        if (Vector2.Distance(transform.position, _player.transform.position) <= _model._attackRange && !_isDamaged)
+        if (Vector2.Distance(transform.position, _player.transform.position) <= _model._attack1Range && !_isDamaged)
         {
             _movement._isTrace = false;
             _isAttack1 = true;
         }
 
-        // TakeDamage ≈◊Ω∫∆Æ
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            TakeDamage(10, transform.position);
-        }
+        //// TakeDamage ≈◊Ω∫∆Æ
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    TakeDamage(10, transform.position);
+        //}
     }
 
     public void Attack1()
@@ -49,11 +45,11 @@ public class OrcController : MonsterBase
 
         if (xDir < 0f)
         {
-            _attackCollider.transform.position = transform.position + new Vector3(-1f, 0);
+            _attackCollider.transform.position = transform.position + new Vector3(-_model._attack1Range / 2, 0);
         }
         else if (xDir > 0f)
         {
-            _attackCollider.transform.position = transform.position + new Vector3(1f, 0);
+            _attackCollider.transform.position = transform.position + new Vector3(_model._attack1Range / 2, 0);
         }
 
             // ¿¸πÊ¿∏∑Œ µµ≥¢∏¶ »÷µŒ∏• »ƒ 1√  ∏ÿ√„
@@ -63,6 +59,7 @@ public class OrcController : MonsterBase
 
     private IEnumerator CoAttack1()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_OrcAttack);
         yield return _attackDelay;
         _movement._isTrace = true;
         _isAttack1 = false;
@@ -76,5 +73,11 @@ public class OrcController : MonsterBase
     public void DisableAttackCollider()
     {
         _attackCollider.enabled = false;
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_OrcDie);
     }
 }

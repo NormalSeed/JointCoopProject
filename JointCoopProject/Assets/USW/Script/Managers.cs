@@ -35,6 +35,7 @@ public class Managers : MonoBehaviour
     public static UIManager UI { get { return Instance._ui; } }
 
 
+
     void Start()
     {
         Init();     // 싱글톤
