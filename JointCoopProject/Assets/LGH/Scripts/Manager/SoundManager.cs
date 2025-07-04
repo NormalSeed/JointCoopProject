@@ -20,7 +20,61 @@ public class SoundManager : MonoBehaviour
 
     public enum ESfx
     {
-        SFX_GUNSHOT
+        SFX_Dagger,
+        SFX_Thunder,
+        SFX_Flame,
+        SFX_LaserMulti,
+        SFX_SpinArrow,
+        SFX_DashAttack,
+        SFX_Parry,
+        SFX_Predetor,
+        SFX_Berserk,
+        SFX_ExplosionShield,
+        SFX_PickupHeart,
+        SFX_PickupPenny,
+        SFX_PickupBomb,
+        SFX_SetBomb,
+        SFX_BombExplode,
+        SFX_PlayerAttack,
+        SFX_PlayerDamage,
+        SFX_GetItem,
+        SFX_OrcAttack,
+        SFX_OrcDie,
+        SFX_SkeletonArcherAttack,
+        SFX_SkeletonDie,
+        SFX_DragonAttack,
+        SFX_DragonDie,
+        SFX_GolluxAttack,
+        SFX_GolluxDie,
+        SFX_GreatSwordSkeletonAttack,
+        SFX_EliteOrcAttack,
+        SFX_EliteOrcDie,
+        SFX_WerewolfAttack,
+        SFX_WerewolfDie,
+        SFX_ShardSlayerAttack1,
+        SFX_ShardSlayerAttack2,
+        SFX_ShardSlayerDie,
+        SFX_WarriorAttack1,
+        SFX_WarriorAttack2,
+        SFX_WarriorDie,
+        SFX_InfectedGhostAttack,
+        SFX_InfectedGhostDie,
+        SFX_InfectedGoblinAttack,
+        SFX_InfectedGoblinDie,
+        SFX_OrcRiderThrow,
+        SFX_IncubusAttack1,
+        SFX_IncubusAttack2,
+        SFX_IncubusDie,
+        SFX_GoblinKingAttack1,
+        SFX_GoblinKingAttack2,
+        SFX_GoblinKingDie,
+        SFX_StrayCatAttack1,
+        SFX_StrayCatAttack2,
+        SFX_StrayCatAttack3,
+        SFX_StrayCatDie,
+        SFX_CoinSlot,
+        SFX_GachaSuccess,
+        SFX_GachaFail
     }
 
     [SerializeField] AudioClip[] bgms;
@@ -43,5 +97,15 @@ public class SoundManager : MonoBehaviour
     public void PlaySFX(ESfx sfx)
     {
         audioSfx.PlayOneShot(sfxs[(int)sfx]);
+    }
+
+    public void BGM_Volume(float volume)
+    {
+        audioBgm.volume = volume;
+    }
+
+    public void SFX_Volume(float volume)
+    {
+        audioSfx.volume = volume;
     }
 }
