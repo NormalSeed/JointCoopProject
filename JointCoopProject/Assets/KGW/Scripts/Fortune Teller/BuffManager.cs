@@ -37,7 +37,8 @@ public class BuffManager : MonoBehaviour
         }
     }
 
-    private List<IBuff> _applyBuffList = new List<IBuff>();
+    List<IBuff> _applyBuffList = new List<IBuff>();
+    public string _FortuneExplanation;
 
     public void ApplyBuff(IBuff applyBuff, PlayerStatManager playerStatus)
     {
@@ -52,9 +53,16 @@ public class BuffManager : MonoBehaviour
         applyBuff.BuffReceive(playerStatus);    // 버프를 플레이어에 적용
     }
 
+    public void FortuneConfirm(string explanation)
+    {
+        _FortuneExplanation = explanation;
+    }
+
     public void ClearBuff()
     {
         _applyBuffList.Clear();
         Debug.Log("모든 버퍼 초기화 완료!!");
+
+        
     }
 }
