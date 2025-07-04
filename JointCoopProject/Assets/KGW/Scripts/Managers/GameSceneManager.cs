@@ -5,6 +5,8 @@ using UnityEngine;
 public class GameSceneManager : MonoBehaviour
 {
     static GameSceneManager instance;
+    // UI를 Stack으로 관리
+    Stack<GameObject> _UiStack = new Stack<GameObject>();
 
     // 초기 SceneManager 생성
     public static GameSceneManager Instance
@@ -38,19 +40,23 @@ public class GameSceneManager : MonoBehaviour
         }
             
     }
-    // UI를 Stack으로 관리
-    Stack<GameObject> _UiStack = new Stack<GameObject>();
 
     // UI 열기
-    public void OpenUi(GameObject ui)
+    public void OpenUi(UIKeyList uiName)
     {
+        GameObject openUi = UIManager.Instance.GetUI(uiName);
+        if(openUi == null)
+        {
+            return;
+        }
+
         if (_UiStack.Count > 0)
         {
             // 열려있는 UI가 있으면 숨김
             _UiStack.Peek().SetActive(false);
         }
-        ui.SetActive(true);
-        _UiStack.Push(ui);
+        openUi.SetActive(true);
+        _UiStack.Push(openUi);
     }
 
     // UI 닫기
@@ -60,8 +66,8 @@ public class GameSceneManager : MonoBehaviour
         {
             return;
         }
-        GameObject ui = _UiStack.Pop();
-        ui.SetActive(false);
+        GameObject closeUi = _UiStack.Pop();
+        closeUi.SetActive(false);
 
         if (_UiStack.Count > 0)
         {

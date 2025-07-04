@@ -1,11 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class CrystalBallController : MonoBehaviour
 {
     [SerializeField] Animator _effectAni;
+    [SerializeField] float _FortuneTextTime = 2f;
+
     bool _isContact = false;
+    float _timer;
+    bool _isFortuneUiOpen = false;
 
     readonly int Bless_Common_Effect = Animator.StringToHash("BlessCommonEffect");
     readonly int Bless_Rare_Effect = Animator.StringToHash("BlessRareEffect");
@@ -14,6 +19,24 @@ public class CrystalBallController : MonoBehaviour
     readonly int Curs_Rare_Effect = Animator.StringToHash("CursRareEffect");
     readonly int Curs_Legend_Effect = Animator.StringToHash("CursLegendEffect");
     readonly int Nothing_Effect = Animator.StringToHash("NothingEffect");
+
+    private void Awake()
+    {
+        _timer = _FortuneTextTime;
+    }
+
+    private void Update()
+    {
+        if (_isFortuneUiOpen)
+        {
+            _timer -= Time.deltaTime;
+
+            if ( _timer < 0)
+            {
+                OnFortuneUiClose();
+            }
+        }        
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -34,6 +57,12 @@ public class CrystalBallController : MonoBehaviour
             BuffManager.Instance.ApplyBuff(randomBuff, PlayerStatManager.Instance);
             // 버프를 받고 수정구슬은 사라지지 않고 남아있지만 다시 접촉을해도 상호작용 없음
             //_isContact = true;
+
+            // 예언 문구 출력
+            if(randomBuff._buffType == BuffType.Fortune)
+            {
+                OnFortuneUiOpen();
+            }
 
             // 접촉시 사운드와 이펙트
             // 축복 이펙트
@@ -74,5 +103,34 @@ public class CrystalBallController : MonoBehaviour
                 _effectAni.Play(Nothing_Effect);            // 꽝 이펙트
             }
         }
+    }
+
+    // 운세 UI 열림
+    private void OnFortuneUiOpen()
+    {
+        // 타이머 리셋
+        _timer = _FortuneTextTime;
+        // 운세 UI 열림
+        _isFortuneUiOpen = true;
+
+        GameSceneManager.Instance.OpenUi(UIKeyList.fortune);
+        GameObject fortuneUi = UIManager.Instance.GetUI(UIKeyList.fortune);
+        
+        if (fortuneUi != null)
+        {
+            TMP_Text fortuneText = fortuneUi.GetComponentInChildren<TMP_Text>(true);    // true로 해야 비활성화 상태에서도 찾아서 가져올수 있다.
+
+            if (fortuneText != null)
+            {
+                fortuneText.text = BuffManager.Instance._FortuneExplanation;
+            }
+        }      
+    }
+
+    // 지정된 시간이 지나면 운세 UI 닫힘
+    private void OnFortuneUiClose()
+    {
+        GameSceneManager.Instance.CloseUi();
+        _isFortuneUiOpen = false;
     }
 }
