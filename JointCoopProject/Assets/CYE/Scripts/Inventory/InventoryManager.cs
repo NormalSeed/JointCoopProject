@@ -84,7 +84,7 @@ public class InventoryManager : TempSingleton<InventoryManager>
     public bool TryBuyItem(ShopItem insertItem)
     { 
         bool insertResult = false;
-        if (TempManager.inventory._coinCount > insertItem._itemData._itemPrice)
+        if (_coinCount > insertItem._itemData._itemPrice)
         {
             if (insertItem._isVisibleInInventory)
             {
@@ -125,17 +125,17 @@ public class InventoryManager : TempSingleton<InventoryManager>
         }
         return insertResult;
     }
-    public void GetCoin()
+    public void GetCoin(int getAmount)
     {
-        _coinCount += 1;
+        _coinCount += getAmount;
     }
     public void UseCoin(int useAmount)
     {
         _coinCount -= useAmount;
     }
-    public void GetBomb()
+    public void GetBomb(int getAmount)
     {
-        _bombCount += 1;
+        _bombCount += getAmount;
     }
     public void UseBomb(Transform playerPos)
     {

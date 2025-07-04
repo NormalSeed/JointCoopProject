@@ -23,7 +23,7 @@ public class Coin : Item, IPickable
     #region // IPickable
     public void PickUp(Transform pickupPos)
     {
-        TempManager.inventory.GetCoin();
+        TempManager.inventory.GetCoin(_itemData._itemPrice);
         Debug.Log($"current coin: {TempManager.inventory._coinCount}");
         Destroy(gameObject);
     }

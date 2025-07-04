@@ -9,5 +9,6 @@ public class ObtainedUpSkillSO : SkillDataSO
     {
         // base.UseSkill(caster);
         // Player Obtained Up
+        // PlayerStatManager.Instance._playerHp += randomvalue;
     }
 }

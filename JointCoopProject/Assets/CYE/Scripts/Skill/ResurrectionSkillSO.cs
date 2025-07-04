@@ -9,5 +9,6 @@ public class ResurrectionSkillSO : SkillDataSO
     {
         // base.UseSkill(caster);
         // Player canResurrection
+        // PlayerStatManager.Instance._canResurrect = true;
     }
 }

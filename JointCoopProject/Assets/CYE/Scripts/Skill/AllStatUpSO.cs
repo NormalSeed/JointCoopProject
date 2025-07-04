@@ -9,6 +9,10 @@ public class AllStatUpSO : SkillDataSO
     {
         // base.UseSkill(caster);
         // Player Hp Up
-        // PlayerStatManager.Instance._playerHp += randomvalue;
+        // PlayerStatManager.Instance._playerHp += 2;
+        // PlayerStatManager.Instance._moveSpeed += randomvalue;
+        // PlayerStatManager.Instance._playerLuck += randomvalue;
+        // PlayerStatManager.Instance._moveSpeed += randomvalue;
+        // PlayerStatManager.Instance._attackSpeed += randomvalue;
     }
 }
