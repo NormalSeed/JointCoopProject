@@ -23,7 +23,7 @@ public class AudioController : MonoBehaviour
         // ½ºÅµ Å°
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.Instance.LoadMainScene();    
+            GameSceneManager.Instance.LoadMainScene();    
         }
     }
 
@@ -61,7 +61,7 @@ public class AudioController : MonoBehaviour
     // Scene ÀüÈ¯
     private void SceneChange(VideoPlayer videoPlayer)
     {
-        SceneManager.Instance.LoadMainScene();
+        GameSceneManager.Instance.LoadMainScene();
     }
 
 }
