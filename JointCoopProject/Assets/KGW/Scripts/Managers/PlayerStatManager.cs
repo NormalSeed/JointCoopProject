@@ -40,8 +40,12 @@ public class PlayerStatManager : MonoBehaviour
 
     [Header("Player Status")]
     // Player HP
-    [SerializeField] int playerHp = 12;
+    [SerializeField] int playerHp = 6;
     public int _playerHp { get { return playerHp; } set { playerHp = value; } }
+
+    // Player Max Hp (읽기 전용)
+    [SerializeField] int playerMaxHp = 13;
+    public int _playerMaxHp { get { return playerMaxHp; } }
 
     // Player Attack Damage
     [SerializeField] int attackDamage = 3;
