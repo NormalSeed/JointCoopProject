@@ -47,7 +47,7 @@ public class ChangeSceneManager : MonoBehaviour
       
       if (nextIndex < SceneManager.sceneCountInBuildSettings)
       {
-         SceneManager.LoadScene(nextIndex);
+         GameSceneManager.Instance.LoadScene(nextIndex);
       }
    }
 
@@ -58,7 +58,7 @@ public class ChangeSceneManager : MonoBehaviour
    
    public static void GoToScene(string sceneName)
    {
-      SceneManager.LoadScene(sceneName);
+      GameSceneManager.Instance.LoadScene(sceneName);
    }
 
    // 재시작 기능 넣는다면 넣기. 
@@ -69,7 +69,7 @@ public class ChangeSceneManager : MonoBehaviour
    
    public static void GoToMainMenu()
    {
-      SceneManager.LoadScene(0);
+      GameSceneManager.Instance.LoadScene(0);
    }
    //private void OnTriggerEnter2D(Collider2D other)
    //{
