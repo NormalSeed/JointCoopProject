@@ -45,11 +45,11 @@ public class OrcController : MonsterBase
 
         if (xDir < 0f)
         {
-            _attackCollider.transform.position = transform.position + new Vector3(-_model._attack1Range, 0);
+            _attackCollider.transform.position = transform.position + new Vector3(-_model._attack1Range / 2, 0);
         }
         else if (xDir > 0f)
         {
-            _attackCollider.transform.position = transform.position + new Vector3(_model._attack1Range, 0);
+            _attackCollider.transform.position = transform.position + new Vector3(_model._attack1Range / 2, 0);
         }
 
             // ¿¸πÊ¿∏∑Œ µµ≥¢∏¶ »÷µŒ∏• »ƒ 1√  ∏ÿ√„
@@ -59,6 +59,7 @@ public class OrcController : MonsterBase
 
     private IEnumerator CoAttack1()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_OrcAttack);
         yield return _attackDelay;
         _movement._isTrace = true;
         _isAttack1 = false;
@@ -72,5 +73,11 @@ public class OrcController : MonsterBase
     public void DisableAttackCollider()
     {
         _attackCollider.enabled = false;
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_OrcDie);
     }
 }

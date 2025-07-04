@@ -63,6 +63,7 @@ public class WarriorController : MonsterBase
     // 지속시간이 끝나거나 실드가 모두 소모되면 패턴이 종료되고 종료된 시점부터 15초의 쿨다운을 갖는다.
     public void Attack1()
     {
+        SoundManager.Instance.RPlaySFX(SoundManager.ESfx.SFX_WarriorAttack1);
         _model._curHP.Value += _shieldAmount;
         _curShield = _model._curHP.Value;
     }
@@ -77,6 +78,7 @@ public class WarriorController : MonsterBase
     // 공격 방향을 입력받은 후 공격방향쪽으로 각도 60도의 부채꼴 공격
     public void Attack2()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_WarriorAttack2);
         Vector2 toPlayer = _player.transform.position - transform.position;
 
         float angleToPlayer = Vector2.Angle(_attack2Dir, toPlayer.normalized);
@@ -110,5 +112,11 @@ public class WarriorController : MonsterBase
         yield return _attackDelay;
         _movement._isTrace = true;
         _isAttack2 = false;
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_WarriorDie);
     }
 }

@@ -76,12 +76,14 @@ public class ShardSlayerController : MonsterBase
 
     private void GetAttack1Dir1()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_ShardSlayerAttack1);
         _attack1Dir1 = (_player.transform.position - transform.position).normalized;
-        _rushDestination1 = _attack1Dir1 * _model._attack1Range;
+        _rushDestination1 = (Vector2)transform.position + _attack1Dir1 * _model._attack1Range;
     }
 
     private void GetAttack1Dir2()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_ShardSlayerAttack1);
         _attack1Dir2 = Random.insideUnitCircle.normalized;
         Vector2 rushDestination = _attack1Dir2 * _model._attack1Range;
         _rushDestination2 = (Vector2)transform.position + rushDestination;
@@ -102,7 +104,7 @@ public class ShardSlayerController : MonsterBase
     public void Attack2()
     {
         GetAttack2Dir();
-
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_ShardSlayerAttack2);
         if (_coAttack2 != null)
         {
             _coAttack2 = null;
@@ -139,5 +141,11 @@ public class ShardSlayerController : MonsterBase
     {
         _fireController.ShootFire(_attack2Dir1, _model._attack2Damage);
         _fireController.ShootFire(_attack2Dir2, _model._attack2Damage);
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_ShardSlayerDie);
     }
 }

@@ -112,11 +112,11 @@ public class StrayCat_Attack3 : StrayCatState
     {
         if (_firstRushDuration > 0f)
         {
-            _controller.gameObject.transform.position = Vector2.MoveTowards(_controller.gameObject.transform.position, _controller._rushDestination1, _controller._model._attack3Range * Time.deltaTime);
+            _controller.gameObject.transform.position = Vector2.MoveTowards(_controller.gameObject.transform.position, _controller._rushDestination1, _controller._model._attack3Range * 1.4f * Time.deltaTime);
         }
         else
         {
-            _controller.gameObject.transform.position = Vector2.MoveTowards(_controller.gameObject.transform.position, _controller._rushDestination2, _controller._model._attack3Range * Time.deltaTime);
+            _controller.gameObject.transform.position = Vector2.MoveTowards(_controller.gameObject.transform.position, _controller._rushDestination2, _controller._model._attack3Range * 1.4f * Time.deltaTime);
         }
     }
 

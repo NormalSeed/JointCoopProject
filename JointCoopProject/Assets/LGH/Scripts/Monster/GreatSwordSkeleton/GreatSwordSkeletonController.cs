@@ -35,6 +35,7 @@ public class GreatSwordSkeletonController : MonsterBase
 
     public void Attack1()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_GreatSwordSkeletonAttack);
         Vector2 attackDir = _player.transform.position - transform.position;
         float xDir = attackDir.x;
 
@@ -67,5 +68,11 @@ public class GreatSwordSkeletonController : MonsterBase
     public void DisableAttackCollider()
     {
         _attackCollider.enabled = false;
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_SkeletonDie);
     }
 }

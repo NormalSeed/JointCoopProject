@@ -58,6 +58,13 @@ public class SkeletonArcherController : MonsterBase
 
     public void ShootArrow()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_SkeletonArcherAttack);
         _arrowController.ShootArrow(_attack1Dir, _model._attack1Damage);
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_SkeletonDie);
     }
 }

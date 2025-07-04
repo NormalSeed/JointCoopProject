@@ -7,6 +7,7 @@ public class ArmoredOrcController : MonsterBase
     private readonly WaitForSeconds _attackDelay = new WaitForSeconds(1.5f);
     private Coroutine _coAttack1;
     public float _attack1Cooldown = 0f;
+    private Vector2 _attack1Dir;
     public Vector2 _rushDestination = Vector2.zero;
     public readonly int ATTACK1_HASH = Animator.StringToHash("Attack1");
 
@@ -41,6 +42,7 @@ public class ArmoredOrcController : MonsterBase
     // Attack1 : 플레이어방향으로 1초간 3m 돌진, 돌진 후에 3초간 움직이지 못함, 쿨타임 6초
     public void Attack1()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_EliteOrcAttack);
         if (_coAttack1 != null)
         {
             StopCoroutine(_coAttack1);
@@ -55,13 +57,19 @@ public class ArmoredOrcController : MonsterBase
 
     private IEnumerator CoAttack1()
     {
-        Vector2 attackDir = (_player.transform.position - transform.position).normalized;
-        _rushDestination = attackDir * _model._attack1Range;
+        _attack1Dir = (_player.transform.position - transform.position).normalized;
+        _rushDestination = (Vector2)transform.position + _attack1Dir * _model._attack1Range;
         yield return _attackDelay;
 
         _attack1Cooldown = 6f;
         _movement._isTrace = true;
         _isAttack1 = false;
         _rushDestination = Vector2.zero;
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_EliteOrcDie);
     }
 }
