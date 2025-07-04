@@ -40,7 +40,6 @@ public class SpikeDamage : MonoBehaviour
         if ((currentFrame == 1 || currentFrame == 2) && Time.time - lastDamageTime > damageCooldown)
         {
             IDamagable damagable = other.GetComponent<IDamagable>();
-            Debug.Log("damagable: " + damagable);
             if (damagable != null)
             {
                 damagable.TakeDamage(1, transform.position);

@@ -1,8 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
+using Quaternion = UnityEngine.Quaternion;
 using Random = UnityEngine.Random;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -44,6 +48,10 @@ public class MapGenerator : MonoBehaviour
     private Vector2 doorDownPos = new Vector2(7.5f, 0.5f);
     private Vector2 doorLeftPos = new Vector2(0.5f, 4.5f);
     private Vector2 doorRightPos = new Vector2(14.5f, 4.5f);
+    
+    // 방 클리어시 문 상태 업데이트
+    private RoomMonsterManager roomMonsterManager;
+    private bool isDoorInit = false;
 
     public enum Direction
     {
@@ -70,7 +78,7 @@ public class MapGenerator : MonoBehaviour
     public bool enableDebugLogs = false;
     private int failsafe = 0; // 무한루프 방지
 
-    [System.Serializable]
+    [Serializable]
     public class RoomData
     {
         public Vector2Int position;
@@ -105,7 +113,8 @@ public class MapGenerator : MonoBehaviour
         GenerateMap();
         
         ReinitializePlayerRoom();
-        
+
+        StartCoroutine(InitializeDoorSystem());
     }
 
     void Update()
@@ -175,6 +184,10 @@ public class MapGenerator : MonoBehaviour
 
         currentAttempts = 0; // 성공하면 시도 횟수 리셋
         Debug.Log("맵 생성 성공 총 방 개수: " + generatedRooms.Count);
+        
+        isDoorInit = false;
+        StartCoroutine(InitializeDoorSystem());
+        Debug.Log("문 열고 닫기 성공!");
     }
 
     bool GenerateBasicMapStructure()
@@ -587,7 +600,7 @@ public class MapGenerator : MonoBehaviour
         {
             perfectCandidates = FindPositionsWithSurroundingCount(3);
         }
-
+        
         if (perfectCandidates.Count == 0)
         {
             perfectCandidates = FindPositionsWithSurroundingCount(2, true);
@@ -835,6 +848,90 @@ public class MapGenerator : MonoBehaviour
             if (playerRoomMove != null)
             {
                 playerRoomMove.PlayerRoomReinitialize();
+            }
+        }
+    }
+
+    IEnumerator InitializeDoorSystem()
+    {
+        yield return new WaitForSeconds(0.5f);
+        
+        roomMonsterManager = FindObjectOfType<RoomMonsterManager>();
+
+        if (roomMonsterManager != null)
+        {
+            isDoorInit = true;
+            StartCoroutine(UpdateDoorstates());
+        }
+    }
+
+    IEnumerator UpdateDoorstates()
+    {
+        while (isDoorInit)
+        {
+            yield return new WaitForSeconds(0.5f);
+
+            if (roomMonsterManager == null)
+                continue;
+
+            foreach (var room in generatedRooms)
+            {
+                Vector2Int roomPos = room.Key;
+                UpdateRoomDoors(roomPos);
+            }
+        }
+    }
+
+    void UpdateRoomDoors(Vector2Int roomPos)
+    {
+        if (!roomDoors.ContainsKey(roomPos)) return;
+
+        bool isCleared = roomMonsterManager.IsRoomClear(roomPos);
+
+        if (generatedRooms[roomPos].roomType == RoomType.Start)
+        {
+            isCleared = true;
+        }
+        
+        var doors = roomDoors[roomPos];
+        
+        UpdateSingleDoorState(roomPos, Direction.Up, Vector2Int.up, doors,isCleared);
+        UpdateSingleDoorState(roomPos, Direction.Down, Vector2Int.down, doors,isCleared);
+        UpdateSingleDoorState(roomPos, Direction.Left, Vector2Int.left, doors,isCleared);
+        UpdateSingleDoorState(roomPos, Direction.Right, Vector2Int.right, doors,isCleared);
+        // 클리어 되어있는지 확인하고 
+        // 시작방은 항상 클리어 된걸로
+        // var 로 도어 가져와서 
+        // 4방향 업데이트 해주기
+
+        //updatesingledoor 하나하나 딕셔너리에서 뽑기 , 이러면 monsterbase 도 참조해야할듯 ? 
+    }
+
+    void UpdateSingleDoorState(Vector2Int roomPos, Direction direction, Vector2Int directionVector,
+        Dictionary<Direction, GameObject> doors, bool isRoomCleared)
+    {
+        if (!doors.ContainsKey(direction)) return;
+        
+        GameObject door = doors[direction];
+        if (door == null) return;
+        
+        SpriteRenderer doorRenderer = door.GetComponent<SpriteRenderer>();
+        if (doorRenderer == null) return;
+
+        Vector2Int adjacentRoomPos = roomPos + directionVector;
+        bool hasAdjacentRoom = generatedRooms.ContainsKey(adjacentRoomPos);
+
+        if (hasAdjacentRoom)
+        {
+            if (isRoomCleared)
+            {
+                Debug.Log($"방 {roomPos}{direction} 문열림");
+                doorRenderer.sprite = GetOpenDoorSprite(direction);
+            }
+            else
+            {
+                Debug.Log($"방 {roomPos}{direction} 문닫음");
+                doorRenderer.sprite = GetClosedDoorSprite(direction);
             }
         }
     }
