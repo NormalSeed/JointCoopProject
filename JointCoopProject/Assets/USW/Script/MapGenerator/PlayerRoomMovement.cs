@@ -161,13 +161,16 @@ public class PlayerRoomMovement : MonoBehaviour
     void CheckSingleDoor(Vector2 playerPos, Vector2 doorPos, Vector2Int direction)
     {
         float distance = Vector2.Distance(playerPos, doorPos);
-
+        
+        
         if (distance <= doorDetectionDistance)
         {
             Vector2Int targetRoom = currentRoom + direction;
-
+            
+            Debug.Log($"문 감지됨 , 현재방 {currentRoom}, 목표방 {targetRoom}");
             if (mapGen.generatedRooms.ContainsKey(targetRoom))
             {
+                Debug.Log($"목표방 이동가능");
                 StartTransition(targetRoom, direction);
             }
         }
@@ -259,6 +262,7 @@ public class PlayerRoomMovement : MonoBehaviour
 
         if (roomData.roomType == MapGenerator.RoomType.Start)
             return true;
+        Debug.Log("시작방 이동허용 완료");
         // mapGen 은 mapgenerator 의 객체
         // 하지만 MapGenerator 자체는 클래스니깐 
         // 객체하고 클래스맴버는 다르니깐 
@@ -269,7 +273,11 @@ public class PlayerRoomMovement : MonoBehaviour
         // 이게 뭐냐면 기름이 일정한 속력과 일정한 양이 뿜으면 멈춰져있는것처럼 보이는 현상을 층류 현상
         // 실제로 왜 이렇게 일어나는가에 대한거는 모르겠다. 
         // 
-        return roomMonster.IsRoomClear(currentRoom);
+        //return roomMonster.IsRoomClear(currentRoom);
+        bool isCleared = roomMonster.IsRoomClear(currentRoom);
+        Debug.Log($"방 {currentRoom} 클리어 {isCleared}");
+
+        return isCleared;
     }
     
     // 퍼블릭 메서드들 여기에서 가져갈것이..

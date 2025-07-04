@@ -773,6 +773,8 @@ public class MapGenerator : MonoBehaviour
 
             // 정렬 순서 설정
             spriteRenderer.sortingOrder = 1;
+            
+            BoxCollider2D collider = door.AddComponent<BoxCollider2D>();
 
             roomDoors[roomPos][direction] = door;
         }
