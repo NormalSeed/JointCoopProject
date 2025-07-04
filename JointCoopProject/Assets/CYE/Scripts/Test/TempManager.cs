@@ -4,13 +4,13 @@ using UnityEngine;
 
 public static class TempManager
 {
-    // public static PlayerStatManager playerStat = PlayerStatManager.Instance; 
     public static InventoryManager inventory => InventoryManager.GetInstance();
+    public static ShopManager shop = ShopManager.GetInstance(); 
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Initailize()
     {
         InventoryManager.CreateInstance();
-        // PlayerStatManager.CreatePlayerStatManager(); // Awake할때 실행됨
+        ShopManager.CreateInstance();
     }
 }
