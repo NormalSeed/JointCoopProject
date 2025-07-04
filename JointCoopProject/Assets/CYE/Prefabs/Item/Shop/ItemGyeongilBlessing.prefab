@@ -142,7 +142,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 7090766043594075331, guid: 37d48b3be05df9245bcb4a407bb244a3, type: 2}
+  - {fileID: -4710288607027950780, guid: bac87a903e8f58d44ad05c07ff03d269, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -186,8 +186,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 000C
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 37d48b3be05df9245bcb4a407bb244a3, type: 2}
-  m_sharedMaterial: {fileID: 7090766043594075331, guid: 37d48b3be05df9245bcb4a407bb244a3, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: bac87a903e8f58d44ad05c07ff03d269, type: 2}
+  m_sharedMaterial: {fileID: -4710288607027950780, guid: bac87a903e8f58d44ad05c07ff03d269, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -282,7 +282,7 @@ GameObject:
   - component: {fileID: 8928677474658725988}
   m_Layer: 0
   m_Name: ItemGyeongilBlessing
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -320,6 +320,7 @@ MonoBehaviour:
   _itemData: {fileID: 11400000, guid: f32181a1d2aa99146a344ca099647575, type: 2}
   _itemSkill: {fileID: 11400000, guid: d0195ea46dd93cd43a6d673978652fa0, type: 2}
   isVisibleInInventory: 1
+  showPrice: 0
 --- !u!58 &6167092064826279661
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -58,7 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 7090766043594075331, guid: 37d48b3be05df9245bcb4a407bb244a3, type: 2}
+  - {fileID: -4710288607027950780, guid: bac87a903e8f58d44ad05c07ff03d269, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -102,8 +102,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 000C
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 37d48b3be05df9245bcb4a407bb244a3, type: 2}
-  m_sharedMaterial: {fileID: 7090766043594075331, guid: 37d48b3be05df9245bcb4a407bb244a3, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: bac87a903e8f58d44ad05c07ff03d269, type: 2}
+  m_sharedMaterial: {fileID: -4710288607027950780, guid: bac87a903e8f58d44ad05c07ff03d269, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -198,7 +198,7 @@ GameObject:
   - component: {fileID: 424175797657309383}
   m_Layer: 0
   m_Name: ItemLuckUp
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -236,6 +236,7 @@ MonoBehaviour:
   _itemData: {fileID: 11400000, guid: 75961a05ca8b90c47b043077b6354d30, type: 2}
   _itemSkill: {fileID: 11400000, guid: 728f2ef50dac8b54ba9739a86085a4fd, type: 2}
   isVisibleInInventory: 0
+  showPrice: 0
 --- !u!58 &1346809370052970227
 CircleCollider2D:
   m_ObjectHideFlags: 0

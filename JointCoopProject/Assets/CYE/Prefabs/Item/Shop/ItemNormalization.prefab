@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 8534450399612206884}
   m_Layer: 0
   m_Name: ItemNormalization
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -136,6 +136,7 @@ MonoBehaviour:
   _itemData: {fileID: 11400000, guid: dd87a854ad54a324781e35e7019bad84, type: 2}
   _itemSkill: {fileID: 11400000, guid: e9460b5f696931d48a135837a80226a4, type: 2}
   isVisibleInInventory: 1
+  showPrice: 0
 --- !u!58 &5611978480695391012
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -256,7 +257,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 7090766043594075331, guid: 37d48b3be05df9245bcb4a407bb244a3, type: 2}
+  - {fileID: -4710288607027950780, guid: bac87a903e8f58d44ad05c07ff03d269, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -300,8 +301,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 000C
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 37d48b3be05df9245bcb4a407bb244a3, type: 2}
-  m_sharedMaterial: {fileID: 7090766043594075331, guid: 37d48b3be05df9245bcb4a407bb244a3, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: bac87a903e8f58d44ad05c07ff03d269, type: 2}
+  m_sharedMaterial: {fileID: -4710288607027950780, guid: bac87a903e8f58d44ad05c07ff03d269, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
