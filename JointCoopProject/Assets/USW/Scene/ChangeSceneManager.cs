@@ -8,6 +8,8 @@ public class ChangeSceneManager : MonoBehaviour
 {
    public bool useNextStage = true;
    public string targetSceneName = "";
+
+
    
    // OntriggerEnter로 먼저 접속후 
    // 필요한게 뭐가있을까
