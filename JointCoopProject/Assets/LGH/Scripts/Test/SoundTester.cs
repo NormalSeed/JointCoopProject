@@ -25,5 +25,16 @@ public class SoundTester : MonoBehaviour
         {
             _soundManager.PlaySFX(SoundManager.ESfx.SFX_PlayerAttack);
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            float volume = _soundManager.audioBgm.volume;
+            _soundManager.BGM_Volume(volume -0.1f);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2)) 
+        {
+            float volume = _soundManager.audioBgm.volume;
+            _soundManager.BGM_Volume(volume + 0.1f);
+        }
     }
 }
