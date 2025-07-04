@@ -110,12 +110,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: 1808035013, guid: 0d0b09b9d0d2edb4fa49b85692debe3f, type: 3}
+  m_Sprite: {fileID: -1649127325, guid: 643adac66faf68740b260de1138cbff0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.26, y: 0.21}
+  m_Size: {x: 0.18, y: 0.23}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -216,15 +216,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10b9e8280e222564a8e87925c76493f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tearPrefab: {fileID: 5494932106409676983, guid: 68bd5dae829129a45999e61ef86a2e76, type: 3}
   _swordPrefab: {fileID: 7245640990072495586, guid: fd8bd6a4731d10c459ecfaac62fc50e4, type: 3}
-  _tearAttackDelay: 0.3
   _swordAttackDelay: 1
-  _isMeleeWeapon: 0
   _hitCoolTime: 0.5
   _knockBackForce: 3
   _knockBackTime: 0.2
-  _playerRigid: {fileID: 0}
+  _skillManager: {fileID: 0}
+  _moveInput: {x: 0, y: 0}
+  _attackDirection: {x: 0, y: 0}
 --- !u!114 &8535683092932245613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,4 +243,5 @@ MonoBehaviour:
   doorDetectionDistance: 1
   transitionSpeed: 2
   doorActive: 1
-  debugMode: 0
+  disableRoomTransition: 0
+  autoDetectMapGenerator: 1
