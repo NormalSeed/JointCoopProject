@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class SoundManager : MonoBehaviour
+public class SoundManager : TestSingleton<SoundManager>
 {
     public enum EBgm
     {
@@ -82,6 +83,15 @@ public class SoundManager : MonoBehaviour
 
     [SerializeField] public AudioSource audioBgm;
     [SerializeField] public AudioSource audioSfx;
+
+    // TestSingleton 초기 설정
+    private void Awake() => Init();
+
+    private void Init()
+    {
+        base.SingletonInit();
+    }
+    // 합칠 때 이부분만 지워주시면 됩니다.
 
     public void PlayBGM(EBgm bgm)
     {
