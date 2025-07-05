@@ -102,55 +102,55 @@ public class GameSceneManager : MonoBehaviour
     // 인 게임 씬 전환
     public void LoadIngameScene()
     {
-        LoadScene("Rear_InGame");
+        LoadScene("Real_InGame");
     }
 
     // 클리어 씬 전환
     public void LoadClearScene()
     {
-        LoadScene("Rear_Clear");
+        LoadScene("Real_Clear");
     }
 
     // 스테이지 1 전환
     public void LoadStage1Scene()
     {
-        LoadScene("Rear_Stage1");
+        LoadScene("Real_Stage1");
     }
 
     // 스테이지 2 전환
     public void LoadStage2Scene()
     {
-        LoadScene("Rear_Stage2");
+        LoadScene("Real_Stage2");
     }
 
     // 스테이지 3 전환
     public void LoadStage3Scene()
     {
-        LoadScene("Rear_Stage3");
+        LoadScene("Real_Stage3");
     }
 
     // 스테이지 4 전환
     public void LoadStage4Scene()
     {
-        LoadScene("Rear_Stage4");
+        LoadScene("Real_Stage4");
     }
 
     // 스테이지 5 전환
     public void LoadStage5Scene()
     {
-        LoadScene("Rear_Stage5");
+        LoadScene("Real_Stage5");
     }
 
     // 스테이지 6 전환
     public void LoadStage6Scene()
     {
-        LoadScene("Rear_Stage6");
+        LoadScene("Real_Stage6");
     }
 
     // 스테이지 7 전환
     public void LoadStage7Scene()
     {
-        LoadScene("Rear_Stage7");
+        LoadScene("Real_Stage7");
     }
 
 }

@@ -34,6 +34,7 @@ public class PlayerHeartController : MonoBehaviour
                 else    // 하트의 상태가 빈 하트
                 {
                     _heartList[i].sprite = _emptyHeart;
+                    _heartList[i].gameObject.SetActive(false);
                 }
             }
             else
