@@ -645,6 +645,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useNextStage: 1
   targetSceneName: 
+  isInGame: 1
+  isCutScene: 0
+  isMainMenu: 0
+  useAsyncLoading: 1
+  loadingUI: {fileID: 0}
+  loadingBar: {fileID: 0}
+  loadingText: {fileID: 0}
+  minLoadingTime: 1
+  videoPlayer: {fileID: 0}
+  allowClickSkip: 0
+  gameStartButton: {fileID: 0}
 --- !u!1 &1674720978102903655
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -22,7 +23,7 @@ public class ChangeSceneManager : MonoBehaviour
     public GameObject loadingUI;
     public Slider loadingBar;
     public Text loadingText;
-    public float minLoadingTime = 1f;
+    public float minLoadingTime = 5f;
 
     public VideoPlayer videoPlayer;
     
@@ -67,16 +68,22 @@ public class ChangeSceneManager : MonoBehaviour
 
     private void Start()
     {
-        
+        SetupManager();
     }
 
     void SetupManager()
     {
+        Debug.Log("setupmanager 시작인데 왜 호출안됨 ?");
+        if (loadingUI != null)
+        {
+            Debug.Log("LoadingScene 프리팹 인스턴스 생성 리소시스로드로는 안되고 왜 이렇게해야 되는거야.");
+            loadingUI = Instantiate(loadingUI);
+        }
         if (loadingUI != null)
         {
             loadingUI.SetActive(false);
+            Debug.Log("loading ui 비활성화");
         }
-
         if (isCutScene)
         {
             SetupCutScene();
@@ -158,20 +165,7 @@ public class ChangeSceneManager : MonoBehaviour
             }
         }
     }
-
-    public void GoToScene(string sceneName)
-    {
-        if (isLoading) return;
-
-        if (useAsyncLoading)
-        {
-            StartCoroutine(LoadSceneAsync(sceneName));
-        }
-        else
-        {
-            SceneManager.LoadScene(sceneName);
-        }
-    }
+    
 
 
     // 다음씬으로 넘어가는거 하나 
@@ -207,14 +201,16 @@ public class ChangeSceneManager : MonoBehaviour
         
         //비동기 로딩 시작
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName);
+        asyncOperation.allowSceneActivation = false;
 
         
         // 로딩 진행률 표시
-        while (!asyncOperation.isDone || minTimeTimer < minLoadingTime)
+        while (asyncOperation.progress < 0.9f)
         {
-            float progress = asyncOperation.progress;
-
             minTimeTimer += Time.deltaTime;
+            float progress = Mathf.Clamp01(asyncOperation.progress / 0.9f);
+
+            
             if (minTimeTimer < minLoadingTime)
             {
                 progress = Mathf.Min(progress, minTimeTimer / minLoadingTime);
@@ -225,6 +221,28 @@ public class ChangeSceneManager : MonoBehaviour
             yield return null;
         }
 
+        while (minTimeTimer < minLoadingTime)
+        {
+            minTimeTimer += Time.deltaTime;
+            
+            float progress = minTimeTimer / minLoadingTime;
+            
+            UpdateLoadingUI(progress);
+            
+            yield return null;
+        }
+        
+        Debug.Log( "도현님 감사합니다");
+        UpdateLoadingUI(1f);
+        asyncOperation.allowSceneActivation = true;
+
+        while (!asyncOperation.isDone)
+        {
+            yield return null;
+        }
+        
+        
+        
         if (loadingUI != null)
         {
             loadingUI.SetActive(false);
@@ -244,13 +262,19 @@ public class ChangeSceneManager : MonoBehaviour
         }
 
         float minTimeTimer = 0f;
+        
+        //비동기 로딩 시작
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneIndex);
+        asyncOperation.allowSceneActivation = false;
 
-        while (!asyncOperation.isDone || minTimeTimer < minLoadingTime)
+        
+        // 로딩 진행률 표시
+        while (asyncOperation.progress < 0.9f)
         {
-            float progress = asyncOperation.progress;
-
             minTimeTimer += Time.deltaTime;
+            float progress = Mathf.Clamp01(asyncOperation.progress / 0.9f);
+
+            
             if (minTimeTimer < minLoadingTime)
             {
                 progress = Mathf.Min(progress, minTimeTimer / minLoadingTime);
@@ -261,22 +285,35 @@ public class ChangeSceneManager : MonoBehaviour
             yield return null;
         }
 
+        while (minTimeTimer < minLoadingTime)
+        {
+            minTimeTimer += Time.deltaTime;
+            
+            float progress = minTimeTimer / minLoadingTime;
+            
+            UpdateLoadingUI(progress);
+            
+            yield return null;
+        }
+        
+        Debug.Log( "도현님 감사합니다");
+        UpdateLoadingUI(1f);
+        asyncOperation.allowSceneActivation = true;
+
+        while (!asyncOperation.isDone)
+        {
+            yield return null;
+        }
+        
+        
+        
         if (loadingUI != null)
         {
             loadingUI.SetActive(false);
         }
 
         isLoading = false;
-        // 로딩 UI 챙기고
-        // 로딩 시간 타이머 아 최소도 맞춰야겠구나
-        // 최소시간 체크할때는 time deltatime 해서 mathf.min 쓰면 되겠고 
-
-        // 로딩은 그러면 최소 로딩 시간 다음에 해야하나 ? 
-        // 최소 로딩시간을 타이머를 설정하고 먼저 
-        // 그다음에 load 그 씬 에이 싱크론가 뭐시기하고 
-        // 그다음에 최소 1초 시간체크하고 
-        // 진행률 ? ? ? 
-        // 아  
+        
     }
 
     void UpdateLoadingUI(float progress)
