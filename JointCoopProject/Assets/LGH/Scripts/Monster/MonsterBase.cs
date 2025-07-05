@@ -220,4 +220,9 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
             gameObject.SetActive(false);
         }
     }
+
+    public virtual void DropItems()
+    {
+
+    }
 }
