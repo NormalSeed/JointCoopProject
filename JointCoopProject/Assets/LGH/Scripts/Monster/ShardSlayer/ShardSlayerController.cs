@@ -34,6 +34,7 @@ public class ShardSlayerController : MonsterBase
         _fireController = GetComponentInChildren<ShardSlayerFireController>();
         
         _attackType = 1;
+        isBoss = true;
     }
 
     protected override void StateMachineInit()

@@ -229,8 +229,68 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         }
     }
 
-    public virtual void DropItems()
+    public void DropItems()
     {
+        if (!isBoss)
+        {
+            _hHPercentage = 5;
+            _fHPercentage = 5;
+            _cPercentage = 90;
 
+            int random = UnityEngine.Random.Range(0, 100);
+            if (random >= 0 && random < _hHPercentage && _halfHeart != null)
+            {
+                Instantiate(_halfHeart, transform.position, Quaternion.identity);
+            }
+            else if (random >= _hHPercentage && random < _hHPercentage + _fHPercentage && _fullHeart != null)
+            {
+                Instantiate(_fullHeart, transform.position, Quaternion.identity);
+            }
+            else if (random >= _hHPercentage + _fHPercentage && _coin != null)
+            {
+                Instantiate(_coin, transform.position, Quaternion.identity);
+            }
+        }
+        else if (isBoss)
+        {
+            _hHPercentage = 50;
+            _fHPercentage = 50;
+            _cPercentage = 33;
+
+            int hpRandom = UnityEngine.Random.Range(0, 100);
+            int coinRandom = UnityEngine.Random.Range(0, 99);
+
+            if (hpRandom >= 0 && hpRandom < _hHPercentage)
+            {
+                Instantiate(_fullHeart, transform.position, Quaternion.identity);
+            }
+            else if (hpRandom >= _hHPercentage)
+            {
+                Instantiate(_fullHeart, transform.position + new Vector3(0.2f, 0, 0), Quaternion.identity);
+                Instantiate(_fullHeart, transform.position + new Vector3(-0.2f, 0, 0), Quaternion.identity);
+            }
+
+            if (coinRandom >= 0 && coinRandom < _cPercentage)
+            {
+                Instantiate(_coin, transform.position + new Vector3(0.2f, 0, 0), Quaternion.identity);
+                Instantiate(_coin, transform.position + new Vector3(-0.2f, 0, 0), Quaternion.identity);
+                Instantiate(_coin, transform.position + new Vector3(0, 0.3f, 0), Quaternion.identity);
+            }
+            else if (coinRandom >= _cPercentage && coinRandom < _cPercentage * 2)
+            {
+                Instantiate(_coin, transform.position + new Vector3(0.2f, 0, 0), Quaternion.identity);
+                Instantiate(_coin, transform.position + new Vector3(-0.2f, 0, 0), Quaternion.identity);
+                Instantiate(_coin, transform.position + new Vector3(0, 0.3f, 0), Quaternion.identity);
+                Instantiate(_coin, transform.position + new Vector3(0, -0.3f, 0), Quaternion.identity);
+            }
+            else if (coinRandom >= _cPercentage * 2)
+            {
+                Instantiate(_coin, transform.position + new Vector3(0.2f, 0, 0), Quaternion.identity);
+                Instantiate(_coin, transform.position + new Vector3(-0.2f, 0, 0), Quaternion.identity);
+                Instantiate(_coin, transform.position + new Vector3(0.2f, 0.3f, 0), Quaternion.identity);
+                Instantiate(_coin, transform.position + new Vector3(-0.2f, 0.3f, 0), Quaternion.identity);
+                Instantiate(_coin, transform.position + new Vector3(0, -0.3f, 0), Quaternion.identity);
+            }
+        }
     }
 }
