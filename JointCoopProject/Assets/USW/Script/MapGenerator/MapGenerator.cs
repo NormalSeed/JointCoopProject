@@ -483,8 +483,6 @@ public class MapGenerator : MonoBehaviour
         else
         {
             spawnedPlayer = Instantiate(playerPrefab, playerSpawnPos, Quaternion.identity);
-            spawnedPlayer.name = "Player";
-            spawnedPlayer.tag = "Player";
         }
     }
 
