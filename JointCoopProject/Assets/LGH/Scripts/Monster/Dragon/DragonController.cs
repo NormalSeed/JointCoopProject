@@ -20,6 +20,7 @@ public class DragonController : MonsterBase
         base.Init();
         _monsterID = 10151;
         _flameController = GetComponentInChildren<DragonFlameController>();
+        isBoss = true;
     }
 
     protected override void StateMachineInit()

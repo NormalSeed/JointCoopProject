@@ -18,6 +18,7 @@ public class GolluxController : MonsterBase
     {
         base.Init();
         _monsterID = 10152;
+        isBoss = true;
     }
 
     protected override void StateMachineInit()
