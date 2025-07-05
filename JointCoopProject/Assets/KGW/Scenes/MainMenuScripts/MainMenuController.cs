@@ -22,7 +22,7 @@ public class MainMenuController : MonoBehaviour
     {
         // 클릭 이벤트 초기화 세팅
         // Open Button
-        _playButton.onClick.AddListener(() => GameSceneManager.Instance.LoadIngameScene());
+        _playButton.onClick.AddListener(() => GameSceneManager.Instance.LoadStage1Scene());
         _optionButton.onClick.AddListener(() => GameSceneManager.Instance.OpenUi(UIKeyList.mainOption));
         _creditsButton.onClick.AddListener(() => GameSceneManager.Instance.OpenUi(UIKeyList.credit));
         _exitButton.onClick.AddListener(() => Application.Quit());

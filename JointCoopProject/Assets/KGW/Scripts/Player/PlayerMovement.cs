@@ -293,6 +293,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     {
         _playerAnimator.SetBool("IsDeath", true);
         GetComponent<CapsuleCollider2D>().enabled = false;
+        GameSceneManager.Instance.OpenUi(UIKeyList.deathWindow);
         Destroy(gameObject, 9f);
         // TODO : UI Ãß°¡
     }

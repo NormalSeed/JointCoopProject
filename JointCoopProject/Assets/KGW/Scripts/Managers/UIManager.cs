@@ -1,8 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 // 딕셔너리 키 입력에 대한 오타 방지로 enum 사용
@@ -45,6 +48,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Button _yesButton;    // Yes 버튼
     [SerializeField] Button _noButton;    // No 버튼
     [SerializeField] Button _optionCloseButton;    // 옵션 닫기 버튼
+    [SerializeField] Button _deathMainMenuButton;    // 메인 화면 이동 버튼 (죽은 후)
 
     [Header("Player Heart Controll")]
     [SerializeField] PlayerHeartController _playerHeartController;  // 플레이어 하트 컨트롤 스크립트
@@ -71,8 +75,22 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        OnInventoryOpen();
-        HeartUpdateUI(PlayerStatManager.Instance._playerHp, PlayerStatManager.Instance._playerMaxHp);
+        if(_inventoryUI != null)
+        {
+            OnInventoryOpen();
+        }
+        if(_playerHpUI != null)
+        {
+            HeartUpdateUI(PlayerStatManager.Instance._playerHp, PlayerStatManager.Instance._playerMaxHp);
+        }
+        if(_inventoryUI != null)
+        {
+            StatUpdateUI();
+        }
+        if(_deathWindowUI != null)
+        {
+            MainMenuButton();
+        }           
     }
 
     private void CreateUIManager()
@@ -109,6 +127,8 @@ public class UIManager : MonoBehaviour
         // Main Menu UI 추가
         _UiDictionary[UIKeyList.mainOption] = _mainOptionUI;
         _UiDictionary[UIKeyList.credit] = _creditUI;
+
+        _miniMapUI = _miniMapUI ?? GameObject.Find("miniMap");
 
     }
 
@@ -153,8 +173,36 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    // 플레이어 체력 UI 업데이트
     public void HeartUpdateUI(float playerCurrentHp, float playerMaxHp)
     {
         _playerHeartController.HeartsUpdate(playerCurrentHp, playerMaxHp);
+    }
+
+    // 플레이어 스탯 UI 업데이트
+    public void StatUpdateUI()
+    {
+        GameObject statUI = UIManager.instance.GetUI(UIKeyList.inventory);
+        TMP_Text[] texts = statUI.GetComponentsInChildren<TMP_Text>();
+
+        // UI 하위 텍스트에서 이름으로 설정
+        TMP_Text speedText = texts.First(t => t.name == "SpeedValue");
+        TMP_Text atkText = texts.First(t => t.name == "ATKValue");
+        TMP_Text asText = texts.First(t => t.name == "ASValue");
+        TMP_Text rangeText = texts.First(t => t.name == "RangeValue");
+        TMP_Text luckText = texts.First(t => t.name == "LuckValue");
+        
+        // 설정된 텍스트에 플레이어 스텟 연결
+        speedText.text = (PlayerStatManager.Instance._moveSpeed).ToString();
+        atkText.text = (PlayerStatManager.Instance._attackDamage).ToString();
+        asText.text = (PlayerStatManager.Instance._attackSpeed).ToString();
+        rangeText.text = (PlayerStatManager.Instance._attackRange).ToString();
+        luckText.text = (PlayerStatManager.Instance._playerLuck).ToString();
+    }
+
+    // 플레이어 죽은 후 메인 전환
+    public void MainMenuButton()
+    {
+        _deathMainMenuButton.onClick.AddListener(() => GameSceneManager.Instance.LoadMainScene());
     }
 }
