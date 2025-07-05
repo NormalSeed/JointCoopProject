@@ -26,8 +26,9 @@ public class GameItem : Item, IPickable
         bool insertResult = TempManager.inventory.TryGetItem(this, transform);
         if (insertResult) // true - 아이템 획득 성공, false - 아이템 획득 실패
         {
-            PlayerSkillManager playerSkillManager = pickupPos.gameObject.GetComponentInChildren<PlayerSkillManager>();
-            playerSkillManager.AddSkill(_itemSkill);
+            PlayerSkillManager playerSkillManager = pickupPos.gameObject.GetComponentInChildren<PlayerSkillManager>();            
+            int nextGrade = TempManager.inventory.GetItemSkillGrade(_itemData);
+            playerSkillManager.AddSkill(_itemSkill[nextGrade-1]);
             Destroy(gameObject);
         }
     }
