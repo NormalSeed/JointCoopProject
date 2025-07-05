@@ -20,6 +20,13 @@ public class ShopItem : Item, IPickable
     {
         Init();
     }
+    // void OnCollisionEnter2D(Collision2D collision)
+    // {
+    //     if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+    //     {
+    //         PickUp(collision.transform);
+    //     }
+    // }
     #endregion
     
     #region // IPickable
@@ -28,7 +35,7 @@ public class ShopItem : Item, IPickable
         bool insertResult = TempManager.inventory.TryBuyItem(this);
         if (insertResult)
         {
-            TempManager.inventory.UseCoin(_itemData._itemPrice);
+            TempManager.inventory.UseCoin(_itemData[0]._itemPrice);
         }
     }
     public void Drop(Transform dropPos) // 사실 필요없음

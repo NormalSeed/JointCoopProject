@@ -59,9 +59,10 @@ public class EliteOrcController : MonsterBase
     {
         _view.PlayAnimation(IDLE_HASH);
         Vector2 attackDir = (_player.transform.position - transform.position).normalized;
-        _rushDestination = attackDir * _model._attack1Range;
+        _rushDestination = (Vector2)transform.position + attackDir * _model._attack1Range;
 
         yield return _attackstart;
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_EliteOrcAttack);
         _view.PlayAnimation(ATTACK1_HASH);
         
         yield return _attackDelay;
@@ -69,5 +70,11 @@ public class EliteOrcController : MonsterBase
         _movement._isTrace = true;
         _isAttack1 = false;
         _rushDestination = Vector2.zero;
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_EliteOrcDie);
     }
 }

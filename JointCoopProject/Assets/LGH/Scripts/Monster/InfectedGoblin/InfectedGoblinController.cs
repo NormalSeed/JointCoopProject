@@ -54,8 +54,15 @@ public class InfectedGoblinController : MonsterBase
 
     public void ShootFire()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_InfectedGoblinAttack);
         _fireController.ShootFire(_attack1Dir1, _model._attack1Damage);
         _fireController.ShootFire(_attack1Dir2, _model._attack1Damage);
         _fireController.ShootFire(_attack1Dir3, _model._attack1Damage);
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_InfectedGoblinDie);
     }
 }

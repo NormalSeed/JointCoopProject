@@ -174,11 +174,13 @@ public class RoomMonsterManager : MonoBehaviour
     public bool IsRoomClear(Vector2Int roomPos)
     {
         // 그 방에 몬스터가 없으면 클리어된 걸로 처리
-        if (!roomMonsters.ContainsKey(roomPos)) 
+        if (!roomMonsters.ContainsKey(roomPos))
+        {   Debug.Log("몬스터 없음 클리어로 처리");
             return true;
-        
+        }
+
         List<MonsterBase> monsters = roomMonsters[roomPos];
-        
+        Debug.Log($"{roomPos} 에 {monsters.Count}");
         // 살아있는 몬스터가 하나라도 있으면 아직 클리어 안됨
         for(int i = 0; i < monsters.Count; i++)
         {
@@ -188,7 +190,7 @@ public class RoomMonsterManager : MonoBehaviour
                 return false; // 살아있는 몬스터 발견
             }
         }
-        
+        Debug.Log("몬스터 다죽음");
         return true; // 모든 몬스터가 죽음
     }
 }

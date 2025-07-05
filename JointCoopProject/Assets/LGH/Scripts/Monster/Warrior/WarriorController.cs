@@ -15,6 +15,8 @@ public class WarriorController : MonsterBase
     public Coroutine _coAttack2;
     private readonly WaitForSeconds _attackDelay = new WaitForSeconds(1f);
 
+    [SerializeField] private Attack2Mesh _attack2Mesh;
+
     public readonly int ATTACK1_HASH = Animator.StringToHash("Attack1");
     public readonly int ATTACK2_HASH = Animator.StringToHash("Attack2");
     public readonly int STUN_HASH = Animator.StringToHash("Stun");
@@ -63,6 +65,7 @@ public class WarriorController : MonsterBase
     // 지속시간이 끝나거나 실드가 모두 소모되면 패턴이 종료되고 종료된 시점부터 15초의 쿨다운을 갖는다.
     public void Attack1()
     {
+        SoundManager.Instance.RPlaySFX(SoundManager.ESfx.SFX_WarriorAttack1);
         _model._curHP.Value += _shieldAmount;
         _curShield = _model._curHP.Value;
     }
@@ -77,6 +80,7 @@ public class WarriorController : MonsterBase
     // 공격 방향을 입력받은 후 공격방향쪽으로 각도 60도의 부채꼴 공격
     public void Attack2()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_WarriorAttack2);
         Vector2 toPlayer = _player.transform.position - transform.position;
 
         float angleToPlayer = Vector2.Angle(_attack2Dir, toPlayer.normalized);
@@ -86,7 +90,11 @@ public class WarriorController : MonsterBase
         {
             if (angleToPlayer <= _attack2Angle / 2f)
             {
-                Debug.Log("공격 맞음");
+                IDamagable player = _player.GetComponent<IDamagable>();
+                if (player != null)
+                {
+                    player.TakeDamage(_model._attack2Damage, transform.position);
+                }
             }
         }
     }
@@ -110,5 +118,23 @@ public class WarriorController : MonsterBase
         yield return _attackDelay;
         _movement._isTrace = true;
         _isAttack2 = false;
+    }
+
+    public void ShowAttack2Mesh()
+    {
+        _attack2Mesh.gameObject.SetActive(true);
+        _attack2Mesh.CreateSector(_attack2Dir);
+    }
+
+    public void HideAttack2Filled()
+    {
+        _attack2Mesh.gameObject.SetActive(false);
+    }
+
+
+    public override void Die()
+    {
+        base.Die();
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_WarriorDie);
     }
 }

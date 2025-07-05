@@ -79,8 +79,9 @@ public class OrcRiderController : MonsterBase
 
     private IEnumerator CoAttack1()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_EliteOrcAttack);
         Vector2 attackDir = (_player.transform.position - transform.position).normalized;
-        _rushDestination = attackDir * _model._attack1Range;
+        _rushDestination = (Vector2)transform.position + attackDir * _model._attack1Range;
 
         yield return _attack1Delay;
 
@@ -116,6 +117,7 @@ public class OrcRiderController : MonsterBase
 
     public void ShootBullet()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_OrcRiderThrow);
         _bulletController.ShootBullet(_attack2Dir, _model._attack2Damage);
     }
 
@@ -126,5 +128,11 @@ public class OrcRiderController : MonsterBase
         _attack2Cooldown = 4f;
         _movement._isTrace = true;
         _isAttack2 = false;
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_EliteOrcDie);
     }
 }

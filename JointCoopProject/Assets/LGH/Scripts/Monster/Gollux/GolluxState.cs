@@ -60,7 +60,7 @@ public class Gollux_Attack1 : GolluxState
     {
         if (_rushDelay <= 0f)
         {
-            _controller.gameObject.transform.position = Vector2.MoveTowards(_controller.gameObject.transform.position, _controller._rushDestination, 8 * Time.deltaTime);
+            _controller.gameObject.transform.position = Vector2.MoveTowards(_controller.gameObject.transform.position, _controller._rushDestination, _controller._model._attack2Range * 1.5f  * Time.deltaTime);
         }
     }
 }

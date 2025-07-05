@@ -112,6 +112,7 @@ public class StrayCatController : MonsterBase
 
     private IEnumerator CoAttack1()
     {
+        SoundManager.Instance.RPlaySFX(SoundManager.ESfx.SFX_StrayCatAttack1);
         int bulletCount = 0;
 
         while (bulletCount < 8)
@@ -120,7 +121,8 @@ public class StrayCatController : MonsterBase
             yield return _bulletDelay;
             bulletCount++;
         }
-        
+
+        SoundManager.Instance.RStopSFX();
 
         yield return _attack1Delay;
         _isAttack1 = false;
@@ -152,6 +154,7 @@ public class StrayCatController : MonsterBase
 
     public void Attack2()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_StrayCatAttack2);
         SpawnExplosion();
         SpawnExplosion();
         SpawnExplosion();
@@ -185,7 +188,7 @@ public class StrayCatController : MonsterBase
     private void GetAttack1Dir1()
     {
         _attack3Dir1 = (_player.transform.position - transform.position).normalized;
-        _rushDestination1 = _attack3Dir1 * _model._attack3Range;
+        _rushDestination1 = (Vector2)transform.position + _attack3Dir1 * _model._attack3Range;
     }
 
     private void GetAttack1Dir2()
@@ -197,8 +200,11 @@ public class StrayCatController : MonsterBase
 
     private IEnumerator CoAttack3()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_StrayCatAttack3);
         GetAttack1Dir1();
         yield return _attack3DirChange;
+
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_StrayCatAttack3);
         GetAttack1Dir2();
         yield return _attack3Delay;
 

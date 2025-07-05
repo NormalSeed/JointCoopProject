@@ -58,9 +58,10 @@ public class GolluxController : MonsterBase
 
     private IEnumerator CoAttack1()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_GolluxAttack);
         _view.PlayAnimation(IDLE_HASH);
         Vector2 attackDir = (_player.transform.position - transform.position).normalized;
-        _rushDestination = attackDir * _model._attack2Range;
+        _rushDestination = (Vector2)transform.position + attackDir * _model._attack2Range;
 
         yield return _attackStart;
         _view.PlayAnimation(ATTACK1_HASH);
@@ -72,5 +73,11 @@ public class GolluxController : MonsterBase
         _isAttack1 = false;
         _rushDestination = Vector2.zero;
         _model._bodyDamage = 1;
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_GolluxDie);
     }
 }

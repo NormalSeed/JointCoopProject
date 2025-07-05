@@ -5,10 +5,10 @@ using UnityEngine;
 public class GameSceneManager : MonoBehaviour
 {
     static GameSceneManager instance;
-    // UI¸¦ StackÀ¸·Î °ü¸®
+    // UIë¥¼ Stackìœ¼ë¡œ ê´€ë¦¬
     Stack<GameObject> _UiStack = new Stack<GameObject>();
 
-    // ÃÊ±â SceneManager »ı¼º
+    // ì´ˆê¸° SceneManager ìƒì„±
     public static GameSceneManager Instance
     {
         get
@@ -29,19 +29,19 @@ public class GameSceneManager : MonoBehaviour
 
     private void CreateSceneManager()
     {
-        if(instance == null)    // »ı¼ºÀÌ µÇ¾î ÀÖÀ¸¸é ´õ ¸¸µéÁö ¾Ê°í »ç¿ë
+        if(instance == null)    // ìƒì„±ì´ ë˜ì–´ ìˆìœ¼ë©´ ë” ë§Œë“¤ì§€ ì•Šê³  ì‚¬ìš©
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else    // Áßº¹ »èÁ¦
+        else    // ì¤‘ë³µ ì‚­ì œ
         {
             Destroy(gameObject);
         }
             
     }
 
-    // UI ¿­±â
+    // UI ì—´ê¸°
     public void OpenUi(UIKeyList uiName)
     {
         GameObject openUi = UIManager.Instance.GetUI(uiName);
@@ -52,14 +52,14 @@ public class GameSceneManager : MonoBehaviour
 
         if (_UiStack.Count > 0)
         {
-            // ¿­·ÁÀÖ´Â UI°¡ ÀÖÀ¸¸é ¼û±è
+            // ì—´ë ¤ìˆëŠ” UIê°€ ìˆìœ¼ë©´ ìˆ¨ê¹€
             _UiStack.Peek().SetActive(false);
         }
         openUi.SetActive(true);
         _UiStack.Push(openUi);
     }
 
-    // UI ´İ±â
+    // UI ë‹«ê¸°
     public void CloseUi()
     {
         if (_UiStack.Count == 0)
@@ -75,79 +75,79 @@ public class GameSceneManager : MonoBehaviour
         }
     }
 
-    // ÀÔ·ÂÇÑ ¾À ÀüÈ¯ (ÀÌ¸§)
+    // ì…ë ¥í•œ ì”¬ ì „í™˜ (ì´ë¦„)
     public void LoadScene(string sceneName)
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
     }
 
-    // ÀÔ·ÂÇÑ ¾À ÀüÈ¯ (¼ıÀÚ)
+    // ì…ë ¥í•œ ì”¬ ì „í™˜ (ìˆ«ì)
     public void LoadScene(int sceneNumber)
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneNumber);
     }
 
-    // ÄÆ ¾À ÀüÈ¯
+    // ì»· ì”¬ ì „í™˜
     public void LoadCutScene()
     {
         LoadScene("Real_CutScene");
     }
 
-    // ¸ŞÀÎ ¾À ÀüÈ¯
+    // ë©”ì¸ ì”¬ ì „í™˜
     public void LoadMainScene()
     {
         LoadScene("Real_MainMenu");
     }
 
-    // ÀÎ °ÔÀÓ ¾À ÀüÈ¯
+    // ì¸ ê²Œì„ ì”¬ ì „í™˜
     public void LoadIngameScene()
     {
         LoadScene("Rear_InGame");
     }
 
-    // Å¬¸®¾î ¾À ÀüÈ¯
+    // í´ë¦¬ì–´ ì”¬ ì „í™˜
     public void LoadClearScene()
     {
         LoadScene("Rear_Clear");
     }
 
-    // ½ºÅ×ÀÌÁö 1 ÀüÈ¯
+    // ìŠ¤í…Œì´ì§€ 1 ì „í™˜
     public void LoadStage1Scene()
     {
         LoadScene("Rear_Stage1");
     }
 
-    // ½ºÅ×ÀÌÁö 2 ÀüÈ¯
+    // ìŠ¤í…Œì´ì§€ 2 ì „í™˜
     public void LoadStage2Scene()
     {
         LoadScene("Rear_Stage2");
     }
 
-    // ½ºÅ×ÀÌÁö 3 ÀüÈ¯
+    // ìŠ¤í…Œì´ì§€ 3 ì „í™˜
     public void LoadStage3Scene()
     {
         LoadScene("Rear_Stage3");
     }
 
-    // ½ºÅ×ÀÌÁö 4 ÀüÈ¯
+    // ìŠ¤í…Œì´ì§€ 4 ì „í™˜
     public void LoadStage4Scene()
     {
         LoadScene("Rear_Stage4");
     }
 
-    // ½ºÅ×ÀÌÁö 5 ÀüÈ¯
+    // ìŠ¤í…Œì´ì§€ 5 ì „í™˜
     public void LoadStage5Scene()
     {
         LoadScene("Rear_Stage5");
     }
 
-    // ½ºÅ×ÀÌÁö 6 ÀüÈ¯
+    // ìŠ¤í…Œì´ì§€ 6 ì „í™˜
     public void LoadStage6Scene()
     {
         LoadScene("Rear_Stage6");
     }
 
-    // ½ºÅ×ÀÌÁö 7 ÀüÈ¯
+    // ìŠ¤í…Œì´ì§€ 7 ì „í™˜
     public void LoadStage7Scene()
     {
         LoadScene("Rear_Stage7");
