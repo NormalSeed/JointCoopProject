@@ -23,7 +23,7 @@ public class ChangeSceneManager : MonoBehaviour
     public GameObject loadingUI;
     public Slider loadingBar;
     public Text loadingText;
-    public float minLoadingTime = 5f;
+    public float minLoadingTime = 2f;
 
     public VideoPlayer videoPlayer;
     
