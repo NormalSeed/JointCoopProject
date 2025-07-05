@@ -20,7 +20,7 @@ public class AudioController : MonoBehaviour
 
     private void Update()
     {
-        // ½ºÅµ Å°
+        // ìŠ¤í‚µ í‚¤
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             GameSceneManager.Instance.LoadMainScene();    
@@ -36,29 +36,29 @@ public class AudioController : MonoBehaviour
 
     private void VideoSetting()
     {
-        // ºñµğ¿À ¼¼ÆÃ
-        _videoPlayer.audioOutputMode = VideoAudioOutputMode.AudioSource;    // ¿µ»ó¿¡ ÀúÀåµÈ ¿Àµğ¿À »ç¿ë
+        // ë¹„ë””ì˜¤ ì„¸íŒ…
+        _videoPlayer.audioOutputMode = VideoAudioOutputMode.AudioSource;    // ì˜ìƒì— ì €ì¥ëœ ì˜¤ë””ì˜¤ ì‚¬ìš©
 
-        // Æ®·¢ È®ÀÎ
+        // íŠ¸ë™ í™•ì¸
         if (_videoPlayer.audioTrackCount > 0 )
         {
-            Debug.Log("Æ®·¢ Àç»ı");
-            _videoPlayer.EnableAudioTrack(0, true); // 0¹ø Track »ç¿ë (True)
+            Debug.Log("íŠ¸ë™ ì¬ìƒ");
+            _videoPlayer.EnableAudioTrack(0, true); // 0ë²ˆ Track ì‚¬ìš© (True)
             _videoPlayer.SetTargetAudioSource(0, _audioSource);
         }
         else
         {
-            Debug.Log("Æ®·¢ ¾øÀ½");
+            Debug.Log("íŠ¸ë™ ì—†ìŒ");
         }
 
-        // ¿µ»ó ³¡³­ ÈÄ Main SceneÀüÈ¯ ÀÌº¥Æ® µî·Ï
-        _videoPlayer.loopPointReached -= SceneChange;   // Áßº¹ µî·Ï ¹®Á¦·Î ÀÎÇÏ¿© ÀÏ´Ü »èÁ¦ ÈÄ Ãß°¡
+        // ì˜ìƒ ëë‚œ í›„ Main Sceneì „í™˜ ì´ë²¤íŠ¸ ë“±ë¡
+        _videoPlayer.loopPointReached -= SceneChange;   // ì¤‘ë³µ ë“±ë¡ ë¬¸ì œë¡œ ì¸í•˜ì—¬ ì¼ë‹¨ ì‚­ì œ í›„ ì¶”ê°€
         _videoPlayer.loopPointReached += SceneChange;
 
         _videoPlayer.Play();
     }
 
-    // Scene ÀüÈ¯
+    // Scene ì „í™˜
     private void SceneChange(VideoPlayer videoPlayer)
     {
         GameSceneManager.Instance.LoadMainScene();
