@@ -11,16 +11,22 @@ public class Bomb : Item, IPickable, IInstallable
     [SerializeField]
     private float _explosiveDelay;
     [SerializeField]
-    private float _explosiveDamage;
+    private int explosiveDamage;
+    public int _explosiveDamage { get { return explosiveDamage; } }
 
     [SerializeField]
     private GameObject _explosionFx;
+    
 
     public bool _isSetUp;
 
     private Coroutine _explodeRoutine = null;
 
     private Animator _animator;
+
+    private bool _isExplode;
+
+    private LayerMask _playerLayer;
 
 
     #region // Unity Message Function
@@ -37,7 +43,7 @@ public class Bomb : Item, IPickable, IInstallable
     }
     // void OnCollisionEnter2D(Collision2D collision)
     // {
-    //     if (!_isSetUp && collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+    //     if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
     //     {
     //         PickUp(collision.transform);
     //     }
@@ -52,6 +58,8 @@ public class Bomb : Item, IPickable, IInstallable
         _spriteRenderer.color = Color.white;
 
         _animator = transform.GetChild(0).GetComponent<Animator>();
+
+        _playerLayer = LayerMask.NameToLayer("Player");
     }
     #endregion
 
@@ -81,15 +89,18 @@ public class Bomb : Item, IPickable, IInstallable
 
     private IEnumerator Explode()
     {
+        _isExplode = false;
         _animator.SetBool("IsSetUp", true);
         gameObject.GetComponent<Collider2D>().enabled = false;
         yield return new WaitForSeconds(_explosiveDelay);
 
-        _animator.SetBool("IsExplode", true);
+        _isExplode = true;
+        _animator.SetBool("IsExplode", _isExplode);
         _spriteRenderer.enabled = true;
         _explosionFx.SetActive(true);
         yield return new WaitForSeconds(0.5f);
 
+        _isExplode = false;
         _explosionFx.SetActive(false);
         if (_explodeRoutine != null)
         {
@@ -97,5 +108,11 @@ public class Bomb : Item, IPickable, IInstallable
             _explodeRoutine = null;
         }
         Destroy(gameObject);
+    }
+
+    private void TakeDamage(IDamagable target, LayerMask targetLayer)
+    {
+        int realDamage = (targetLayer == _playerLayer) ? 2 : (int)_explosiveDamage;
+        target?.TakeDamage(realDamage, transform.position);
     }
 }

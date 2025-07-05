@@ -393,7 +393,7 @@ GameObject:
   - component: {fileID: 3989061889594808968}
   - component: {fileID: 4015838080079913323}
   - component: {fileID: 1612313809412559360}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ItemBomb
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -479,7 +479,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &1612313809412559360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -496,6 +496,6 @@ MonoBehaviour:
   _itemData: {fileID: 11400000, guid: b684faf58891c8046a94afda85c3770b, type: 2}
   _itemSkill: {fileID: 0}
   _explosiveDelay: 2
-  _explosiveDamage: 10
+  explosiveDamage: 0
   _explosionFx: {fileID: 7772028558700602818}
   _isSetUp: 0

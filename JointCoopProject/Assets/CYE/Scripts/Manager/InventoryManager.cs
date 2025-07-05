@@ -12,6 +12,7 @@ public class InventoryManager : TempSingleton<InventoryManager>
     private GameItem activeItem;
     public GameItem _activeItem { get { return activeItem; } set { activeItem = value; } }
     private ItemDataSO _activeItemData;
+
     private List<ItemSlot> _visItemList = new List<ItemSlot>(SLOT_COUNT);
 
     // UI invisible
@@ -25,6 +26,7 @@ public class InventoryManager : TempSingleton<InventoryManager>
     public int _bombCount { get { return bombCount; } private set { bombCount = value; } }
     [SerializeField] private GameObject _bombPrefab;
 
+    [System.Serializable]
     private struct ItemSlot
     {
         public ItemDataSO itemDataSO;
@@ -44,7 +46,7 @@ public class InventoryManager : TempSingleton<InventoryManager>
         }
     }
 
-    public bool TryGetItem(GameItem insertItem, Transform itemPos)
+    public bool TryGetItem(GameItem insertItem, Transform pickupPos)
     {
         bool insertResult = false;
         switch (insertItem._itemType)
@@ -52,7 +54,7 @@ public class InventoryManager : TempSingleton<InventoryManager>
             case ItemType.Active:
                 if (_activeItem != null)
                 {
-                    _activeItem.Drop(itemPos);
+                    _activeItem.Drop(pickupPos);
                 }
                 _activeItem = insertItem;
                 _activeItemData = insertItem._itemData;
@@ -88,16 +90,16 @@ public class InventoryManager : TempSingleton<InventoryManager>
         {
             if (insertItem._isVisibleInInventory)
             {
-                insertResult = InsertItemToList(insertItem, ref _visItemList, insertItem._itemData._canStack, insertItem._isVisibleInInventory);
+                insertResult = InsertBoughtItemToList(insertItem, ref _visItemList, insertItem._itemData._canStack, insertItem._isVisibleInInventory);
             }
             else
             { 
-                insertResult = InsertItemToList(insertItem, ref _invItemList, insertItem._itemData._canStack);
+                insertResult = InsertBoughtItemToList(insertItem, ref _invItemList, insertItem._itemData._canStack);
             }
         }
         return insertResult;
     }
-    private bool InsertItemToList(Item insertItem, ref List<ItemSlot> insertedList, bool stackable = false, bool checkCapacity = false)
+    private bool InsertBoughtItemToList(Item insertItem, ref List<ItemSlot> insertedList, bool stackable = false, bool checkCapacity = false)
     {
         bool insertResult = false;
         if (stackable)
@@ -107,7 +109,7 @@ public class InventoryManager : TempSingleton<InventoryManager>
                 if (insertItem._itemData._itemID == item.itemDataSO._itemID)
                 {
                     item.UpgradeStackCount();
-                    insertItem._itemSkill.UseSkill(insertItem.transform);
+                    insertItem._itemSkill[0].UseSkill(insertItem.transform);
                     insertResult = true;
                     break;
                 }
@@ -119,7 +121,7 @@ public class InventoryManager : TempSingleton<InventoryManager>
             {
                 ItemSlot newItem = new ItemSlot(insertItem._itemData, 1);
                 insertedList.Add(newItem);
-                insertItem._itemSkill.UseSkill(insertItem.transform);
+                insertItem._itemSkill[0].UseSkill(insertItem.transform);
                 insertResult = true;
             }
         }

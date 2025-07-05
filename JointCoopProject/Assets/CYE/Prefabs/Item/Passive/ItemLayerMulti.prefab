@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8038672848934108261}
   - component: {fileID: 186164793565002054}
   - component: {fileID: 2407877883425155121}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ItemLayerMulti
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemType: 2
   _itemData: {fileID: 11400000, guid: 28a4847f77f128947a1e6cb91487d38f, type: 2}
-  _itemSkill: {fileID: 11400000, guid: 8019c5e91387a264b995a3d409ddeabd, type: 2}
+  _itemSkill: {fileID: 11400000, guid: c3dd3c3eff5157c4a8e11af237b4893b, type: 2}
 --- !u!58 &186164793565002054
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -112,7 +112,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!1 &6426829720300378109
 GameObject:
   m_ObjectHideFlags: 0
