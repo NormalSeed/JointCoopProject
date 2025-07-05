@@ -80,14 +80,10 @@ public class BossRoomLadderManager : MonoBehaviour
         Vector3 roomPosition = transform.position;
         Vector3 startPos = roomPosition + ladderStartPos;
         Vector3 endPos = roomPosition + ladderEndPos;
-
-        Debug.Log($"LadderManager 위치: {roomPosition}");
-        Debug.Log($"ladderStartPos: {ladderStartPos}");
-        Debug.Log($"계산된 startPos: {startPos}");
-        Debug.Log($"계산된 endPos: {endPos}");
+        
 
         ladder.transform.position = startPos;
-        Debug.Log($"실제 사다리 위치: {ladder.transform.position}");
+        
 
         float elapsedTime = 0f;
         while (elapsedTime < ladderDropTime)
