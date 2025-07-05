@@ -64,7 +64,7 @@ Transform:
   m_GameObject: {fileID: 5957698803893682831}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.42, y: -0.02, z: 0}
+  m_LocalPosition: {x: 0.37, y: -0.037, z: 0}
   m_LocalScale: {x: 4, y: 4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -111,15 +111,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 1808035013, guid: 0d0b09b9d0d2edb4fa49b85692debe3f, type: 3}
+  m_Sprite: {fileID: -1649127325, guid: 643adac66faf68740b260de1138cbff0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.26, y: 0.21}
+  m_Size: {x: 0.18, y: 0.23}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &2454437540699625519
@@ -260,4 +260,5 @@ MonoBehaviour:
   doorDetectionDistance: 1.5
   transitionSpeed: 2
   doorActive: 1
-  debugMode: 0
+  disableRoomTransition: 0
+  autoDetectMapGenerator: 1

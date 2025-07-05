@@ -13,8 +13,8 @@ public class BossRoomLadderManager : MonoBehaviour
     [Header("보스 방 사물들 ")] public MonsterBase bossMonster;
     public SpriteRenderer ladder;
 
-    public Vector3 ladderStartPos = new Vector3(7.5f, 11f, 0f);
-    public Vector3 ladderEndPos = new Vector3(7.5f, 7.5f, 0f);
+    public Vector3 ladderStartPos = new Vector3(0f, 6.5f, 0f);
+    public Vector3 ladderEndPos = new Vector3(0f, 3f, 0f);
 
     public float ladderDropTime = 2f;
 
@@ -80,8 +80,10 @@ public class BossRoomLadderManager : MonoBehaviour
         Vector3 roomPosition = transform.position;
         Vector3 startPos = roomPosition + ladderStartPos;
         Vector3 endPos = roomPosition + ladderEndPos;
+        
 
         ladder.transform.position = startPos;
+        
 
         float elapsedTime = 0f;
         while (elapsedTime < ladderDropTime)
