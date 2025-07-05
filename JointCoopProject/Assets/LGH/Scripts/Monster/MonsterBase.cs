@@ -35,6 +35,13 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     private WaitForSeconds _damageDelay = new WaitForSeconds(1f);
     public bool isBoss = false;
     public Action OnBossDied;
+
+    [SerializeField] protected GameObject _halfHeart;
+    [SerializeField] protected GameObject _fullHeart;
+    [SerializeField] protected GameObject _coin;
+    protected float _hHPercentage;
+    protected float _fHPercentage;
+    protected float _cPercentage;
     
     //Monster RoomManager
     private RoomMonsterManager roomMonsterManager;
@@ -56,7 +63,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _model = GetComponent<MonsterModel>();
         _movement = GetComponent<MonsterMovement>();
         _view = GetComponent<MonsterView>();
-        _player = GameObject.Find("Player");
+        _player = GameObject.Find("Player(Clone)");
 
         roomMonsterManager = FindObjectOfType<RoomMonsterManager>();
         
@@ -199,7 +206,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     public virtual void Die()
     {
         _isDead = true;
-        
+
         if (roomMonsterManager != null)
         {
             roomMonsterManager.MonsterDied(this, myRoom);
@@ -214,10 +221,16 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
 
     public void UnactivateSelf()
     {
+        DropItems();
         //TODO: ��Ȱ��ȭ�ϸ� ���ÿ� ������ �Ǵ� ��ȭ�� ����ϴ� ��� ���� �ʿ�
         if (_isDead)
         {
             gameObject.SetActive(false);
         }
+    }
+
+    public virtual void DropItems()
+    {
+
     }
 }
