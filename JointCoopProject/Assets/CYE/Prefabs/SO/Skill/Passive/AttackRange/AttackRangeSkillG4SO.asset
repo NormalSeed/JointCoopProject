@@ -9,16 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f5ff7bc19cdee8438e7030b70ea4b60, type: 3}
-  m_Name: SpinArrowSkillSO
+  m_Script: {fileID: 11500000, guid: 095fac752b02b1d44b4eeb40089cfeb0, type: 3}
+  m_Name: AttackRangeSkillG4SO
   m_EditorClassIdentifier: 
-  skillName: 
+  skillName: Attack Range
   skillCooldown: 0
-  skillPossibility: 0
-  skillIcon: {fileID: 0}
+  skillPossibility: 100
+  skillIcon: {fileID: 21300000, guid: 2cee7268bd907024e8ffd9650d621a2f, type: 3}
   _isTrace: 0
-  _isSwordAttack: 0
+  _isSwordAttack: 1
   skillPrefab: {fileID: 0}
-  detectionRange: 4
-  projectileSpeed: 0
-  enemyTag: Enemy
+  _skillLevel: 4
+  _upgradeRange: 2.4
+  _scaleUpRange: 0.6

@@ -11,6 +11,13 @@ public class GameItem : Item, IPickable
     {
         Init();
     }
+    // void OnCollisionEnter2D(Collision2D collision)
+    // {
+    //     if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+    //     {
+    //         PickUp(collision.transform);
+    //     }
+    // }
     #endregion
     
     #region // IPickable
@@ -19,6 +26,8 @@ public class GameItem : Item, IPickable
         bool insertResult = TempManager.inventory.TryGetItem(this, transform);
         if (insertResult) // true - 아이템 획득 성공, false - 아이템 획득 실패
         {
+            PlayerSkillManager playerSkillManager = pickupPos.gameObject.GetComponentInChildren<PlayerSkillManager>();
+            playerSkillManager.AddSkill(_itemSkill);
             Destroy(gameObject);
         }
     }

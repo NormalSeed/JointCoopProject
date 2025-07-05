@@ -14,7 +14,7 @@ public abstract class Item : MonoBehaviour
     public ItemDataSO _itemData;
     
     [Header("Skill(Ability) Data")]
-    public SkillDataSO _itemSkill;
+    public SkillDataSO[] _itemSkill = new SkillDataSO[5];
 
     protected SpriteRenderer _spriteRenderer;
 

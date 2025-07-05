@@ -109,9 +109,9 @@ GameObject:
   - component: {fileID: 114761165529350821}
   - component: {fileID: 3068860942591285334}
   - component: {fileID: 3469950582754703136}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ItemLongDistanceSword
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemType: 1
   _itemData: {fileID: 11400000, guid: fc23a75ba51081f458a9d1a4d3a3c821, type: 2}
-  _itemSkill: {fileID: 11400000, guid: f9452ddea87db3a4b995065dff73e5ad, type: 2}
+  _itemSkill: {fileID: 11400000, guid: 4d7f08ce384763647b32a9f0498f91d6, type: 2}
 --- !u!58 &3068860942591285334
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -209,7 +209,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!1 &4435160684932751147
 GameObject:
   m_ObjectHideFlags: 0

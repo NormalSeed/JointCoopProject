@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 4320206517066384420}
   - component: {fileID: 6986704049645329708}
   - component: {fileID: 9020470999594302961}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ItemPoisonAttack
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemType: 1
   _itemData: {fileID: 11400000, guid: c3515928f36860c4c8e16301b5e3b721, type: 2}
-  _itemSkill: {fileID: 11400000, guid: 3bce46f8b766fa0409252a5d65091bae, type: 2}
+  _itemSkill: {fileID: 11400000, guid: a206550f644b2334b8486e2b54b5fd6d, type: 2}
 --- !u!58 &6986704049645329708
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -112,7 +112,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!1 &3111499517625803239
 GameObject:
   m_ObjectHideFlags: 0
