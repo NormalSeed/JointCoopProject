@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -49,7 +50,7 @@ public class InventoryManager : TempSingleton<InventoryManager>
     public bool TryGetItem(GameItem insertItem, Transform pickupPos)
     {
         bool insertResult = false;
-        switch (insertItem._itemType)
+        switch (insertItem._itemData._itemType)
         {
             case ItemType.Active:
                 if (_activeItem != null)
@@ -84,7 +85,7 @@ public class InventoryManager : TempSingleton<InventoryManager>
         return insertResult;
     }
     public bool TryBuyItem(ShopItem insertItem)
-    { 
+    {
         bool insertResult = false;
         if (_coinCount > insertItem._itemData._itemPrice)
         {
@@ -93,7 +94,7 @@ public class InventoryManager : TempSingleton<InventoryManager>
                 insertResult = InsertBoughtItemToList(insertItem, ref _visItemList, insertItem._itemData._canStack, insertItem._isVisibleInInventory);
             }
             else
-            { 
+            {
                 insertResult = InsertBoughtItemToList(insertItem, ref _invItemList, insertItem._itemData._canStack);
             }
         }
@@ -116,7 +117,7 @@ public class InventoryManager : TempSingleton<InventoryManager>
             }
         }
         else
-        { 
+        {
             if (!checkCapacity || insertedList.Count < insertedList.Capacity)
             {
                 ItemSlot newItem = new ItemSlot(insertItem._itemData, 1);
@@ -142,9 +143,37 @@ public class InventoryManager : TempSingleton<InventoryManager>
     public void UseBomb(Transform playerPos)
     {
         if (_bombCount >= 1)
-        { 
+        {
             _bombCount -= 1;
             _bombPrefab.GetComponent<Bomb>().Install(playerPos);
         }
     }
+    public int GetItemSkillGrade(ItemDataSO _itemData)
+    {
+        int grade = 0;
+        switch (_itemData._itemType)
+        {
+            case ItemType.Active:
+            case ItemType.shop:
+                grade = 1;
+                break;
+            case ItemType.PassiveAttack:
+            case ItemType.PassiveAuto:
+                foreach (ItemSlot item in _visItemList)
+                {
+                    if (_itemData._itemID == item.itemDataSO._itemID)
+                    {
+                        grade = item.itemStackCount;
+                        break; // >> foreach break;
+                    }
+                }
+                break;
+            case ItemType.Expend:
+                break;
+            default:
+                break;
+        }
+        return grade;
+    }
+
 }

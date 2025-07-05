@@ -35,7 +35,7 @@ public class ShopItem : Item, IPickable
         bool insertResult = TempManager.inventory.TryBuyItem(this);
         if (insertResult)
         {
-            TempManager.inventory.UseCoin(_itemData[0]._itemPrice);
+            TempManager.inventory.UseCoin(_itemData._itemPrice);
         }
     }
     public void Drop(Transform dropPos) // 사실 필요없음

@@ -50,7 +50,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemType: 2
   _itemData: {fileID: 11400000, guid: 28a4847f77f128947a1e6cb91487d38f, type: 2}
-  _itemSkill: {fileID: 11400000, guid: c3dd3c3eff5157c4a8e11af237b4893b, type: 2}
+  _itemSkill:
+  - {fileID: 11400000, guid: c3dd3c3eff5157c4a8e11af237b4893b, type: 2}
+  - {fileID: 11400000, guid: 1ed287d153c3aa840ba0ad29cdef6ac1, type: 2}
+  - {fileID: 11400000, guid: f7c98b26cca14bf4490deebc8dd3c0c4, type: 2}
+  - {fileID: 11400000, guid: 3ffa026b4067d9546a9d866b644dcfbd, type: 2}
+  - {fileID: 11400000, guid: b12d143fd7f7a6e43bdb2a606d708dfa, type: 2}
 --- !u!58 &186164793565002054
 CircleCollider2D:
   m_ObjectHideFlags: 0

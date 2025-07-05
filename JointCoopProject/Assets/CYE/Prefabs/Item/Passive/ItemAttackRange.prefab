@@ -147,7 +147,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemType: 1
   _itemData: {fileID: 11400000, guid: 0b460a601b2f27944adfe4a1934f5a13, type: 2}
-  _itemSkill: {fileID: 11400000, guid: e7f4a47c696cccc448fce9e9d1db3d1c, type: 2}
+  _itemSkill:
+  - {fileID: 11400000, guid: e7f4a47c696cccc448fce9e9d1db3d1c, type: 2}
+  - {fileID: 11400000, guid: 346d4d65c4ed86444aa56e13f4dd19ee, type: 2}
+  - {fileID: 11400000, guid: c6624ffd19d6756428956c3ed4833532, type: 2}
+  - {fileID: 11400000, guid: efb946bbdb97a334e959e9b7b37b9279, type: 2}
+  - {fileID: 11400000, guid: 0b10a1e829b06454da7542b43d2206a4, type: 2}
 --- !u!58 &3181638804148704682
 CircleCollider2D:
   m_ObjectHideFlags: 0
