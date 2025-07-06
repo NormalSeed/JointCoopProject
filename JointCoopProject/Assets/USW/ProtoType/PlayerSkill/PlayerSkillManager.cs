@@ -43,7 +43,7 @@ public class PlayerSkillManager : MonoBehaviour
     // 기본 공격 강화 스킬들의 리스트
     public List<SwordUpgradeSkill> swordUpgradeskills = new();
 
-   
+
     /// <summary>
     /// 매 프레임마다 자동 스킬 타이머를 감소시키고 , 조건을 만족하면 스킬을 발동.
     /// </summary>
@@ -52,7 +52,7 @@ public class PlayerSkillManager : MonoBehaviour
         AutoSkillAttack();
         SwordRangeUpgrade();
     }
-   
+
     /// <summary>
     /// 스킬 이름으로 스킬을 찾아서 발동함.
     /// </summary>
@@ -85,7 +85,7 @@ public class PlayerSkillManager : MonoBehaviour
             Debug.Log($"패시브 스킬 {newSkill.skillName} 추가됨");
         }
     }
-   
+
     /// <summary>
     /// 스킬 이름으로 스킬을 찾아서 발동합니다.
     /// </summary>
@@ -94,14 +94,14 @@ public class PlayerSkillManager : MonoBehaviour
     {
 
         // 보유 스킬 목록에서 이름이 일치하는 스킬을 찾음.
-        var skill = ownedSkills.Find(s=>s.skillName == skillName);
-      
+        var skill = ownedSkills.Find(s => s.skillName == skillName);
+
         if (skill != null)
         {
             // 만약에 Input 넣으면 ? useskill 로 문자열찾고 그다음에 발동위치 넘겨준다는 마인드인데 ? 왜 transform 이 안되지 ? 
             skill.UseSkill(transform);
         }
-   
+
     }
 
     /// <summary>
@@ -143,7 +143,7 @@ public class PlayerSkillManager : MonoBehaviour
     {
         foreach (var skill in swordUpgradeskills)
         {
-            if(skill.swordSkill.skillName == "Poison Attack")
+            if (skill.swordSkill.skillName == "Poison Attack")
             {
                 Vector3 attackDir = _playerMove._attackDirection;
 
@@ -159,7 +159,7 @@ public class PlayerSkillManager : MonoBehaviour
     {
         foreach (var skill in swordUpgradeskills)
         {
-            if(skill.swordSkill.skillName == "Long Distance Sword")
+            if (skill.swordSkill.skillName == "Long Distance Sword")
             {
                 Vector3 attackDir = _playerMove._attackDirection;
                 skill.swordSkill.UseSkill(transform, attackDir);
@@ -171,7 +171,7 @@ public class PlayerSkillManager : MonoBehaviour
     /// 플레이어의 기존 공격 사거리 증가 항시 발동
     /// </summary>
     public void SwordRangeUpgrade()
-    {        
+    {
         foreach (var skill in swordUpgradeskills)
         {
             if (skill.swordSkill.skillName == "Attack Range")
@@ -185,6 +185,51 @@ public class PlayerSkillManager : MonoBehaviour
                 // 현재 레벨 저장
                 _curLevel = _attackRange._skillLevel;
             }
+        }
+    }
+
+    /// <summary>
+    /// ItemType을 통해 추가할 스킬을 분류하여 List에 추가합니다.
+    /// </summary>
+    /// <param name="newSkill">추가할 스킬의 데이터</param>
+    /// <param name="skillItemType">스킬이 포함된 아이템의 타입</param>
+    public void AddSkill(SkillDataSO newSkill, ItemType skillItemType)
+    { 
+        // 보유 스킬 목록에 없다면, 스킬을 추가합니다.
+        if (!ownedSkills.Contains(newSkill))
+        {
+            ownedSkills.Add(newSkill);
+        }
+
+        // 스킬이 포함된 아이템의 타입에 따라
+        switch (skillItemType)
+        {
+            // 액티브 아이템(스킬)일 경우 추가적으로 스킬을 넣지 않습니다.
+            case ItemType.Active:
+                break;
+            // 패시브 아이템(스킬)-기본 공격 강화일 경우 swordUpgradeskills에 스킬을 추가합니다.
+            case ItemType.PassiveAttack:
+                SwordUpgradeSkill swordUpgradeSkill = new SwordUpgradeSkill()
+                {
+                    swordSkill = newSkill
+                };
+                swordUpgradeskills.Add(swordUpgradeSkill);
+                break;
+            // 패시브 아이템(스킬)-자동 실행일 경우 autoskills에 스킬을 추가합니다.
+            case ItemType.PassiveAuto:
+                AutoSkill autoSkill = new AutoSkill()
+                {
+                    skill = newSkill
+                };
+                autoskills.Add(autoSkill);
+                break;
+            // 상점 아이템이나 소모성 아이템의 경우 즉시 스킬을 사용하여 효과를 발생시킵니다.
+            case ItemType.shop:
+            case ItemType.Expend:
+                newSkill.UseSkill(transform);
+                break;
+            default:
+                break;
         }
     }
 }

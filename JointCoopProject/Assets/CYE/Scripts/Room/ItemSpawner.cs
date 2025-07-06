@@ -4,15 +4,9 @@ using UnityEngine;
 
 public class ItemSpawner : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private List<GameItem> _itemList;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SerializeField] private List<Transform> _itemSpawnPoint;
+
+    
 }

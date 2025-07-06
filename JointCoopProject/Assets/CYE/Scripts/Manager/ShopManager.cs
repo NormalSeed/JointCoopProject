@@ -12,15 +12,15 @@ public class ShopManager : TempSingleton<ShopManager>
         public ItemDataSO itemData;
         public int maxStock;
         private int curStock;
-        public SellItemSlot(ItemDataSO itemData, int sellLimit)
+        public SellItemSlot(ItemDataSO itemData, int maxStock)
         {
             this.itemData = itemData;
-            this.maxStock = sellLimit;
-            this.curStock = this.maxStock;
+            this.maxStock = maxStock;
+            this.curStock = maxStock;
         }
         public bool TryDecreaseCurStock()
         {     
-            if (curStock >= 1)
+            if (curStock > 0)
             {
                 curStock--;
                 return true;

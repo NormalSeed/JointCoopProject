@@ -19,16 +19,20 @@ public class GameItem : Item, IPickable
     //     }
     // }
     #endregion
-    
+    private void UpgradePassiveSkill(Transform pickupPos)
+    {
+        int nextGrade = TempManager.inventory.GetItemSkillGrade(_itemData);
+        PlayerSkillManager playerSkillManager = pickupPos.gameObject.GetComponentInChildren<PlayerSkillManager>();
+        playerSkillManager.AddSkill(_itemSkill[nextGrade-1]);
+    }
     #region // IPickable
     public void PickUp(Transform pickupPos)
     {
         bool insertResult = TempManager.inventory.TryGetItem(this, transform);
-        if (insertResult) // true - 아이템 획득 성공, false - 아이템 획득 실패
+        if (insertResult)
         {
-            PlayerSkillManager playerSkillManager = pickupPos.gameObject.GetComponentInChildren<PlayerSkillManager>();            
-            int nextGrade = TempManager.inventory.GetItemSkillGrade(_itemData);
-            playerSkillManager.AddSkill(_itemSkill[nextGrade-1]);
+            if(_itemData._itemType==ItemType.PassiveAttack||_itemData._itemType==ItemType.PassiveAuto)
+                UpgradePassiveSkill(pickupPos);
             Destroy(gameObject);
         }
     }

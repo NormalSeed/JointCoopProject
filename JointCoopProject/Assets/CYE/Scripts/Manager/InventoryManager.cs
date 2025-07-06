@@ -1,51 +1,54 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
+// using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Events;
 
+[System.Serializable]
+public struct ItemSlot
+{
+    public ItemDataSO itemDataSO;
+    public int itemStackCount;
+    public ItemSlot(ItemDataSO itemDataSO, int itemStackCount)
+    {
+        this.itemDataSO = itemDataSO;
+        this.itemStackCount = itemStackCount;
+    }
+    public void UpgradeStackCount()
+    {
+        itemStackCount++;
+        if (itemStackCount > 5)
+        {
+            itemStackCount = 5;
+        }
+    }
+}
 public class InventoryManager : TempSingleton<InventoryManager>
 {
     private const int SLOT_COUNT = 12;
 
     // UI visible
+    [SerializeField]
     private GameItem activeItem;
-    public GameItem _activeItem { get { return activeItem; } set { activeItem = value; } }
+    public GameItem _activeItem { get { return activeItem; } private set { activeItem = value; } }
     private ItemDataSO _activeItemData;
+    private SkillDataSO _activeSkillData;
+    [SerializeField]
+    private List<GameItem> _activeItemPool;
 
-    private List<ItemSlot> _visItemList = new List<ItemSlot>(SLOT_COUNT);
+    public List<ItemSlot> _visItemList = new List<ItemSlot>(SLOT_COUNT);
 
     // UI invisible
     private List<ItemSlot> _invItemList = new List<ItemSlot>();
 
     // Expend Items Info
-    private int coinCount;
+    private int coinCount = 1000;
     public int _coinCount { get { return coinCount; } private set { coinCount = value; } }
     [SerializeField] private GameObject _coinPrefab;
     private int bombCount;
     public int _bombCount { get { return bombCount; } private set { bombCount = value; } }
     [SerializeField] private GameObject _bombPrefab;
-
-    [System.Serializable]
-    private struct ItemSlot
-    {
-        public ItemDataSO itemDataSO;
-        public int itemStackCount;
-        public ItemSlot(ItemDataSO itemDataSO, int itemStackCount)
-        {
-            this.itemDataSO = itemDataSO;
-            this.itemStackCount = itemStackCount;
-        }
-        public void UpgradeStackCount()
-        {
-            itemStackCount++;
-            if (itemStackCount > 5)
-            {
-                itemStackCount = 5;
-            }
-        }
-    }
 
     public bool TryGetItem(GameItem insertItem, Transform pickupPos)
     {
@@ -53,12 +56,11 @@ public class InventoryManager : TempSingleton<InventoryManager>
         switch (insertItem._itemData._itemType)
         {
             case ItemType.Active:
-                if (_activeItem != null)
-                {
-                    _activeItem.Drop(pickupPos);
-                }
-                _activeItem = insertItem;
+                DropPrevActiveItem(_activeItemData, pickupPos);
+
                 _activeItemData = insertItem._itemData;
+                _activeSkillData = insertItem._itemSkill[0];
+
                 insertResult = true;
                 break;
             case ItemType.PassiveAttack:
@@ -87,44 +89,66 @@ public class InventoryManager : TempSingleton<InventoryManager>
     public bool TryBuyItem(ShopItem insertItem)
     {
         bool insertResult = false;
-        if (_coinCount > insertItem._itemData._itemPrice)
+        if (_coinCount >= insertItem._itemData._itemPrice)
         {
             if (insertItem._isVisibleInInventory)
             {
-                insertResult = InsertBoughtItemToList(insertItem, ref _visItemList, insertItem._itemData._canStack, insertItem._isVisibleInInventory);
+                insertResult = InsertBoughtItemToList(insertItem, insertItem._itemData._canStack, insertItem._isVisibleInInventory);
             }
             else
             {
-                insertResult = InsertBoughtItemToList(insertItem, ref _invItemList, insertItem._itemData._canStack);
+                insertResult = InsertBoughtItemToList(insertItem, insertItem._itemData._canStack);
+            }
+
+            if (insertResult)
+            {
+                insertItem._itemSkill[0].UseSkill(insertItem.transform, out bool useSkillResult);
+                insertResult = useSkillResult;
             }
         }
         return insertResult;
     }
-    private bool InsertBoughtItemToList(Item insertItem, ref List<ItemSlot> insertedList, bool stackable = false, bool checkCapacity = false)
+    private bool InsertBoughtItemToList(Item insertItem, bool stackable = false, bool checkCapacity = false)
     {
         bool insertResult = false;
-        if (stackable)
+        if (stackable && checkCapacity)
         {
-            foreach (ItemSlot item in insertedList)
+            foreach (ItemSlot item in _visItemList)
             {
                 if (insertItem._itemData._itemID == item.itemDataSO._itemID)
                 {
                     item.UpgradeStackCount();
-                    insertItem._itemSkill[0].UseSkill(insertItem.transform);
                     insertResult = true;
                     break;
                 }
             }
         }
-        else
+        else if (stackable && !checkCapacity)
         {
-            if (!checkCapacity || insertedList.Count < insertedList.Capacity)
+            foreach (ItemSlot item in _invItemList)
+            {
+                if (insertItem._itemData._itemID == item.itemDataSO._itemID)
+                {
+                    item.UpgradeStackCount();
+                    insertResult = true;
+                    break;
+                }
+            }
+        }
+        else if (!stackable && checkCapacity) // 사실상 stackable 체크는 필요없음
+        {
+            if (_visItemList.Count < _visItemList.Capacity)
             {
                 ItemSlot newItem = new ItemSlot(insertItem._itemData, 1);
-                insertedList.Add(newItem);
-                insertItem._itemSkill[0].UseSkill(insertItem.transform);
+                _visItemList.Add(newItem);
                 insertResult = true;
             }
+        }
+        else if (!stackable && !checkCapacity) // 사실상 stackable 체크는 필요없음
+        {
+            ItemSlot newItem = new ItemSlot(insertItem._itemData, 1);
+            _invItemList.Add(newItem);
+            insertResult = true;
         }
         return insertResult;
     }
@@ -134,6 +158,7 @@ public class InventoryManager : TempSingleton<InventoryManager>
     }
     public void UseCoin(int useAmount)
     {
+        Debug.Log($"{_coinCount}");
         _coinCount -= useAmount;
     }
     public void GetBomb(int getAmount)
@@ -174,6 +199,27 @@ public class InventoryManager : TempSingleton<InventoryManager>
                 break;
         }
         return grade;
+    }
+    public void UseActiveSkill(Transform usePos)
+    {
+        if (_activeSkillData != null)
+        {
+            _activeSkillData.UseSkill(usePos);
+        }
+    }
+    private void DropPrevActiveItem(ItemDataSO _itemData, Transform dropPos)
+    {
+        if (_itemData != null)
+        {
+            foreach (GameItem item in _activeItemPool)
+            {
+                if (item._itemData == _itemData)
+                {
+                    item.Drop(dropPos);
+                }
+            }
+        }
+        
     }
 
 }
