@@ -55,7 +55,7 @@ public class WarriorController : MonsterBase
             _isAttack1 = true;
         }
 
-        if (Vector2.Distance(transform.position, _player.transform.position) <= _model._attack2Range && !_isDamaged && _attack2Cooldown <= 0f && !_isAttack1)
+        if (_player != null && Vector2.Distance(transform.position, _player.transform.position) <= _model._attack2Range && !_isDamaged && _attack2Cooldown <= 0f && !_isAttack1)
         {
             _movement._isTrace = false;
             _isAttack2 = true;

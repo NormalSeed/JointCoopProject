@@ -39,7 +39,7 @@ public class IncubusController : MonsterBase
             _attack2Cooldown -= Time.deltaTime;
         }
 
-        if (Vector2.Distance(transform.position, _player.transform.position) <= _model._attack1Range && !_isDamaged && !_isAttack2)
+        if (_player != null && Vector2.Distance(transform.position, _player.transform.position) <= _model._attack1Range && !_isDamaged && !_isAttack2)
         {
             _movement._isTrace = false;
             _isAttack1 = true;
