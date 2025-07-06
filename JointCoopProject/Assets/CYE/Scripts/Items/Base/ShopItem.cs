@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ShopItem : Item, IPickable
@@ -14,11 +15,14 @@ public class ShopItem : Item, IPickable
     [Tooltip("아이템 하단에 가격 표시 여부를 결정합니다. 체크하면 가격이 표시되지 않습니다.")]
     private bool showPrice;
     public bool _showPrice { get { return showPrice; } }
-    
+
+    private TMP_Text _priceTag;
+
     #region // Unity Message Function
     void Awake()
     {
         Init();
+        _priceTag = GetComponentInChildren<TMP_Text>();
     }
     // void OnCollisionEnter2D(Collision2D collision)
     // {
@@ -27,8 +31,12 @@ public class ShopItem : Item, IPickable
     //         PickUp(collision.transform);
     //     }
     // }
+    void OnEnable()
+    { 
+        _priceTag.text = (_showPrice)?$"{_itemData._itemPrice}C":"";   
+    }
     #endregion
-    
+
     #region // IPickable
     public void PickUp(Transform pickupPos)
     {
@@ -36,9 +44,13 @@ public class ShopItem : Item, IPickable
         if (insertResult)
         {
             TempManager.inventory.UseCoin(_itemData._itemPrice);
+            if (_itemData._itemPrice == 0)
+            {
+                Destroy(gameObject);
+            }
         }
     }
-    public void Drop(Transform dropPos) // 사실 필요없음
+    public void Drop(Transform dropPos)
     {
         GameObject itemObject = Instantiate(gameObject, dropPos.position, Quaternion.identity);
         itemObject.SetActive(true);

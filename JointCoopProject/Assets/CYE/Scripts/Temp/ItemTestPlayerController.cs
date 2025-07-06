@@ -10,6 +10,10 @@ public class ItemTestPlayerController : MonoBehaviour
         {
             TempManager.inventory.UseBomb(transform);
         }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            TempManager.inventory.UseActiveSkill(transform);
+        }
     }
     
     void OnCollisionEnter2D(Collision2D collision)

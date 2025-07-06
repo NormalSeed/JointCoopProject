@@ -6,7 +6,7 @@ public class PlayerStatManager : MonoBehaviour
 {
     static PlayerStatManager instance;
 
-    // ÃÊ±â PlayerStatManager »ý¼º
+    // ï¿½Ê±ï¿½ PlayerStatManager ï¿½ï¿½ï¿½ï¿½
     public static PlayerStatManager Instance
     {
         get
@@ -27,12 +27,12 @@ public class PlayerStatManager : MonoBehaviour
 
     private void CreatePlayerStatManager()
     {
-        if (instance == null)   // »ý¼ºÀÌ µÇ¾î ÀÖÀ¸¸é ´õ ¸¸µéÁö ¾Ê°í »ç¿ë
+        if (instance == null)   // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê°ï¿½ ï¿½ï¿½ï¿½
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else    // Áßº¹ »èÁ¦
+        else    // ï¿½ßºï¿½ ï¿½ï¿½ï¿½ï¿½
         {
             Destroy(gameObject);
         }
@@ -43,7 +43,7 @@ public class PlayerStatManager : MonoBehaviour
     [SerializeField] float playerHp = 3;
     public float _playerHp { get { return playerHp; } set { playerHp = value; } }
 
-    // Player Max Hp (ÀÐ±â Àü¿ë)
+    // Player Max Hp (ï¿½Ð±ï¿½ ï¿½ï¿½ï¿½ï¿½)
     [SerializeField] float playerMaxHp = 12;
     public float _playerMaxHp { get { return playerMaxHp; } }
 
@@ -61,7 +61,7 @@ public class PlayerStatManager : MonoBehaviour
 
     // Player Deceleration Speed
     [SerializeField][Range(0, 30)] float decelerationSpeed = 20f;
-    public float _decelerationSpeed { get {return decelerationSpeed; } set { decelerationSpeed = value; } }
+    public float _decelerationSpeed { get { return decelerationSpeed; } set { decelerationSpeed = value; } }
 
     // Player Dash Speed
     [SerializeField][Range(5, 20)] int dashSpeed = 15;
@@ -95,4 +95,10 @@ public class PlayerStatManager : MonoBehaviour
     [SerializeField] bool alive = true;
     public bool _alive { get { return alive; } set { alive = value; } }
 
+    // Player Can Resurrect
+    [SerializeField] bool canResurrect = false;
+    public bool _canResurrect { get { return canResurrect; } set { canResurrect = value; } }
+
+    [SerializeField] int additionalDropGold = 0;
+    public int _additionalDropGold { get { return additionalDropGold; } set { additionalDropGold = value; } }
 }
