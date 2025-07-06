@@ -20,7 +20,13 @@ public class OptionUIController : MonoBehaviour
     {
         InitDisplayMode();
         InitResolusion();
-        InitSoundVolume();
+        InitSoundVolume();      
+    }
+
+    private void Update()
+    {
+        Debug.Log($"사운드 볼륨 조절 : {_musicSlider.value}");
+        Debug.Log($"이펙트 볼륨 조절 : {_soundEffectSlider.value}");
     }
 
     // 디스플레이 초기화

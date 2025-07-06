@@ -3494,6 +3494,7 @@ GameObject:
   - component: {fileID: 1014155473108580873}
   - component: {fileID: 3925348297097603361}
   - component: {fileID: 153924593520299045}
+  - component: {fileID: 8106344900439004755}
   m_Layer: 5
   m_Name: Option_Window
   m_TagString: Untagged
@@ -3508,7 +3509,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7037114339139377196}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3562,6 +3563,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8106344900439004755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7037114339139377196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe576fe44ba621e4f9168fd5adeeb8b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _disPlayDropdown: {fileID: 1505932097900605634}
+  _resolutionDropdown: {fileID: 6595059644590225500}
+  _musicSlider: {fileID: 7050479191937699275}
+  _soundEffectSlider: {fileID: 5515223976066257980}
 --- !u!1 &7377851391513448242
 GameObject:
   m_ObjectHideFlags: 0
