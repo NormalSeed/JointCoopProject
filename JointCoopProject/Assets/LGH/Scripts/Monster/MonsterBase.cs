@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public abstract class MonsterBase : MonoBehaviour, IDamagable
@@ -25,7 +26,12 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     public Dictionary<int, MonsterData> _dataDic = new();
     public MonsterView _view;
     public StateMachine _stateMachine;
+
     public GameObject _player;
+    private PlayerSkillManager _skillManager;
+    public MoneyDropSkillSO _moneyDropSkill;
+    
+
     public bool _isAttack1;
     public bool _isAttack2;
     public bool _isAttack3;
@@ -74,6 +80,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     protected void OnEnable()
     {
         _player = GameObject.FindWithTag("Player");
+        _skillManager = _player.GetComponent<PlayerSkillManager>();
     }
 
     /// <summary>
@@ -164,6 +171,11 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
             _movement._isTrace = true;
         }
         _stateMachine.Update();
+
+        _moneyDropSkill = _skillManager.swordUpgradeskills
+            .Select(x => x.swordSkill)
+            .OfType<MoneyDropSkillSO>()
+            .FirstOrDefault();
     }
 
     private void FixedUpdate()
@@ -295,6 +307,49 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
                 Instantiate(_coin, transform.position + new Vector3(-0.2f, 0.3f, 0), Quaternion.identity);
                 Instantiate(_coin, transform.position + new Vector3(0, -0.3f, 0), Quaternion.identity);
             }
+        }
+
+        if (_moneyDropSkill != null)
+        {
+            int skillRandom = UnityEngine.Random.Range(0, 10);
+            switch (_moneyDropSkill.name)
+            {
+                case "MoneyDropSkillG1SO":
+                    if (skillRandom < 1)
+                    {
+                        Instantiate(_coin, transform.position, Quaternion.identity);
+                    }
+                    break;
+                case "MoneyDropSkillG2SO":
+                    if (skillRandom < 2)
+                    {
+                        Instantiate(_coin, transform.position, Quaternion.identity);
+                    }
+                    break;
+                case "MoneyDropSkillG3SO":
+                    if (skillRandom < 3)
+                    {
+                        Instantiate(_coin, transform.position, Quaternion.identity);
+                    }
+                    break;
+                case "MoneyDropSkillG4SO":
+                    if (skillRandom < 4)
+                    {
+                        Instantiate(_coin, transform.position, Quaternion.identity);
+                    }
+                    break;
+                case "MoneyDropSkillG5SO":
+                    if (skillRandom < 10)
+                    {
+                        Instantiate(_coin, transform.position, Quaternion.identity);
+                    }
+                    break;
+            }
+            Debug.Log($"적용된 골드드랍 버프스킬 : {_moneyDropSkill.name}");
+        }
+        else
+        {
+            Debug.Log("스킬 참조 못함");
         }
     }
 }
