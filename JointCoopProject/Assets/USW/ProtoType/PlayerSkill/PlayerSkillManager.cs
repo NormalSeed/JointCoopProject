@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -14,9 +15,12 @@ public class PlayerSkillManager : MonoBehaviour
     private List<SkillDataSO> ownedSkills = new();
     [SerializeField] PlayerMovement _playerMove;
     [SerializeField] AttackRange _attackRange;
+    [SerializeField] float _skillTitleTextTime = 3f;
 
     // 현재 레벨 확인
     int _curLevel;
+    bool _isSkillTitleOpen = false;
+    float _timer;
 
     /// <summary>
     /// 자동으로 발동되는 스킬 정보를 저장하는 클래스
@@ -43,7 +47,12 @@ public class PlayerSkillManager : MonoBehaviour
     // 기본 공격 강화 스킬들의 리스트
     public List<SwordUpgradeSkill> swordUpgradeskills = new();
 
-   
+
+    private void Start()
+    {
+        _timer = _skillTitleTextTime;
+    }
+
     /// <summary>
     /// 매 프레임마다 자동 스킬 타이머를 감소시키고 , 조건을 만족하면 스킬을 발동.
     /// </summary>
@@ -51,6 +60,15 @@ public class PlayerSkillManager : MonoBehaviour
     {
         AutoSkillAttack();
         SwordRangeUpgrade();
+        if (_isSkillTitleOpen)
+        {
+            _timer -= Time.deltaTime;
+
+            if (_timer < 0)
+            {
+                OnSkillTitleUiClose();
+            }
+        }
     }
    
     /// <summary>
@@ -73,6 +91,13 @@ public class PlayerSkillManager : MonoBehaviour
 
             swordUpgradeskills.Add(swordUpgradeSkill);
             Debug.Log($"공격 강화 스킬 {newSkill.skillName} 추가됨");
+
+            _timer = _skillTitleTextTime;
+            _isSkillTitleOpen = true;
+            GameObject getSkills = UIManager.Instance.GetUI(UIKeyList.itemTitle);
+            TMP_Text skillText = getSkills.GetComponentInChildren<TMP_Text>(true);
+            UIManager.Instance.OpenUi(UIKeyList.itemTitle);
+            skillText.text = newSkill.skillName;
         }
         else    // 공격 강화 스킬이 아니면 패시브 리스트에 추가
         {
@@ -83,9 +108,22 @@ public class PlayerSkillManager : MonoBehaviour
 
             autoskills.Add(autoSkill);
             Debug.Log($"패시브 스킬 {newSkill.skillName} 추가됨");
+
+            _timer = _skillTitleTextTime;
+            _isSkillTitleOpen = true;
+            GameObject getSkills = UIManager.Instance.GetUI(UIKeyList.itemTitle);
+            TMP_Text skillText = getSkills.GetComponentInChildren<TMP_Text>(true);
+            UIManager.Instance.OpenUi(UIKeyList.itemTitle);
+            skillText.text = newSkill.skillName;
         }
     }
-   
+
+    private void OnSkillTitleUiClose()
+    {
+        UIManager.Instance.CloseUi();
+        _isSkillTitleOpen = false;
+    }
+
     /// <summary>
     /// 스킬 이름으로 스킬을 찾아서 발동합니다.
     /// </summary>

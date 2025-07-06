@@ -21,6 +21,8 @@ public class UIManager : MonoBehaviour
 {
     static UIManager instance;
     Dictionary<UIKeyList, GameObject> _UiDictionary = new Dictionary<UIKeyList, GameObject>();
+    // UI를 Stack으로 관리
+    Stack<GameObject> _UiStack = new Stack<GameObject>();
 
     [Header("InGame UI References")]
     [SerializeField] GameObject _miniMapUI;   // 미니맵 UI
@@ -52,6 +54,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Player Heart Controll")]
     [SerializeField] PlayerHeartController _playerHeartController;  // 플레이어 하트 컨트롤 스크립트
+    [SerializeField] ItemGuageController _itemGuageController;  // 아이템 게이지 컨트롤 스크립트
 
     // 초기 UIManager 생성
     public static UIManager Instance
@@ -60,8 +63,19 @@ public class UIManager : MonoBehaviour
         {
             if (instance == null)
             {
-                GameObject gameObject = new GameObject("UIManager");
-                instance = gameObject.AddComponent<UIManager>();
+                // 씬 이동 시 UIManager의 참조가 None으로 되는 현상으로 UIManager를 프리팹으로 만들어 생성
+                GameObject UIManagerPrefab = Resources.Load<GameObject>("UIManager");
+
+                if (UIManagerPrefab == null)
+                {
+                    Debug.LogError("UIManager 프리팹을 Resources/UIManager 에서 찾을 수 없습니다.");
+                    return null;
+                }
+
+                GameObject gameObject = Instantiate(UIManagerPrefab);
+                instance = gameObject.GetComponent<UIManager>();
+
+                DontDestroyOnLoad(gameObject);
             }
             return instance;
         }
@@ -71,26 +85,43 @@ public class UIManager : MonoBehaviour
     {
         CreateUIManager();
         Init();
+        // 씬 Change 시 UI 재참조 진행
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void Start()
+    {
+        ReferenceUIReflesh();
     }
 
     private void Update()
     {
-        if(_inventoryUI != null)
+        if (_inventoryUI != null)
         {
             OnInventoryOpen();
+            StatUpdateUI();
         }
-        if(_playerHpUI != null)
+        if (_playerHpUI != null)
         {
             HeartUpdateUI(PlayerStatManager.Instance._playerHp, PlayerStatManager.Instance._playerMaxHp);
         }
-        if(_inventoryUI != null)
-        {
-            StatUpdateUI();
-        }
-        if(_deathWindowUI != null)
+        if (_deathWindowUI != null)
         {
             MainMenuButton();
-        }           
+        }
+        if (_activeItemGuageUI != null)
+        {
+            GetItem();
+            UseItem();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if(instance == this)
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
     }
 
     private void CreateUIManager()
@@ -98,9 +129,9 @@ public class UIManager : MonoBehaviour
         if(instance == null)    // 생성이 되어 있으면 더 만들지 않고 사용
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
+            Init();
         }
-        else    // 중복 삭제
+        else if(instance != this)   // 인스펙터 값 보존
         {
             Destroy(gameObject);
         }
@@ -128,8 +159,34 @@ public class UIManager : MonoBehaviour
         _UiDictionary[UIKeyList.mainOption] = _mainOptionUI;
         _UiDictionary[UIKeyList.credit] = _creditUI;
 
-        _miniMapUI = _miniMapUI ?? GameObject.Find("miniMap");
+        
+    }
 
+    private void ReferenceUIReflesh()
+    {
+        _miniMapUI = _miniMapUI != null ? _inventoryUI : GameObject.Find("miniMap");
+        _playerHpUI = _playerHpUI != null ? _playerHpUI : GameObject.Find("Frame_Hearts");
+        _activeItemUI = _activeItemUI != null ? _activeItemUI : GameObject.Find("ActiveItemImage");
+        _activeItemGuageUI = _activeItemGuageUI != null ? _activeItemGuageUI : GameObject.Find("ActiveItemGuage");
+        _ChipUI = _ChipUI != null ? _ChipUI : GameObject.Find("Frame_Chip");
+        _bombUI = _bombUI != null ? _bombUI : GameObject.Find("Frame_Bomb");
+        _inventoryUI = _inventoryUI != null ? _inventoryUI : GameObject.Find("Inventory_Window");
+        _confirmWindowUI = _confirmWindowUI != null ? _confirmWindowUI : GameObject.Find("Confirm_Window");
+        _optionWindowUI = _optionWindowUI != null ? _optionWindowUI : GameObject.Find("Option_Window");
+        _deathWindowUI = _deathWindowUI != null ? _deathWindowUI : GameObject.Find("DeathPanel");
+        _fortuneUI = _fortuneUI != null ? _fortuneUI : GameObject.Find("Fortune_Description");
+        _itemTitleUI = _itemTitleUI != null ? _itemTitleUI : GameObject.Find("Item_Title");
+        _itemDescriptionUI = _itemDescriptionUI != null ? _itemDescriptionUI : GameObject.Find("Item_Description");
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if(scene.name.StartsWith("Real_Stage"))
+        {
+            Debug.Log($"씬 전환 {scene.name} UI 재참조");
+            ReferenceUIReflesh();
+            Init();
+        }
     }
 
     // UI가져오기
@@ -152,18 +209,18 @@ public class UIManager : MonoBehaviour
         {
             if (GameSceneManager.Instance != null)
             {
-                GameSceneManager.Instance.OpenUi(UIKeyList.inventory);
+                UIManager.Instance.OpenUi(UIKeyList.inventory);
                 // 인벤토리 창
-                _inventoryCloseButton.onClick.AddListener(() => GameSceneManager.Instance.CloseUi());   // 인벤토리 창 닫음
-                _optionWindowButton.onClick.AddListener(() => GameSceneManager.Instance.OpenUi(UIKeyList.optionWindow));    // 옵션 창 열기
-                _mainMenuButton.onClick.AddListener(() => GameSceneManager.Instance.OpenUi(UIKeyList.confirmWindow));   // 확인 창 열기
+                _inventoryCloseButton.onClick.AddListener(() => UIManager.Instance.CloseUi());   // 인벤토리 창 닫음
+                _optionWindowButton.onClick.AddListener(() => UIManager.Instance.OpenUi(UIKeyList.optionWindow));    // 옵션 창 열기
+                _mainMenuButton.onClick.AddListener(() => UIManager.Instance.OpenUi(UIKeyList.confirmWindow));   // 확인 창 열기
 
                 // 확인 창
                 _yesButton.onClick.AddListener(() => GameSceneManager.Instance.LoadMainScene());    // Yes 버튼 : 메인 창 전환
-                _noButton.onClick.AddListener(() => GameSceneManager.Instance.CloseUi()); // No 버튼 : 인벤토리 창 전환
+                _noButton.onClick.AddListener(() => UIManager.Instance.CloseUi()); // No 버튼 : 인벤토리 창 전환
 
                 // 옵션 창
-                _optionCloseButton.onClick.AddListener(() => GameSceneManager.Instance.CloseUi());  // 옵션 창 닫음 : 인벤토리 창 전환
+                _optionCloseButton.onClick.AddListener(() => UIManager.Instance.CloseUi());  // 옵션 창 닫음 : 인벤토리 창 전환
             }
             else
             {
@@ -204,5 +261,67 @@ public class UIManager : MonoBehaviour
     public void MainMenuButton()
     {
         _deathMainMenuButton.onClick.AddListener(() => GameSceneManager.Instance.LoadMainScene());
+    }
+
+    // TODO : 아이템 사용 관련 Item Guage UI 확인용 테스트 함수
+    public void GetItem()
+    {
+        // 아이템 획득
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            _itemGuageController.GetItme();
+            Debug.Log("아이템을 얻었습니다");
+        }
+    }
+
+    // TODO : 아이템 사용 관련 Item Guage UI 확인용 테스트 함수
+    public void UseItem()
+    {
+        // 아이템 게이지 애니메이션 동작 테스트
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (_itemGuageController._canUseItem)
+            {
+                _itemGuageController.ItemUse();
+            }
+            else
+            {
+                Debug.Log("아이템을 사용할 수 없습니다");
+            }
+        }
+    }
+
+    // UI 열기
+    public void OpenUi(UIKeyList uiName)
+    {
+        GameObject openUi = GetUI(uiName);
+        if (openUi == null)
+        {
+            return;
+        }
+
+        if (_UiStack.Count > 0)
+        {
+            // 열려있는 UI가 있으면 숨김
+            _UiStack.Peek().SetActive(false);
+        }
+        openUi.SetActive(true);
+        _UiStack.Push(openUi);
+    }
+
+    // UI 닫기
+    public void CloseUi()
+    {
+        if (_UiStack.Count == 0)
+        {
+            return;
+        }
+        GameObject closeUi = _UiStack.Pop();
+        closeUi.SetActive(false);
+
+        if (_UiStack.Count > 0)
+        {
+            _UiStack.Peek().SetActive(true);
+        }
     }
 }
