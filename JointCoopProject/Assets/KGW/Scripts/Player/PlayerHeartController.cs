@@ -27,11 +27,11 @@ public class PlayerHeartController : MonoBehaviour
                 {
                     _heartList[i].sprite = _fullHeart;
                 }
-                else if (heartstate >= 0.5f)    // 하트의 상태가 하프 하트
+                else if (heartstate == 0.5f)    // 하트의 상태가 하프 하트
                 {
                     _heartList[i].sprite = _halfHeart;
                 }
-                else    // 하트의 상태가 빈 하트
+                else   // 하트의 상태가 빈 하트
                 {
                     _heartList[i].sprite = _emptyHeart;
                     _heartList[i].gameObject.SetActive(false);
