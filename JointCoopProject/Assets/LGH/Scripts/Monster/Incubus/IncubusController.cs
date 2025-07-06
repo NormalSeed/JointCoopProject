@@ -21,6 +21,7 @@ public class IncubusController : MonsterBase
     {
         base.Init();
         _monsterID = 10351;
+        isBoss = true;
     }
 
     protected override void StateMachineInit()

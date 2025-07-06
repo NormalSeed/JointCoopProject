@@ -15,9 +15,6 @@ public class OrcController : MonsterBase
     {
         base.Init();
         _monsterID = 10101;
-        _hHPercentage = 5;
-        _fHPercentage = 5;
-        _cPercentage = 90;
     }
 
     protected override void StateMachineInit()
@@ -83,22 +80,5 @@ public class OrcController : MonsterBase
     {
         base.Die();
         SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_OrcDie);
-    }
-
-    public override void DropItems()
-    {
-        int random = Random.Range(0, 100);
-        if (random >= 0 && random < _hHPercentage && _halfHeart != null)
-        {
-            Instantiate(_halfHeart, transform.position, Quaternion.identity);
-        }
-        else if (random >= _hHPercentage && random < _hHPercentage + _fHPercentage && _fullHeart != null)
-        {
-            Instantiate(_fullHeart, transform.position, Quaternion.identity);
-        }
-        else if (random >= _hHPercentage + _fHPercentage && _coin != null)
-        {
-            Instantiate(_coin, transform.position, Quaternion.identity);
-        }
     }
 }

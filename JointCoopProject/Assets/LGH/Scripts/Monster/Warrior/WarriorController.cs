@@ -25,6 +25,7 @@ public class WarriorController : MonsterBase
     {
         base.Init();
         _monsterID = 10252;
+        isBoss = true;
     }
 
     protected override void StateMachineInit()

@@ -66,7 +66,7 @@ public class SlotMachine : MonoBehaviour
     }
     private void Init()
     {
-        _randomInstance = new System.Random((int)GetUnixTimeStamp());
+        _randomInstance = new System.Random((int)ItemUtil.GetUnixTimeStamp());
         _animator = GetComponentInChildren<Animator>();
         _canUse = true;
     } 
@@ -97,7 +97,6 @@ public class SlotMachine : MonoBehaviour
 
         _animator.SetBool("IsWorking", false);
         _slotResult = GetRandomSlotResult();
-        Debug.Log($"{_slotResult}");
         switch (_slotResult)
         {
             case SlotResult.Item:
@@ -149,10 +148,5 @@ public class SlotMachine : MonoBehaviour
         {
             _coinPrefab.GetComponent<Coin>()?.Drop(_dropPoint);
         }
-    }
-    private static float GetUnixTimeStamp()
-    {
-        TimeSpan timestamp = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0);
-        return (float)timestamp.TotalSeconds;
     }
 }

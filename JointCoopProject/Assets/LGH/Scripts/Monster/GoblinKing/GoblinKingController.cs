@@ -24,6 +24,7 @@ public class GoblinKingController : MonsterBase
     {
         base.Init();
         _monsterID = 10352;
+        isBoss = true;
     }
 
     protected override void StateMachineInit()

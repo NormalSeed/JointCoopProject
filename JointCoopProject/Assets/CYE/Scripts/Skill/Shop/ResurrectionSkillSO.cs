@@ -5,10 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Skills/Shop/Resurrection")]
 public class ResurrectionSkillSO : SkillDataSO
 {
-    public override void UseSkill(Transform caster)
+    public override void UseSkill(Transform caster, out bool useResult)
     {
-        // base.UseSkill(caster);
-        // Player canResurrection
-        // PlayerStatManager.Instance._canResurrect = true;
+        PlayerStatManager.Instance._canResurrect = true;
+        useResult = true;
     }
 }
