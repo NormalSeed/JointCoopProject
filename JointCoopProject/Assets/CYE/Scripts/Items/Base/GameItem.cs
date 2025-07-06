@@ -21,9 +21,19 @@ public class GameItem : Item, IPickable
     #endregion
     private void UpgradePassiveSkill(Transform pickupPos)
     {
-        int nextGrade = TempManager.inventory.GetItemSkillGrade(_itemData);
+        int currentGrade = TempManager.inventory.GetItemSkillGrade(_itemData);
         PlayerSkillManager playerSkillManager = pickupPos.gameObject.GetComponentInChildren<PlayerSkillManager>();
-        playerSkillManager.AddSkill(_itemSkill[nextGrade-1]);
+        if (currentGrade > 1)
+        {
+            playerSkillManager.RemoveSkill(_itemSkill[currentGrade - 2], _itemData._itemType);
+            playerSkillManager.AddSkill(_itemSkill[currentGrade - 1]);
+        }
+        else
+        {
+            playerSkillManager.AddSkill(_itemSkill[0]); // 첫번째 스킬을 넣음
+        }
+        
+        
     }
     #region // IPickable
     public void PickUp(Transform pickupPos)

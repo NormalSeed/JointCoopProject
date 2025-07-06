@@ -194,7 +194,7 @@ public class PlayerSkillManager : MonoBehaviour
     /// <param name="newSkill">추가할 스킬의 데이터</param>
     /// <param name="skillItemType">스킬이 포함된 아이템의 타입</param>
     public void AddSkill(SkillDataSO newSkill, ItemType skillItemType)
-    { 
+    {
         // 보유 스킬 목록에 없다면, 스킬을 추가합니다.
         if (!ownedSkills.Contains(newSkill))
         {
@@ -230,6 +230,31 @@ public class PlayerSkillManager : MonoBehaviour
                 break;
             default:
                 break;
+        }
+    }
+    public void RemoveSkill(SkillDataSO removeSkill, ItemType skillItemType)
+    {
+        if (skillItemType == ItemType.PassiveAttack)
+        {
+            foreach (SwordUpgradeSkill skill in swordUpgradeskills)
+            {
+                if (skill.swordSkill.Equals(removeSkill))
+                {
+                    swordUpgradeskills.Remove(skill);
+                    break;
+                }
+            }
+        }
+        else if (skillItemType == ItemType.PassiveAuto)
+        { 
+            foreach (AutoSkill skill in autoskills)
+            {
+                if (skill.skill.Equals(removeSkill))
+                {
+                    autoskills.Remove(skill);
+                    break;
+                }
+            }
         }
     }
 }

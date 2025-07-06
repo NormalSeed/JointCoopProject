@@ -18,6 +18,7 @@ public struct ItemSlot
     public void UpgradeStackCount()
     {
         itemStackCount++;
+        Debug.Log("1");
         if (itemStackCount > 5)
         {
             itemStackCount = 5;
@@ -69,7 +70,9 @@ public class InventoryManager : TempSingleton<InventoryManager>
                 {
                     if (insertItem._itemData._itemID == item.itemDataSO._itemID)
                     {
-                        item.UpgradeStackCount();
+                        _visItemList.Remove(item);
+                        ItemSlot upgradeItem = new ItemSlot(insertItem._itemData, item.itemStackCount + 1);
+                        _visItemList.Add(upgradeItem);
                         insertResult = true;
                         break; // >> foreach break;
                     }
@@ -189,6 +192,7 @@ public class InventoryManager : TempSingleton<InventoryManager>
                     if (_itemData._itemID == item.itemDataSO._itemID)
                     {
                         grade = item.itemStackCount;
+                        Debug.Log($"{grade}");
                         break; // >> foreach break;
                     }
                 }
@@ -219,7 +223,6 @@ public class InventoryManager : TempSingleton<InventoryManager>
                 }
             }
         }
-        
-    }
 
+    }
 }
