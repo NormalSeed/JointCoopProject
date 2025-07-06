@@ -24,6 +24,9 @@ public class UIManager : MonoBehaviour
     // UI를 Stack으로 관리
     Stack<GameObject> _UiStack = new Stack<GameObject>();
 
+    static System.Random random = new System.Random();
+    int _playerHp;
+
     [Header("InGame UI References")]
     [SerializeField] GameObject _miniMapUI;   // 미니맵 UI
     [SerializeField] GameObject _playerHpUI;    // 플레이어 체력 UI
@@ -87,11 +90,7 @@ public class UIManager : MonoBehaviour
         Init();
         // 씬 Change 시 UI 재참조 진행
         SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void Start()
-    {
-        ReferenceUIReflesh();
+        _playerHp = random.Next(2, 5);
     }
 
     private void Update()
@@ -105,10 +104,6 @@ public class UIManager : MonoBehaviour
         {
             HeartUpdateUI(PlayerStatManager.Instance._playerHp, PlayerStatManager.Instance._playerMaxHp);
         }
-        if (_deathWindowUI != null)
-        {
-            MainMenuButton();
-        }
         if (_activeItemGuageUI != null)
         {
             GetItem();
@@ -118,7 +113,7 @@ public class UIManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        if(instance == this)
+        if (instance == this)
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
@@ -157,9 +152,7 @@ public class UIManager : MonoBehaviour
 
         // Main Menu UI 추가
         _UiDictionary[UIKeyList.mainOption] = _mainOptionUI;
-        _UiDictionary[UIKeyList.credit] = _creditUI;
-
-        
+        _UiDictionary[UIKeyList.credit] = _creditUI;        
     }
 
     private void ReferenceUIReflesh()
@@ -181,12 +174,26 @@ public class UIManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if(scene.name.StartsWith("Real_Stage"))
+        Debug.Log($"씬 전환 {scene.name} UI 재참조");
+        ReferenceUIReflesh();
+        Init();
+
+        InitDeathPanel();
+    }
+
+    // Death Panel 세팅 및 메인메뉴 전환
+    private void InitDeathPanel()
+    {
+        _deathMainMenuButton.onClick.RemoveAllListeners();
+        _deathMainMenuButton.onClick.AddListener(() =>
         {
-            Debug.Log($"씬 전환 {scene.name} UI 재참조");
-            ReferenceUIReflesh();
-            Init();
-        }
+            PlayerStatManager.Instance._playerHp = _playerHp;
+
+            if (GameSceneManager.Instance != null)
+            {
+                GameSceneManager.Instance.LoadMainScene();
+            }
+        });
     }
 
     // UI가져오기
@@ -255,12 +262,6 @@ public class UIManager : MonoBehaviour
         asText.text = (PlayerStatManager.Instance._attackSpeed).ToString();
         rangeText.text = (PlayerStatManager.Instance._attackRange).ToString();
         luckText.text = (PlayerStatManager.Instance._playerLuck).ToString();
-    }
-
-    // 플레이어 죽은 후 메인 전환
-    public void MainMenuButton()
-    {
-        _deathMainMenuButton.onClick.AddListener(() => GameSceneManager.Instance.LoadMainScene());
     }
 
     // TODO : 아이템 사용 관련 Item Guage UI 확인용 테스트 함수

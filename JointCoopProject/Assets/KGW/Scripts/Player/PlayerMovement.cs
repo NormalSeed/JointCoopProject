@@ -35,6 +35,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     float _dashCoolTime;
     string _selectAttackDir;
 
+    readonly int DOWN_IDLE_HASH = Animator.StringToHash("Player_Down_Idle");
     readonly int DOWN_ATTACK_HASH = Animator.StringToHash("Player_Down_Attack");
     readonly int UP_ATTACK_HASH = Animator.StringToHash("Player_Up_Attack");
     readonly int LEFT_ATTACK_HASH = Animator.StringToHash("Player_Left_Attack");
@@ -283,6 +284,8 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         else
         {
             Debug.Log("플레이어가 사망했습니다.");
+            PlayerStatManager.Instance._playerHp = 0;
+
             // Player Death
             PlayerStatManager.Instance._alive = false;
         }
@@ -293,9 +296,17 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     {
         _playerAnimator.SetBool("IsDeath", true);
         GetComponent<CapsuleCollider2D>().enabled = false;
+        Invoke("OnDeathUI", 3f);
+        
+    }
+
+    private void OnDeathUI()
+    {
+        PlayerStatManager.Instance._alive = true;
         UIManager.Instance.OpenUi(UIKeyList.deathWindow);
-        Destroy(gameObject, 9f);
-        // TODO : UI 추가
+        _playerAnimator.Play(DOWN_IDLE_HASH);
+        GetComponent<CapsuleCollider2D>().enabled = true;
+        CancelInvoke();
     }
 
     // Player KnockBack
