@@ -63,13 +63,17 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _model = GetComponent<MonsterModel>();
         _movement = GetComponent<MonsterMovement>();
         _view = GetComponent<MonsterView>();
-        _player = GameObject.Find("Player(Clone)");
 
         roomMonsterManager = FindObjectOfType<RoomMonsterManager>();
         
         LoadCSV("MonsterStats");
 
         StateMachineInit();
+    }
+
+    protected void OnEnable()
+    {
+        _player = GameObject.FindWithTag("Player");
     }
 
     /// <summary>
