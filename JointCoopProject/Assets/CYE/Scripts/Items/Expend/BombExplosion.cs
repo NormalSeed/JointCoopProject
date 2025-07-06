@@ -16,6 +16,15 @@ public class BombExploion : MonoBehaviour
         {
             int realDamage = (collider.gameObject.layer == LayerMask.NameToLayer("Player")) ? 2 : _parent._explosiveDamage;
             collider.GetComponent<IDamagable>()?.TakeDamage(realDamage, transform.position);
+
+            if (collider.gameObject.name.Contains("SecretWall"))
+            {
+                MapGenerator mapGen = FindObjectOfType<MapGenerator>();
+                if (mapGen != null)
+                {
+                    mapGen.DamagedSecretWall(collider.gameObject);
+                }
+            }
         }
     }
 

@@ -55,24 +55,28 @@ public class MinimapManager : MonoBehaviour
         
         if (mapGenerator == null || mapGenerator.generatedRooms.Count == 0) 
         {
-            Debug.LogWarning("맵 생성기가 없거나 방이 없음");
+            Debug.Log("맵 생성기가 없거나 방이 없음");
             return;
         }
         
         if (minimapContainer == null)
         {
-            Debug.LogError("미니맵 컨테이너가 할당되지 않음");
+            Debug.Log("미니맵 컨테이너가 할당되지 않음");
             return;
         }
         
         if (minimapRoomPrefab == null)
         {
-            Debug.LogError("미니맵 룸 프리팹이 할당되지 않음");
+            Debug.Log("미니맵 룸 프리팹이 할당되지 않음");
             return;
         }
         
         foreach (var roomPair in mapGenerator.generatedRooms)
         {
+            if (roomPair.Value.roomType == MapGenerator.RoomType.Secret)
+            {
+                continue;
+            }
             CreateMinimapRoom(roomPair.Key, roomPair.Value);
         }
         
@@ -183,13 +187,27 @@ public class MinimapManager : MonoBehaviour
             minimapRooms[roomPosition].SetExplored(true);
         }
     }
-    
-    public void RevealSecretRoom(Vector2Int roomPosition)
+
+    public void HideSecretRoom(Vector2Int secretRoomPos)
     {
-        if (minimapRooms.ContainsKey(roomPosition))
+        if (minimapRooms.ContainsKey(secretRoomPos))
         {
-            minimapRooms[roomPosition].SetVisible(true);
-            minimapRooms[roomPosition].SetExplored(true);
+            minimapRooms[secretRoomPos].SetExplored(false);
+        }
+    }
+    
+    public void RevealSecretRoom(Vector2Int secretRoomPos)
+    {
+        if (!minimapRooms.ContainsKey(secretRoomPos))
+        {
+            var secretRoomData = mapGenerator.generatedRooms[secretRoomPos];
+            CreateMinimapRoom(secretRoomPos, secretRoomData);
+        }
+        
+        if (minimapRooms.ContainsKey(secretRoomPos))
+        {
+            minimapRooms[secretRoomPos].SetVisible(true);
+            minimapRooms[secretRoomPos].SetExplored(true);
         }
     }
     

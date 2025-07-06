@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class MinimapRoom : MonoBehaviour
 {
@@ -96,7 +97,7 @@ public class MinimapRoom : MonoBehaviour
         roomImage.color = Color.Lerp(roomImage.color, specialColor, 0.3f);
     }
     
-    System.Collections.IEnumerator PulseEffect()
+    IEnumerator PulseEffect()
     {
         float time = 0f;
         Vector3 targetScale = originalScale * 1.3f;
