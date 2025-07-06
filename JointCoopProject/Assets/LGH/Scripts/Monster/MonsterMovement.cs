@@ -27,7 +27,7 @@ public abstract class MonsterMovement : MonoBehaviour
 
     public void Trace(float moveSpd)
     {
-        GameObject player = GameObject.Find("Player(Clone)");
+        GameObject player = GameObject.FindWithTag("Player");
         if (player == null) return;
 
         Vector2 currentPos = _rb.position;
