@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public abstract class MonsterMovement : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public abstract class MonsterMovement : MonoBehaviour
     private float _moveTimer;
     private float _changeInterval = 1.5f;
 
+
     private void Awake() => Init();
 
     private void Init()
@@ -23,6 +25,11 @@ public abstract class MonsterMovement : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _isPatrol = false;
         _moveTimer = 0f;
+    }
+
+    private void Update()
+    {
+
     }
 
     public void Trace(float moveSpd)
