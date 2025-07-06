@@ -339,7 +339,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
                     }
                     break;
                 case "MoneyDropSkillG5SO":
-                    if (skillRandom < 10)
+                    if (skillRandom < 5)
                     {
                         Instantiate(_coin, transform.position, Quaternion.identity);
                     }
