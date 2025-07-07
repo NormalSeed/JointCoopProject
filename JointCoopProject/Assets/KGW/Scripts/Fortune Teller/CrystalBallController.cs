@@ -29,7 +29,6 @@ public class CrystalBallController : MonoBehaviour
     private void OnEnable()
     {
         // 생성시 점술가, 상점방 BGM ON
-        SoundManager.Instance.StopBGM();
         SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_FortuneTellersShop);
     }
 
@@ -48,7 +47,6 @@ public class CrystalBallController : MonoBehaviour
 
     private void OnDisable()
     {
-        SoundManager.Instance.StopBGM();
         switch (_changeSceneManager._CursceneIndex)
         {
             case 2:

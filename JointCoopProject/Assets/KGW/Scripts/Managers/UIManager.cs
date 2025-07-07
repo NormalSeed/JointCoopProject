@@ -14,7 +14,7 @@ public enum UIKeyList
     // MainMenu UIKeyList
     mainOption, credit,
     // InGame UIKeyList
-    miniMap, playerHp, activeItem, activeItemGuage, Chip, bomb, inventory, confirmWindow, optionWindow, deathWindow, fortune, itemTitle, itemDescription
+    miniMap, playerHp, activeItem, activeItemGuage, Chip, bomb, inventory, confirmWindow, optionWindow, deathWindow, fortune, itemInfo
 }
 
 public class UIManager : MonoBehaviour
@@ -36,8 +36,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject _optionWindowUI;   // 옵션 창 UI
     [SerializeField] GameObject _deathWindowUI;   // 캐릭터 죽음 창 UI
     [SerializeField] GameObject _fortuneUI;   // 오늘의 운세 창 UI
-    [SerializeField] GameObject _itemTitleUI;   // 아이템 타이틀 UI
-    [SerializeField] GameObject _itemDescriptionUI;   // 아이템 설명 UI
+    [SerializeField] GameObject _itemInfoUI;   // 아이템 정보 창 UI
 
     [Header("MainMenu UI References")]
     [SerializeField] GameObject _mainOptionUI;    // 메인 옵션 창 UI
@@ -147,8 +146,7 @@ public class UIManager : MonoBehaviour
         _UiDictionary[UIKeyList.optionWindow] = _optionWindowUI;
         _UiDictionary[UIKeyList.deathWindow] = _deathWindowUI;
         _UiDictionary[UIKeyList.fortune] = _fortuneUI;
-        _UiDictionary[UIKeyList.itemTitle] = _itemTitleUI;
-        _UiDictionary[UIKeyList.itemDescription] = _itemDescriptionUI;
+        _UiDictionary[UIKeyList.itemInfo] = _itemInfoUI;
 
         // Main Menu UI 추가
         _UiDictionary[UIKeyList.mainOption] = _mainOptionUI;
@@ -168,8 +166,7 @@ public class UIManager : MonoBehaviour
         _optionWindowUI = _optionWindowUI != null ? _optionWindowUI : GameObject.Find("Option_Window");
         _deathWindowUI = _deathWindowUI != null ? _deathWindowUI : GameObject.Find("DeathPanel");
         _fortuneUI = _fortuneUI != null ? _fortuneUI : GameObject.Find("Fortune_Description");
-        _itemTitleUI = _itemTitleUI != null ? _itemTitleUI : GameObject.Find("Item_Title");
-        _itemDescriptionUI = _itemDescriptionUI != null ? _itemDescriptionUI : GameObject.Find("Item_Description");
+        _itemInfoUI = _itemInfoUI != null ? _itemInfoUI : GameObject.Find("Item_Info");
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
