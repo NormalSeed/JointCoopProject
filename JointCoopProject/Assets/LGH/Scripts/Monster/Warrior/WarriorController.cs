@@ -36,13 +36,6 @@ public class WarriorController : MonsterBase
         _stateMachine._stateDic.Add(EState.Stun, new Warrior_Stun(this));
     }
 
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-        SoundManager.Instance.StopBGM();
-        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
-    }
-
     protected override void Update()
     {
         base.Update();
@@ -67,6 +60,12 @@ public class WarriorController : MonsterBase
             _movement._isTrace = false;
             _isAttack2 = true;
         }
+    }
+
+    protected override void PlayBossBGM()
+    {
+        SoundManager.Instance.StopBGM();
+        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
     }
 
     // Attack1: 실드 패턴, 5초간 지속되고 체력 300만큼의 실드를 획득하고 제자리에 멈춰 있음
@@ -144,7 +143,18 @@ public class WarriorController : MonsterBase
     {
         base.Die();
         SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_WarriorDie);
-        SoundManager.Instance.StopBGM();
-        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);
+    }
+
+    private void OnDisable()
+    {
+        if (SoundManager.Instance.audioBgm != null)
+        {
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);
+        }
+        else
+        {
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);
+        }
     }
 }

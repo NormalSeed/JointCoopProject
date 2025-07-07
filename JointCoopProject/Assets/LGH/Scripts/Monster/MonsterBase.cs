@@ -167,9 +167,14 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     /// </summary>
     protected virtual void Update()
     {
-        _activeDelay -= Time.deltaTime;
-        if (_activeDelay < 0f)
+        if (_isActivated == false)
         {
+            _activeDelay -= Time.deltaTime;
+        }
+        
+        if (_activeDelay < 0f && _isActivated == false)
+        {
+            PlayBossBGM();
             _isActivated = true;
             _movement._isTrace = true;
         }
@@ -181,6 +186,11 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
             .OfType<MoneyDropSkillSO>()
             .FirstOrDefault();
         }
+    }
+
+    protected virtual void PlayBossBGM()
+    {
+
     }
 
     private void FixedUpdate()

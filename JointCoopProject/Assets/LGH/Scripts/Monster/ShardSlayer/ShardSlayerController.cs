@@ -44,13 +44,6 @@ public class ShardSlayerController : MonsterBase
         _stateMachine._stateDic.Add(EState.Attack2, new ShardSlayer_Attack2(this));
     }
 
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-        SoundManager.Instance.StopBGM();
-        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
-    }
-
     protected override void Update()
     {
         base.Update();
@@ -64,6 +57,12 @@ public class ShardSlayerController : MonsterBase
             _movement._isTrace = false;
             _isAttack2 = true;
         }
+    }
+
+    protected override void PlayBossBGM()
+    {
+        SoundManager.Instance.StopBGM();
+        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
     }
 
     // Attack1 : 돌진 공격, 사거리 6, 감지한 캐릭터의 방향으로 6만큼 돌진 후 랜덤 방향으로 6만큼 추가 돌진
@@ -155,7 +154,18 @@ public class ShardSlayerController : MonsterBase
     {
         base.Die();
         SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_ShardSlayerDie);
-        SoundManager.Instance.StopBGM();
-        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);
+    }
+
+    private void OnDisable()
+    {
+        if (SoundManager.Instance.audioBgm != null)
+        {
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);
+        }
+        else
+        {
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);
+        }
     }
 }

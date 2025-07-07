@@ -23,16 +23,6 @@ public class DragonController : MonsterBase
         isBoss = true;
     }
 
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-        if (SoundManager.Instance.audioBgm != null)
-        {
-            SoundManager.Instance.StopBGM();
-            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
-        }
-    }
-
     protected override void StateMachineInit()
     {
         base.StateMachineInit();
@@ -52,7 +42,15 @@ public class DragonController : MonsterBase
         {
             _attack1Cooldown -= Time.deltaTime;
         }
+    }
 
+    protected override void PlayBossBGM()
+    {
+        if (SoundManager.Instance.audioBgm != null)
+        {
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
+        }
     }
 
     public void GetAttack1Dir1()
@@ -97,7 +95,18 @@ public class DragonController : MonsterBase
     {
         base.Die();
         SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_DragonDie);
-        SoundManager.Instance.StopBGM();
-        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage1);
+    }
+
+    private void OnDisable()
+    {
+        if (SoundManager.Instance.audioBgm != null)
+        {
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage1);
+        }
+        else
+        {
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage1);
+        }
     }
 }

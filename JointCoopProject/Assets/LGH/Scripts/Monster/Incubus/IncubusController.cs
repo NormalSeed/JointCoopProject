@@ -31,13 +31,6 @@ public class IncubusController : MonsterBase
         _stateMachine._stateDic.Add(EState.Attack2, new Incubus_Attack2(this));
     }
 
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-        SoundManager.Instance.StopBGM();
-        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
-    }
-
     protected override void Update()
     {
         base.Update();
@@ -57,6 +50,12 @@ public class IncubusController : MonsterBase
             _movement._isTrace = false;
             _isAttack2 = true;
         }
+    }
+
+    protected override void PlayBossBGM()
+    {
+        SoundManager.Instance.StopBGM();
+        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
     }
 
     // Attack1: 기본공격
@@ -145,7 +144,18 @@ public class IncubusController : MonsterBase
     {
         base.Die();
         SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_IncubusDie);
-        SoundManager.Instance.StopBGM();
-        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage3);
+    }
+
+    private void OnDisable()
+    {
+        if (SoundManager.Instance.audioBgm != null)
+        {
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage3);
+        }
+        else
+        {
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage3);
+        }
     }
 }
