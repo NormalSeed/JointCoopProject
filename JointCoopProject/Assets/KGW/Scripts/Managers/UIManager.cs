@@ -113,6 +113,10 @@ public class UIManager : MonoBehaviour
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
+        if (_deathMainMenuButton != null)
+        {
+            _deathMainMenuButton.onClick.RemoveAllListeners();
+        }
     }
 
     private void CreateUIManager()
@@ -180,15 +184,12 @@ public class UIManager : MonoBehaviour
     // Death Panel 세팅 및 메인메뉴 전환
     private void InitDeathPanel()
     {
-        _deathMainMenuButton.onClick.RemoveAllListeners();
         _deathMainMenuButton.onClick.AddListener(() =>
         {
             PlayerStatManager.Instance._playerHp = 3;
-
-            if (GameSceneManager.Instance != null)
-            {
-                GameSceneManager.Instance.LoadMainScene();
-            }
+            
+            SceneManager.LoadScene("Real_MainMenu");
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Title);
         });
     }
 
@@ -210,7 +211,7 @@ public class UIManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (GameSceneManager.Instance != null)
+            if (UIManager.Instance != null)
             {
                 UIManager.Instance.OpenUi(UIKeyList.inventory);
                 // 인벤토리 창
@@ -219,7 +220,7 @@ public class UIManager : MonoBehaviour
                 _mainMenuButton.onClick.AddListener(() => UIManager.Instance.OpenUi(UIKeyList.confirmWindow));   // 확인 창 열기
 
                 // 확인 창
-                _yesButton.onClick.AddListener(() => GameSceneManager.Instance.LoadMainScene());    // Yes 버튼 : 메인 창 전환
+                _yesButton.onClick.AddListener(() => SceneManager.LoadScene("Real_MainMenu"));    // Yes 버튼 : 메인 창 전환
                 _noButton.onClick.AddListener(() => UIManager.Instance.CloseUi()); // No 버튼 : 인벤토리 창 전환
 
                 // 옵션 창

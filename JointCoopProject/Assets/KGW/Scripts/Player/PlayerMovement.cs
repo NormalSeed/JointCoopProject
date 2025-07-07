@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     SpriteRenderer _PlayerSprite;
     Rigidbody2D _playerRigid;
     Animator _playerAnimator;
+    CapsuleCollider2D _capsuleCollider;
 
     public Vector2 _moveInput;
     public Vector2 _attackDirection;
@@ -76,6 +77,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         _playerRigid = GetComponent<Rigidbody2D>();
         _playerAnimator = GetComponent<Animator>();
         _PlayerSprite = GetComponent<SpriteRenderer>();
+        _capsuleCollider = GetComponent<CapsuleCollider2D>();
     }
 
     // Player Move Input
@@ -287,6 +289,9 @@ public class PlayerMovement : MonoBehaviour, IDamagable
             PlayerStatManager.Instance._playerHp = 0;
 
             // Player Death
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.RStopSFX();
+            _capsuleCollider.enabled = false;
             PlayerStatManager.Instance._alive = false;
         }
     }
@@ -295,7 +300,6 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     public void PlayerDeath()
     {
         _playerAnimator.SetBool("IsDeath", true);
-        GetComponent<CapsuleCollider2D>().enabled = false;
         Invoke("OnDeathUI", 3f);
         
     }
@@ -305,7 +309,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         PlayerStatManager.Instance._alive = true;
         UIManager.Instance.OpenUi(UIKeyList.deathWindow);
         _playerAnimator.Play(DOWN_IDLE_HASH);
-        GetComponent<CapsuleCollider2D>().enabled = true;
+        _capsuleCollider.enabled = true;
         CancelInvoke();
     }
 

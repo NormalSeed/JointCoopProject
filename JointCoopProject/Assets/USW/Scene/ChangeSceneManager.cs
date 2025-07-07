@@ -28,6 +28,7 @@ public class ChangeSceneManager : MonoBehaviour
     public VideoPlayer videoPlayer;
     
     public bool allowClickSkip = false;
+    public int _CursceneIndex;  // 현재 씬 저장
 
     public Button gameStartButton;
 
@@ -53,6 +54,11 @@ public class ChangeSceneManager : MonoBehaviour
     {
         if (videoPlayer != null)
         {
+            videoPlayer.audioOutputMode = VideoAudioOutputMode.None;    // 오디오 소스 사용
+
+            // Sound Manager의 컷씬 BGM 재생
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_OP_Audio);
+
             videoPlayer.Play();
             videoPlayer.loopPointReached += OnVideoEnd;
         }
@@ -73,16 +79,13 @@ public class ChangeSceneManager : MonoBehaviour
 
     void SetupManager()
     {
-        Debug.Log("setupmanager 시작인데 왜 호출안됨 ?");
         if (loadingUI != null)
         {
-            Debug.Log("LoadingScene 프리팹 인스턴스 생성 리소시스로드로는 안되고 왜 이렇게해야 되는거야.");
             loadingUI = Instantiate(loadingUI);
         }
         if (loadingUI != null)
         {
             loadingUI.SetActive(false);
-            Debug.Log("loading ui 비활성화");
         }
         if (isCutScene)
         {
@@ -116,6 +119,7 @@ public class ChangeSceneManager : MonoBehaviour
         if (videoPlayer != null)
         {
             videoPlayer.Stop();
+            SoundManager.Instance.StopBGM();
         }
 
         GoToNextScene();
@@ -232,7 +236,6 @@ public class ChangeSceneManager : MonoBehaviour
             yield return null;
         }
         
-        Debug.Log( "도현님 감사합니다");
         UpdateLoadingUI(1f);
         asyncOperation.allowSceneActivation = true;
 
@@ -265,6 +268,33 @@ public class ChangeSceneManager : MonoBehaviour
         
         //비동기 로딩 시작
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneIndex);
+        switch(sceneIndex)
+        {
+            case 1:
+                SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Title); // Title Scene BGM ON
+                break;
+            case 2:
+            case 3:
+                SoundManager.Instance.StopBGM();
+                SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage1);    // Stage1,2 BGM ON
+                _CursceneIndex = sceneIndex;
+                break;
+            case 4:
+            case 5:
+                SoundManager.Instance.StopBGM();
+                SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);    // stage3,4 BGM ON
+                _CursceneIndex = sceneIndex;
+                break;
+            case 6:
+            case 7:
+                SoundManager.Instance.StopBGM();
+                SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage3);    // stage5,6 BGM ON
+                _CursceneIndex = sceneIndex;
+                break;
+            default:
+                break;
+        }
+      
         asyncOperation.allowSceneActivation = false;
 
         
@@ -296,7 +326,6 @@ public class ChangeSceneManager : MonoBehaviour
             yield return null;
         }
         
-        Debug.Log( "도현님 감사합니다");
         UpdateLoadingUI(1f);
         asyncOperation.allowSceneActivation = true;
 
@@ -347,7 +376,7 @@ public class ChangeSceneManager : MonoBehaviour
     public void StartGame()
     {
         if (isLoading) return;
-
+        SoundManager.Instance.StopBGM();
         GoToNextScene();
     }
 }
