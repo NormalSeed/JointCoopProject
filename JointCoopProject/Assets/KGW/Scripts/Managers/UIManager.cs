@@ -24,9 +24,6 @@ public class UIManager : MonoBehaviour
     // UI를 Stack으로 관리
     Stack<GameObject> _UiStack = new Stack<GameObject>();
 
-    static System.Random random = new System.Random();
-    int _playerHp;
-
     [Header("InGame UI References")]
     [SerializeField] GameObject _miniMapUI;   // 미니맵 UI
     [SerializeField] GameObject _playerHpUI;    // 플레이어 체력 UI
@@ -90,7 +87,6 @@ public class UIManager : MonoBehaviour
         Init();
         // 씬 Change 시 UI 재참조 진행
         SceneManager.sceneLoaded += OnSceneLoaded;
-        _playerHp = random.Next(2, 5);
     }
 
     private void Update()
@@ -187,7 +183,7 @@ public class UIManager : MonoBehaviour
         _deathMainMenuButton.onClick.RemoveAllListeners();
         _deathMainMenuButton.onClick.AddListener(() =>
         {
-            PlayerStatManager.Instance._playerHp = _playerHp;
+            PlayerStatManager.Instance._playerHp = 3;
 
             if (GameSceneManager.Instance != null)
             {
@@ -279,7 +275,7 @@ public class UIManager : MonoBehaviour
     public void UseItem()
     {
         // 아이템 게이지 애니메이션 동작 테스트
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             if (_itemGuageController._canUseItem)
             {
