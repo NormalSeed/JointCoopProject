@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CrystalBallController : MonoBehaviour
 {
+    [SerializeField] ChangeSceneManager _changeSceneManager;
     [SerializeField] Animator _effectAni;
     [SerializeField] float _FortuneTextTime = 3f;
 
@@ -25,6 +26,13 @@ public class CrystalBallController : MonoBehaviour
         _timer = _FortuneTextTime;
     }
 
+    private void OnEnable()
+    {
+        // 생성시 점술가, 상점방 BGM ON
+        SoundManager.Instance.StopBGM();
+        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_FortuneTellersShop);
+    }
+
     private void Update()
     {
         if (_isFortuneUiOpen)
@@ -36,6 +44,28 @@ public class CrystalBallController : MonoBehaviour
                 OnFortuneUiClose();
             }
         }        
+    }
+
+    private void OnDisable()
+    {
+        SoundManager.Instance.StopBGM();
+        switch (_changeSceneManager._CursceneIndex)
+        {
+            case 2:
+            case 3:
+                SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage1);    // Stage1,2 BGM ON
+                break;
+            case 4:
+            case 5:
+                SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);    // stage3,4 BGM ON
+                break;
+            case 6:
+            case 7:
+                SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage3);    // stage5,6 BGM ON
+                break;
+            default:
+                break;
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

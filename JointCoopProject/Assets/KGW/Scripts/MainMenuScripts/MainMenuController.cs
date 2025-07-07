@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class MainMenuController : MonoBehaviour
 {
     [Header("Reference Button")]
-    [SerializeField] Button _playButton;
+    //[SerializeField] Button _playButton;
     [SerializeField] Button _optionButton;
     [SerializeField] Button _creditsButton;
     [SerializeField] Button _exitButton;
@@ -22,10 +22,10 @@ public class MainMenuController : MonoBehaviour
     {
         // 클릭 이벤트 초기화 세팅
         // Open Button
-        _playButton.onClick.AddListener(() =>
-        {
-            GameSceneManager.Instance.LoadStage1Scene();
-        });
+        //_playButton.onClick.AddListener(() =>
+        //{
+        //    GameSceneManager.Instance.LoadStage1Scene();
+        //});
         _optionButton.onClick.AddListener(() => UIManager.Instance.OpenUi(UIKeyList.mainOption));
         _creditsButton.onClick.AddListener(() => UIManager.Instance.OpenUi(UIKeyList.credit));
         _exitButton.onClick.AddListener(() => Application.Quit());
