@@ -99,6 +99,16 @@ public class PlayerStatManager : MonoBehaviour
     [SerializeField] bool canResurrect = false;
     public bool _canResurrect { get { return canResurrect; } set { canResurrect = value; } }
 
+    // Additional Drop Gold
     [SerializeField] int additionalDropGold = 0;
     public int _additionalDropGold { get { return additionalDropGold; } set { additionalDropGold = value; } }
+
+    [SerializeField] float shield = 0f;
+    public float _shield { get { return shield; } set { shield = value; } }
+
+    [SerializeField] bool isParry = false;
+    public bool _isParry { get { return isParry; } set { isParry = value; } }
+
+    [SerializeField] float attackBonus = 0f;
+    public float _attackBonus { get { return attackBonus; } set { attackBonus = value; } }
 }

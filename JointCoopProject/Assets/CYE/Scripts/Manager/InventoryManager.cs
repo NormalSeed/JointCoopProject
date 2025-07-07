@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-// using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 [System.Serializable]
 public struct ItemSlot
@@ -33,15 +33,15 @@ public class InventoryManager : TempSingleton<InventoryManager>
     [SerializeField]
     private GameItem activeItem;
     public GameItem _activeItem { get { return activeItem; } private set { activeItem = value; } }
-    private ItemDataSO _activeItemData;
-    private SkillDataSO _activeSkillData;
+    public ItemDataSO _activeItemData;
+    public SkillDataSO _activeSkillData;
     [SerializeField]
     private List<GameItem> _activeItemPool;
 
     public List<ItemSlot> _visItemList = new List<ItemSlot>(SLOT_COUNT);
 
     // UI invisible
-    private List<ItemSlot> _invItemList = new List<ItemSlot>();
+    public List<ItemSlot> _invItemList = new List<ItemSlot>();
 
     // Expend Items Info
     private int coinCount = 1000;
@@ -51,16 +51,32 @@ public class InventoryManager : TempSingleton<InventoryManager>
     public int _bombCount { get { return bombCount; } private set { bombCount = value; } }
     [SerializeField] private GameObject _bombPrefab;
 
+    private float _activeCooldownTimer = 0f;
+    private float _activeDurationTimer = 0f;
+
+    [SerializeField] private Image _cooldownImage;
+
+    private Coroutine _skillCooldownRoutine;
+    private Coroutine _skillDurationRoutine;
+
     public bool TryGetItem(GameItem insertItem, Transform pickupPos)
     {
         bool insertResult = false;
         switch (insertItem._itemData._itemType)
         {
             case ItemType.Active:
-                DropPrevActiveItem(_activeItemData, pickupPos);
+                DropPrevActiveItem(pickupPos);
 
                 _activeItemData = insertItem._itemData;
                 _activeSkillData = insertItem._itemSkill[0];
+
+                _activeSkillData.ReleaseSkill(pickupPos);
+
+                _activeCooldownTimer = 0f;
+                _activeDurationTimer = 0f;
+
+                StopCountActiveCooldown();
+                StopCountActiveDuration();
 
                 insertResult = true;
                 break;
@@ -204,25 +220,81 @@ public class InventoryManager : TempSingleton<InventoryManager>
         }
         return grade;
     }
-    public void UseActiveSkill(Transform usePos)
+
+    private void DropPrevActiveItem(Transform dropPos)
     {
-        if (_activeSkillData != null)
-        {
-            _activeSkillData.UseSkill(usePos);
-        }
-    }
-    private void DropPrevActiveItem(ItemDataSO _itemData, Transform dropPos)
-    {
-        if (_itemData != null)
+        if (_activeItemData != null)
         {
             foreach (GameItem item in _activeItemPool)
             {
-                if (item._itemData == _itemData)
+                if (item._itemData == _activeItemData)
                 {
+                    if (_activeSkillData.skillDuration != 0)
+                    {
+                        _activeSkillData.ReleaseSkill(dropPos);
+                    }
                     item.Drop(dropPos);
                 }
             }
         }
+    }
+    public void UseActiveSkill(Transform usePos)
+    {
+        if (_activeSkillData != null && _activeCooldownTimer <= 0f && _activeDurationTimer <= 0f)
+        {
+            _activeSkillData.UseSkill(usePos);
 
+            _activeDurationTimer = _activeSkillData.skillDuration;
+            if (_skillDurationRoutine == null)
+            {
+                _skillDurationRoutine = StartCoroutine(CountSkillDuration());
+            }
+
+            _activeCooldownTimer = _activeSkillData.skillCooldown;
+            if (_skillCooldownRoutine == null)
+            {
+                _skillCooldownRoutine = StartCoroutine(CountSkillCooltime());
+            }
+
+        }
+    }
+    private IEnumerator CountSkillCooltime()
+    {
+        while (_activeCooldownTimer > 0f)
+        {
+            _activeCooldownTimer -= Time.deltaTime;
+            // UI
+            // _cooldownImage.fillAmount = _activeSkillTimer / _activeSkillData.skillCooldown;
+
+            yield return new WaitForFixedUpdate();
+        }
+
+        StopCountActiveCooldown();
+    }
+    private void StopCountActiveCooldown()
+    {
+        if (_skillCooldownRoutine != null)
+        {
+            StopCoroutine(_skillCooldownRoutine);
+            _skillCooldownRoutine = null;
+        }
+    }
+    private IEnumerator CountSkillDuration()
+    {
+        while (_activeDurationTimer > 0f)
+        {
+            _activeDurationTimer -= Time.deltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+        StopCountActiveDuration();
+    }
+    private void StopCountActiveDuration()
+    {
+        if (_skillDurationRoutine != null)
+        {
+            _activeSkillData.ReleaseSkill();
+            StopCoroutine(_skillDurationRoutine);
+            _skillDurationRoutine = null;
+        }
     }
 }
