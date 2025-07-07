@@ -42,7 +42,15 @@ public class DragonController : MonsterBase
         {
             _attack1Cooldown -= Time.deltaTime;
         }
+    }
 
+    protected override void PlayBossBGM()
+    {
+        if (SoundManager.Instance.audioBgm != null)
+        {
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
+        }
     }
 
     public void GetAttack1Dir1()
@@ -87,5 +95,18 @@ public class DragonController : MonsterBase
     {
         base.Die();
         SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_DragonDie);
+    }
+
+    private void OnDisable()
+    {
+        if (SoundManager.Instance.audioBgm != null)
+        {
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage1);
+        }
+        else
+        {
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage1);
+        }
     }
 }

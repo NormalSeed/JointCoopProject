@@ -59,6 +59,12 @@ public class ShardSlayerController : MonsterBase
         }
     }
 
+    protected override void PlayBossBGM()
+    {
+        SoundManager.Instance.StopBGM();
+        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
+    }
+
     // Attack1 : 돌진 공격, 사거리 6, 감지한 캐릭터의 방향으로 6만큼 돌진 후 랜덤 방향으로 6만큼 추가 돌진
     // 추가 돌진이 끝난 후 2초간 멈춤
     // 멈춘 후에 _attackType을 2로 초기화
@@ -148,5 +154,18 @@ public class ShardSlayerController : MonsterBase
     {
         base.Die();
         SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_ShardSlayerDie);
+    }
+
+    private void OnDisable()
+    {
+        if (SoundManager.Instance.audioBgm != null)
+        {
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);
+        }
+        else
+        {
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);
+        }
     }
 }

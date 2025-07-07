@@ -50,6 +50,12 @@ public class GoblinKingController : MonsterBase
         }
     }
 
+    protected override void PlayBossBGM()
+    {
+        SoundManager.Instance.StopBGM();
+        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
+    }
+
     // Attack1 : 십자, X자가 번갈아 나오는 장판형 공격.
     // 두 장판 사이의 간격은 2초.
     public void Attack1()
@@ -142,5 +148,18 @@ public class GoblinKingController : MonsterBase
     {
         base.Die();
         SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_GoblinKingDie);
+    }
+
+    private void OnDisable()
+    {
+        if (SoundManager.Instance.audioBgm != null)
+        {
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage3);
+        }
+        else
+        {
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage3);
+        }
     }
 }

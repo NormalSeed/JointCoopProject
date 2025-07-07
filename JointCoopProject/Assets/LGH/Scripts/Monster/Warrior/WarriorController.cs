@@ -62,6 +62,12 @@ public class WarriorController : MonsterBase
         }
     }
 
+    protected override void PlayBossBGM()
+    {
+        SoundManager.Instance.StopBGM();
+        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
+    }
+
     // Attack1: 실드 패턴, 5초간 지속되고 체력 300만큼의 실드를 획득하고 제자리에 멈춰 있음
     // 지속시간이 끝나거나 실드가 모두 소모되면 패턴이 종료되고 종료된 시점부터 15초의 쿨다운을 갖는다.
     public void Attack1()
@@ -137,5 +143,18 @@ public class WarriorController : MonsterBase
     {
         base.Die();
         SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_WarriorDie);
+    }
+
+    private void OnDisable()
+    {
+        if (SoundManager.Instance.audioBgm != null)
+        {
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);
+        }
+        else
+        {
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);
+        }
     }
 }

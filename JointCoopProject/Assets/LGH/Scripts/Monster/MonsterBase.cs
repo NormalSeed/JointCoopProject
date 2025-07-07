@@ -30,7 +30,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     public GameObject _player;
     private PlayerSkillManager _skillManager;
     public MoneyDropSkillSO _moneyDropSkill;
-    
+
 
     public bool _isAttack1;
     public bool _isAttack2;
@@ -48,7 +48,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     protected float _hHPercentage;
     protected float _fHPercentage;
     protected float _cPercentage;
-    
+
     //Monster RoomManager
     private RoomMonsterManager roomMonsterManager;
     private Vector2Int myRoom;
@@ -71,16 +71,19 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _view = GetComponent<MonsterView>();
 
         roomMonsterManager = FindObjectOfType<RoomMonsterManager>();
-        
+
         LoadCSV("MonsterStats");
 
         StateMachineInit();
     }
 
-    protected void OnEnable()
+    protected virtual void OnEnable()
     {
         _player = GameObject.FindWithTag("Player");
-        _skillManager = _player.GetComponent<PlayerSkillManager>();
+        if (_player != null)
+        {
+            _skillManager = _player.GetComponent<PlayerSkillManager>();
+        }
     }
 
     /// <summary>
@@ -117,7 +120,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
 
         FindMyRoom();
     }
-    
+
     void FindMyRoom()
     {
         MapGenerator mapGen = FindObjectOfType<MapGenerator>();
@@ -164,18 +167,30 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     /// </summary>
     protected virtual void Update()
     {
-        _activeDelay -= Time.deltaTime;
-        if (_activeDelay < 0f)
+        if (_isActivated == false)
         {
+            _activeDelay -= Time.deltaTime;
+        }
+        
+        if (_activeDelay < 0f && _isActivated == false)
+        {
+            PlayBossBGM();
             _isActivated = true;
             _movement._isTrace = true;
         }
         _stateMachine.Update();
-
-        _moneyDropSkill = _skillManager.swordUpgradeskills
+        if (_skillManager?.swordUpgradeskills != null)
+        {
+            _moneyDropSkill = _skillManager.swordUpgradeskills
             .Select(x => x.swordSkill)
             .OfType<MoneyDropSkillSO>()
             .FirstOrDefault();
+        }
+    }
+
+    protected virtual void PlayBossBGM()
+    {
+
     }
 
     private void FixedUpdate()

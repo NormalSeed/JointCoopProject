@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 583494917859986612}
   m_Layer: 7
   m_Name: PoisonBat
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -260,6 +260,7 @@ MonoBehaviour:
   _model: {fileID: 0}
   _view: {fileID: 0}
   _player: {fileID: 0}
+  _moneyDropSkill: {fileID: 0}
   _isAttack1: 0
   _isAttack2: 0
   _isAttack3: 0
@@ -305,6 +306,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isPatrol: 0
   _isTrace: 0
+  checkDist: 1
+  rayCount: 16
+  maxAvoidAngle: 90
+  smoothTime: 0.12
+  avoidWeight: 1
 --- !u!114 &583494917859986612
 MonoBehaviour:
   m_ObjectHideFlags: 0
