@@ -13,16 +13,13 @@ public class DashAttackSO : SkillDataSO
     public override void UseSkill(Transform caster)
     {
         Debug.Log("Dash");
-        // 쿨타임이 다 돌면 이렇게 만들고
-        PlayerStatManager.Instance._canDash = false;
-        
+        PlayerStatManager.Instance._canDash = true;        
         // 실제 useSkill땐 플레이어의 충돌체를 대미지를 줄수있는 형태로 변ㄴ경해야함
     }
     public override void ReleaseSkill()
     {
         Debug.Log("Dash end");
         // 대미지를 줄 수 있는 형태에서 다시 돌아옴
-        PlayerStatManager.Instance._canDash = true;
-
+        PlayerStatManager.Instance._canDash = false;
     }
 }

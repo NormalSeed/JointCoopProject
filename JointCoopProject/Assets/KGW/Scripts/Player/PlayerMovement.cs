@@ -53,7 +53,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         {
             MoveInput();
 
-            if (PlayerStatManager.Instance._canDash && _isDash)
+            if (_isDash && PlayerStatManager.Instance._canDash)
             {
                 MoveDash();
             }
@@ -343,7 +343,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         {
             leftover = Mathf.Abs(PlayerStatManager.Instance._shield);
             PlayerStatManager.Instance._shield = 0;
-            TempManager.inventory._activeSkillData.ReleaseSkill();
+            TempManager.inventory._activeSkillData.ReleaseSkill(transform);
         }
 
         return (int)leftover;
@@ -354,7 +354,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         int returnValue = PlayerStatManager.Instance._attackDamage;
         if (PlayerStatManager.Instance._attackBonus != 0)
         {
-            returnValue = (int)(PlayerStatManager.Instance._attackDamage + PlayerStatManager.Instance._attackBonus);
+            returnValue += (int)PlayerStatManager.Instance._attackBonus;
             PlayerStatManager.Instance._attackBonus = 0;
         }
         return returnValue;

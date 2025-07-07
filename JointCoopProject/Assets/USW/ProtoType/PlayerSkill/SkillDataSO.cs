@@ -42,5 +42,9 @@ public class SkillDataSO : ScriptableObject
     { 
         // 스킬 해제
     }
+    public virtual void ReleaseSkill(Transform caster)
+    {
+        // 스킬 해제
+    }
 }
 

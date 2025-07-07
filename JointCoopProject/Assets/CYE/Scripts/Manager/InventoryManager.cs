@@ -65,10 +65,12 @@ public class InventoryManager : TempSingleton<InventoryManager>
         switch (insertItem._itemData._itemType)
         {
             case ItemType.Active:
-                DropPrevActiveItem(_activeItemData, pickupPos);
+                DropPrevActiveItem(pickupPos);
 
                 _activeItemData = insertItem._itemData;
                 _activeSkillData = insertItem._itemSkill[0];
+
+                _activeSkillData.ReleaseSkill(pickupPos);
 
                 _activeCooldownTimer = 0f;
                 _activeDurationTimer = 0f;
@@ -218,45 +220,52 @@ public class InventoryManager : TempSingleton<InventoryManager>
         }
         return grade;
     }
-    public void UseActiveSkill(Transform usePos)
-    {
-        if (_activeSkillData != null && _activeCooldownTimer <= 0f && _activeDurationTimer <= 0f)
-        {
-            _activeSkillData.UseSkill(usePos);
-            _activeCooldownTimer = _activeSkillData.skillCooldown;
 
-            if (_skillCooldownRoutine == null)
-            {
-                _skillCooldownRoutine = StartCoroutine(CountSkillCooltime());
-            }
-            if (_skillDurationRoutine == null)
-            {
-                _skillDurationRoutine = StartCoroutine(CountSkillDuration());
-            }
-        }
-    }
-    private void DropPrevActiveItem(ItemDataSO _itemData, Transform dropPos)
+    private void DropPrevActiveItem(Transform dropPos)
     {
-        if (_itemData != null)
+        if (_activeItemData != null)
         {
             foreach (GameItem item in _activeItemPool)
             {
-                if (item._itemData == _itemData)
+                if (item._itemData == _activeItemData)
                 {
-                    item._itemSkill[0].ReleaseSkill();
+                    if (_activeSkillData.skillDuration != 0)
+                    {
+                        _activeSkillData.ReleaseSkill(dropPos);
+                    }
                     item.Drop(dropPos);
                 }
             }
         }
     }
+    public void UseActiveSkill(Transform usePos)
+    {
+        if (_activeSkillData != null && _activeCooldownTimer <= 0f && _activeDurationTimer <= 0f)
+        {
+            _activeSkillData.UseSkill(usePos);
 
+            _activeDurationTimer = _activeSkillData.skillDuration;
+            if (_skillDurationRoutine == null)
+            {
+                _skillDurationRoutine = StartCoroutine(CountSkillDuration());
+            }
+
+            _activeCooldownTimer = _activeSkillData.skillCooldown;
+            if (_skillCooldownRoutine == null)
+            {
+                _skillCooldownRoutine = StartCoroutine(CountSkillCooltime());
+            }
+
+        }
+    }
     private IEnumerator CountSkillCooltime()
     {
         while (_activeCooldownTimer > 0f)
         {
             _activeCooldownTimer -= Time.deltaTime;
+            // UI
             // _cooldownImage.fillAmount = _activeSkillTimer / _activeSkillData.skillCooldown;
-            
+
             yield return new WaitForFixedUpdate();
         }
 
@@ -270,20 +279,20 @@ public class InventoryManager : TempSingleton<InventoryManager>
             _skillCooldownRoutine = null;
         }
     }
-        private IEnumerator CountSkillDuration()
+    private IEnumerator CountSkillDuration()
     {
         while (_activeDurationTimer > 0f)
         {
             _activeDurationTimer -= Time.deltaTime;
             yield return new WaitForFixedUpdate();
         }
-        if(TempManager.inventory._activeSkillData.name!="Dash Attack")
-            StopCountActiveDuration();
+        StopCountActiveDuration();
     }
     private void StopCountActiveDuration()
     {
         if (_skillDurationRoutine != null)
         {
+            _activeSkillData.ReleaseSkill();
             StopCoroutine(_skillDurationRoutine);
             _skillDurationRoutine = null;
         }
