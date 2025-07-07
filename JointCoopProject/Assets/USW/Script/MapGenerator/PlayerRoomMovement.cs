@@ -243,7 +243,7 @@ public class PlayerRoomMovement : MonoBehaviour
         float duration = 1f / transitionSpeed;
 
         while (elapsed < duration)
-        {
+        {   
             elapsed += Time.deltaTime;
             float t = Mathf.SmoothStep(0,1,elapsed/duration);
             transform.position = Vector3.Lerp(startPos, targetPos, t);
@@ -259,12 +259,14 @@ public class PlayerRoomMovement : MonoBehaviour
         
         var roomData = mapGen.generatedRooms[currentRoom];
 
+        
+        if (IsSecretWallBlocking(currentRoom, targetRoom)&& !mapGen.IsSecretRoomOpen(targetRoom))
+        {
+            return false;
+        }
         if (roomData.roomType == MapGenerator.RoomType.Start)
         {
-            if (IsSecretWallBlocking(currentRoom, targetRoom))
-            {
-                return false;
-            }
+         
             return true;
         }
        
@@ -278,6 +280,8 @@ public class PlayerRoomMovement : MonoBehaviour
         // 이게 뭐냐면 기름이 일정한 속력과 일정한 양이 뿜으면 멈춰져있는것처럼 보이는 현상을 층류 현상
         // 실제로 왜 이렇게 일어나는가에 대한거는 모르겠다. 
         //return roomMonster.IsRoomClear(currentRoom);
+        // 일반방도 체크하고 , 비밀방 벽부터 체크한다음 시작방은 항상이동가능으로 둬야하나 ? 아니 그럴필요없잖아
+        // 그리고 일단 reveal부분부터 손보자. 
         bool isCleared = roomMonster.IsRoomClear(currentRoom);
         
 

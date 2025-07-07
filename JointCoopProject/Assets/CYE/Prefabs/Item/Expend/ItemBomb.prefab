@@ -229,6 +229,7 @@ GameObject:
   - component: {fileID: 4048237729656817159}
   - component: {fileID: 5604016732876392737}
   - component: {fileID: 4557842046157552544}
+  - component: {fileID: 2273315551660332632}
   m_Layer: 11
   m_Name: Explosive
   m_TagString: Explosive
@@ -300,7 +301,7 @@ SpriteRenderer:
   m_Size: {x: 0.13, y: 0.13}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!210 &4048237729656817159
@@ -381,6 +382,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2273315551660332632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7772028558700602818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c4319834b25a464999b0a1705f0cb53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8302141887527019030
 GameObject:
   m_ObjectHideFlags: 0
@@ -492,9 +505,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eef9373940dcffe43a87f3cc2aa962ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemType: 4
   _itemData: {fileID: 11400000, guid: b684faf58891c8046a94afda85c3770b, type: 2}
-  _itemSkill: {fileID: 0}
+  _itemSkill:
+  - {fileID: 0}
   _explosiveDelay: 2
   explosiveDamage: 0
   _explosionFx: {fileID: 7772028558700602818}

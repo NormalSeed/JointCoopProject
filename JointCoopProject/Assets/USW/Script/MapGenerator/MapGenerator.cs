@@ -82,6 +82,8 @@ public class MapGenerator : MonoBehaviour
 
     private Dictionary<GameObject, Vector2Int> secretWallToSecretRoom = new Dictionary<GameObject, Vector2Int>();
     private Dictionary<GameObject, Direction> secretWallToDirection = new Dictionary<GameObject, Direction>();
+    
+    private HashSet<Vector2Int> openedSecretRooms = new HashSet<Vector2Int>();
 
     private GameObject spawnedPlayer;
     private int currentAttempts = 0;
@@ -809,15 +811,25 @@ public class MapGenerator : MonoBehaviour
 
     public void DamagedSecretWall(GameObject wall)
     {
+
+
         if (!secretWallToSecretRoom.ContainsKey(wall)) return;
+        
+       // 비밀방 위치 가져오기
+       Vector2Int secretRoomPos = secretWallToSecretRoom[wall];
+       
+       // 비밀방 열림 상태 add
+       openedSecretRooms.Add(secretRoomPos);
 
         BoxCollider2D collider = wall.GetComponent<BoxCollider2D>();
+        
         if (collider != null)
         {
             collider.enabled = false;
         }
 
         SpriteRenderer renderer = wall.GetComponent<SpriteRenderer>();
+        
         if (renderer != null)
         {
             Direction wallDirection = secretWallToDirection[wall];
@@ -828,8 +840,7 @@ public class MapGenerator : MonoBehaviour
             }
         }
         
-        // 비밀방 미니맵 reveal 처리
-        Vector2Int secretRoomPos = secretWallToSecretRoom[wall];
+        
         if (minimapManager != null)
         {
             minimapManager.RevealSecretRoom(secretRoomPos);
@@ -845,10 +856,23 @@ public class MapGenerator : MonoBehaviour
         // 비밀방 도 reveal 처리를 미니맵에 전해주려면 얘고 가져와야하고 . 
         // 잠시만 잠시만 
         // 미니맵도 연동해야하면 미리 메서드를 따로 분류시켜야함 
+        
+        //2025/7/7 새벽 비밀방 자체는 8,8좌표에 생성이 되나 ,
+        // 비밀방 미니맵상은 9,8 좌표에 생성함. 
+        // 폭발위치하고 비밀방 위치 계산에 대한 오차가 있는듯 ,
+        
+        // 또한 비밀방의 해금조건이 만족했음에도 불구하고
+        // mayienterthisroom 메서드가 실행을 안함 . ( secretroom 예외조건이 너무 빡빡했나봄 ) 
+        
 
         // 근데 direction 어디에다가 뒀던것같은데 어디있냐 ... 
         // var 로 그냥 처리할까 근데 튜플 너무 어려웡 포기행
         // 미니맵연동은 그냥 따로 vector2int로 파기. 
+    }
+
+    public bool IsSecretRoomOpen(Vector2Int secretRoomPos)
+    {
+        return openedSecretRooms.Contains(secretRoomPos);
     }
 
     #region 스프라이트 관련 메서드
