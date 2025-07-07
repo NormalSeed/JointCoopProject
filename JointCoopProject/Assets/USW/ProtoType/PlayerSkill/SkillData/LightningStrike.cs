@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class LightningStrike : MonoBehaviour
@@ -30,11 +31,20 @@ public class LightningStrike : MonoBehaviour
         int hitCount = 0;
         foreach (Collider2D enemy in hitEnemies)
         {
-            MonsterBase monster = enemy.GetComponent<MonsterBase>();
-            if (monster != null && !monster._isDead)
+            //MonsterBase monster = enemy.GetComponent<MonsterBase>();
+            //if (monster != null && !monster._isDead)
+            //{
+            //    monster.TakeDamage(damage, transform.position);
+            //    hitCount++;
+            //}
+            if (enemy.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
-                monster.TakeDamage(damage, transform.position);
-                hitCount++;
+                IDamagable damagable = enemy.gameObject.GetComponent<IDamagable>();
+                if (damagable != null)
+                {
+                    damagable.TakeDamage(damage, transform.position);
+                    hitCount++;
+                }
             }
         }
         
