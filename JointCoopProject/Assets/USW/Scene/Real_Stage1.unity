@@ -304,10 +304,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1732077161}
     m_Modifications:
-    - target: {fileID: 1705381759861843760, guid: d8dde2fd9d073f24f96650e07d78fcdb, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3546849671329855822, guid: d8dde2fd9d073f24f96650e07d78fcdb, type: 3}
       propertyPath: m_Name
       value: UI_ShadowMinimap
@@ -392,48 +388,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5085902902822306442, guid: d8dde2fd9d073f24f96650e07d78fcdb, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.7000122
-      objectReference: {fileID: 0}
-    - target: {fileID: 7415721832022840090, guid: d8dde2fd9d073f24f96650e07d78fcdb, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8641140793445745370, guid: d8dde2fd9d073f24f96650e07d78fcdb, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.69999695
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3546849671329855822, guid: d8dde2fd9d073f24f96650e07d78fcdb, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 40662529}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d8dde2fd9d073f24f96650e07d78fcdb, type: 3}
 --- !u!224 &40662527 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4759838298703841680, guid: d8dde2fd9d073f24f96650e07d78fcdb, type: 3}
   m_PrefabInstance: {fileID: 40662526}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &40662528 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3546849671329855822, guid: d8dde2fd9d073f24f96650e07d78fcdb, type: 3}
-  m_PrefabInstance: {fileID: 40662526}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &40662529
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 40662528}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e34773d9728da144d939dab66f5f56e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &111095028
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,10 +477,6 @@ PrefabInstance:
     - target: {fileID: 4669332443751747294, guid: 857d357c7277bb2419270c6a8ecb6541, type: 3}
       propertyPath: m_Name
       value: ActiveItemImage
-      objectReference: {fileID: 0}
-    - target: {fileID: 4669332443751747294, guid: 857d357c7277bb2419270c6a8ecb6541, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6801261641257921451, guid: 857d357c7277bb2419270c6a8ecb6541, type: 3}
       propertyPath: m_Pivot.x
@@ -883,10 +843,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Frame_Chip
       objectReference: {fileID: 0}
-    - target: {fileID: 245691336788935226, guid: f867e6ae10a85d9449b87f28e6fb3d96, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 553525346821111214, guid: f867e6ae10a85d9449b87f28e6fb3d96, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1134,10 +1090,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Frame_Hearts
       objectReference: {fileID: 0}
-    - target: {fileID: 5030953737824188495, guid: f74ec6e35da5af247b72b95f946ccfe6, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1301,14 +1253,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ActiveItemGuage
       objectReference: {fileID: 0}
-    - target: {fileID: 6794428043305537612, guid: e63923d215f42344997f4d39a14aa46e, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8975052575648580964, guid: e63923d215f42344997f4d39a14aa46e, type: 3}
-      propertyPath: _coolTime
-      value: 5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1427,10 +1371,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: miniMap
       objectReference: {fileID: 0}
-    - target: {fileID: 7727422866660128523, guid: abf5e5d6db9a49a40bb155d29a55877f, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1457,10 +1397,6 @@ PrefabInstance:
     - target: {fileID: 2105245759631460730, guid: 375d906adf9b4374b9ba552837f18beb, type: 3}
       propertyPath: m_Name
       value: Frame_Bomb
-      objectReference: {fileID: 0}
-    - target: {fileID: 2105245759631460730, guid: 375d906adf9b4374b9ba552837f18beb, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6547592449748414821, guid: 375d906adf9b4374b9ba552837f18beb, type: 3}
       propertyPath: m_Pivot.x

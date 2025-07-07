@@ -98,7 +98,9 @@ public class InventoryManager : _TempSingleton<InventoryManager>
 
                 _activeItemData = insertItem._itemData;
                 _activeSkillData = insertItem._itemSkill[0];
+
                 // 획득한 액티브 아이템 정보 UI 출력
+                _timer = _skillTitleTextTime;   // UI 오픈마다 타이머 초기화
                 _isSkillTitleOpen = true;
                 GameObject getActiveItem = UIManager.Instance.GetUI(UIKeyList.itemInfo);
                 TMP_Text[] activeItemText = getActiveItem.GetComponentsInChildren<TMP_Text>(true);
