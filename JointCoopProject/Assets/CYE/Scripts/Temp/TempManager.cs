@@ -5,7 +5,7 @@ using UnityEngine;
 public static class TempManager
 {
     public static InventoryManager inventory => InventoryManager.GetInstance();
-    public static ShopManager shop = ShopManager.GetInstance(); 
+    public static ShopManager shop => ShopManager.GetInstance(); 
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Initailize()

@@ -40,8 +40,9 @@ public class ShopItem : Item, IPickable
     #region // IPickable
     public void PickUp(Transform pickupPos)
     {
+        bool buyResult = TempManager.shop.TrySellItem(this._itemData);
         bool insertResult = TempManager.inventory.TryBuyItem(this);
-        if (insertResult)
+        if (buyResult&&insertResult)
         {
             TempManager.inventory.UseCoin(_itemData._itemPrice);
             if (_itemData._itemPrice == 0)
