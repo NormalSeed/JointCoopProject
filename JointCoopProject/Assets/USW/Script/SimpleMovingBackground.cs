@@ -12,7 +12,7 @@ public class SimpleMovingBackground : MonoBehaviour
    public Vector2 moveSpeed = new Vector2(-2f,0f);
    public float resetPositionX = 10f;
    public float triggerPositionX = 10f;
-
+   
    
    
    // fixedupdate 에서 velo주고 

@@ -228,7 +228,8 @@ MonoBehaviour:
   bottomDoorPos: {x: 7, y: 1}
   leftDoorPos: {x: 1, y: 4}
   rightDoorPos: {x: 14, y: 5}
-  doorDetectionDistance: 1.5
+  doorDetectionDistance: 0.8
+  roomTransitionCooldown: 3
   transitionSpeed: 2
   doorActive: 1
   disableRoomTransition: 1
@@ -273,3 +274,6 @@ MonoBehaviour:
   alive: 1
   canResurrect: 0
   additionalDropGold: 0
+  shield: 0
+  isParry: 0
+  attackBonus: 0
