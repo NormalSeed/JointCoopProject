@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 4184161868222570525}
   - component: {fileID: 7736504258023114737}
   - component: {fileID: 3848782610465711388}
+  - component: {fileID: 1842318859535539809}
+  - component: {fileID: 2728253247616235189}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -207,6 +209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerMove: {fileID: 4184161868222570525}
   _attackRange: {fileID: 11400000, guid: 7bcf9bb8ffde51749aac39919962bb4a, type: 2}
+  _skillTitleTextTime: 3
   autoskills: []
   swordUpgradeskills: []
 --- !u!114 &3848782610465711388
@@ -216,7 +219,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5204087859649337490}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1c056e6d672813845a82c990227d5e95, type: 3}
   m_Name: 
@@ -230,3 +233,43 @@ MonoBehaviour:
   doorActive: 1
   disableRoomTransition: 1
   autoDetectMapGenerator: 1
+--- !u!114 &1842318859535539809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5204087859649337490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61912e06c31f5fd48a624d263bd215e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2728253247616235189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5204087859649337490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f022a6c3a534974fa430895e5f01079, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerHp: 3
+  playerMaxHp: 12
+  attackDamage: 8
+  moveSpeed: 3
+  accelerationSpeed: 20
+  decelerationSpeed: 20
+  dashSpeed: 15
+  dashDurationTime: 0.2
+  dashCoolTime: 1
+  attackRange: 0.8
+  attackSpeed: 1
+  canDash: 0
+  playerLuck: 0
+  alive: 1
+  canResurrect: 0
+  additionalDropGold: 0
