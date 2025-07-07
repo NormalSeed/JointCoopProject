@@ -2835,7 +2835,7 @@ SpriteRenderer:
   m_Size: {x: 0.16, y: 0.48}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &2177699580163230656
@@ -2922,6 +2922,7 @@ MonoBehaviour:
   minLoadingTime: 2
   videoPlayer: {fileID: 0}
   allowClickSkip: 0
+  _CursceneIndex: 0
   gameStartButton: {fileID: 0}
 --- !u!1 &8743818972637993420
 GameObject:
@@ -3091,6 +3092,14 @@ PrefabInstance:
     - target: {fileID: 5812600543092801113, guid: bb05eda249ddca141ac9bad43fcf250c, type: 3}
       propertyPath: isBoss
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6161602410738389158, guid: bb05eda249ddca141ac9bad43fcf250c, type: 3}
+      propertyPath: m_Size.x
+      value: 2.6666667
+      objectReference: {fileID: 0}
+    - target: {fileID: 6161602410738389158, guid: bb05eda249ddca141ac9bad43fcf250c, type: 3}
+      propertyPath: m_Size.y
+      value: 2.6666667
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
