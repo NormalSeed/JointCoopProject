@@ -199,7 +199,7 @@ MonoBehaviour:
   - {fileID: 7854309851933494697, guid: 312e9be6815d6c64db8e6fc40fe5fe7b, type: 3}
   mapSize: 13
   startPosition: {x: 7, y: 7}
-  totalRooms: 9
+  totalRooms: 10
   roomGenerationChance: 0.7
   prefabSize: {x: 17, y: 9}
   playerPrefab: {fileID: 2443373463263467340, guid: 28c93c198489ed64f8e94a40600f8f48, type: 3}
@@ -2737,6 +2737,10 @@ PrefabInstance:
     - target: {fileID: 4144794276959707405, guid: de32b2770ff9026408bf1096fd4bc5a7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8975799967109295381, guid: de32b2770ff9026408bf1096fd4bc5a7, type: 3}
+      propertyPath: moveSpeed.x
+      value: -1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
