@@ -43,7 +43,7 @@ public class ItemSpawner : MonoBehaviour
         }
         if (_secretRoom != null)
         {
-            _secretSpawnPairs = GetRandomSpawnPair(_secretRoom);
+            _secretSpawnPairs = GetRandomSpawnPair(_secretRoom, true);
         }
         SpawnItemsInItemRoom();
         SpawnItemsInSecretRoom();
@@ -66,11 +66,11 @@ public class ItemSpawner : MonoBehaviour
         }
     }
 
-    private Dictionary<Transform, GameItem> GetRandomSpawnPair(Transform searchRoom)
+    private Dictionary<Transform, GameItem> GetRandomSpawnPair(Transform searchRoom, bool isSecret = false)
     {
         Dictionary<Transform, GameItem> returnDict = new();
-        int maxRepeat = GetSpawnCount();
-        Debug.Log($"{maxRepeat}");
+        int maxRepeat = (isSecret) ? 3 : GetSpawnCount();
+        Debug.Log($"maxRepeat: {maxRepeat}");
         int repeatCount = 0;
 
         Transform[] allRooms = searchRoom.Find("Grid").transform.GetComponentsInChildren<Transform>();
@@ -102,7 +102,6 @@ public class ItemSpawner : MonoBehaviour
             foreach (KeyValuePair<Transform, GameItem> item in _itemSpawnPairs)
             {
                 Instantiate(item.Value, item.Key);
-                Debug.Log($"{item.Value.name}");
             }
         }
     }
@@ -113,7 +112,6 @@ public class ItemSpawner : MonoBehaviour
             foreach (KeyValuePair<Transform, GameItem> item in _secretSpawnPairs)
             {
                 Instantiate(item.Value, item.Key);
-                Debug.Log($"{item.Value.name}");
             }
         }
     }
