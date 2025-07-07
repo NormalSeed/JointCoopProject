@@ -25,7 +25,6 @@ public class MainMenuController : MonoBehaviour
         _playButton.onClick.AddListener(() =>
         {
             GameSceneManager.Instance.LoadStage1Scene();
-            PlayerStatManager.Instance._alive = true;
         });
         _optionButton.onClick.AddListener(() => UIManager.Instance.OpenUi(UIKeyList.mainOption));
         _creditsButton.onClick.AddListener(() => UIManager.Instance.OpenUi(UIKeyList.credit));
