@@ -43,6 +43,11 @@ public class MonsterState : BaseState
         {
             _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Dead]);
         }
+
+        if (_controller._isParalyzed)
+        {
+            _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Paralyze]);
+        }
     }
 
     public override void Exit()
@@ -172,5 +177,39 @@ public class Monster_Dead : MonsterState
     public override void Update()
     {
         
+    }
+}
+
+public class Monster_Paralyze : MonsterState
+{
+    private float _paralyzeTimer;
+    public Monster_Paralyze(MonsterBase controller) : base(controller)
+    {
+        _hasPhysics = false;
+    }
+
+    public override void Enter()
+    {
+        _controller._view.PlayAnimation(_controller.IDLE_HASH);
+        _paralyzeTimer = 3f;
+        _controller._movement._rb.velocity = Vector2.zero;
+    }
+
+    public override void Update()
+    {
+        if (_paralyzeTimer > 0f)
+        {
+            _paralyzeTimer -= Time.deltaTime;
+        }
+
+        if (_paralyzeTimer <= 0f)
+        {
+            _controller._isParalyzed = false;
+        }
+
+        if (!_controller._isParalyzed)
+        {
+            _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Idle]);
+        }
     }
 }

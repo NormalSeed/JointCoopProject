@@ -37,6 +37,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     public bool _isAttack3;
     public bool _isDamaged;
     public bool _isDead;
+    public bool _isParalyzed;
     private Coroutine _coOffDamage;
     private WaitForSeconds _damageDelay = new WaitForSeconds(1f);
     public bool isBoss = false;
@@ -98,6 +99,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _stateMachine._stateDic.Add(EState.Trace, new Monster_Trace(this));
         _stateMachine._stateDic.Add(EState.Damaged, new Monster_Damaged(this));
         _stateMachine._stateDic.Add(EState.Dead, new Monster_Dead(this));
+        _stateMachine._stateDic.Add(EState.Paralyze, new Monster_Paralyze(this));
 
         _stateMachine._curState = _stateMachine._stateDic[EState.Idle];
     }
@@ -111,6 +113,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _isAttack3 = false;
         _isDamaged = false;
         _isDead = false;
+        _isParalyzed = false;
 
         if (_dataDic.TryGetValue(_monsterID, out MonsterData data))
         {
@@ -190,7 +193,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
 
     protected virtual void PlayBossBGM()
     {
-
+        
     }
 
     private void FixedUpdate()
@@ -207,6 +210,14 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
             {
                 damagable.TakeDamage(_model._bodyDamage, transform.position);
             }
+        }
+    }
+
+    protected void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerProjectile"))
+        {
+            _isParalyzed = true;
         }
     }
 
