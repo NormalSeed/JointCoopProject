@@ -34,6 +34,13 @@ public class GoblinKingController : MonsterBase
         _stateMachine._stateDic.Add(EState.Attack2, new GoblinKing_Attack2(this));
     }
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        SoundManager.Instance.StopBGM();
+        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
+    }
+
     protected override void Update()
     {
         base.Update();
@@ -142,5 +149,7 @@ public class GoblinKingController : MonsterBase
     {
         base.Die();
         SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_GoblinKingDie);
+        SoundManager.Instance.StopBGM();
+        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage3);
     }
 }

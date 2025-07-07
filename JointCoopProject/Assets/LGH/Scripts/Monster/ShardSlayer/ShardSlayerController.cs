@@ -44,6 +44,13 @@ public class ShardSlayerController : MonsterBase
         _stateMachine._stateDic.Add(EState.Attack2, new ShardSlayer_Attack2(this));
     }
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        SoundManager.Instance.StopBGM();
+        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
+    }
+
     protected override void Update()
     {
         base.Update();
@@ -148,5 +155,7 @@ public class ShardSlayerController : MonsterBase
     {
         base.Die();
         SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_ShardSlayerDie);
+        SoundManager.Instance.StopBGM();
+        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);
     }
 }

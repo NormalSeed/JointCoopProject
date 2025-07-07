@@ -23,6 +23,16 @@ public class DragonController : MonsterBase
         isBoss = true;
     }
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        if (SoundManager.Instance.audioBgm != null)
+        {
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
+        }
+    }
+
     protected override void StateMachineInit()
     {
         base.StateMachineInit();
@@ -87,5 +97,7 @@ public class DragonController : MonsterBase
     {
         base.Die();
         SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_DragonDie);
+        SoundManager.Instance.StopBGM();
+        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage1);
     }
 }
