@@ -14,6 +14,7 @@ public class BerserkSkillSO : SkillDataSO
 
     public override void UseSkill(Transform caster)
     {
+        Debug.Log("Berserk");
         _prevAttackSpeed = PlayerStatManager.Instance._attackSpeed;
 
         PlayerStatManager.Instance._playerHp = (PlayerStatManager.Instance._playerHp > 2) ? (PlayerStatManager.Instance._playerHp - 2) : 1;
@@ -22,6 +23,7 @@ public class BerserkSkillSO : SkillDataSO
     }
     public override void ReleaseSkill()
     {
+        Debug.Log("Berserk End");
         PlayerStatManager.Instance._attackSpeed = _prevAttackSpeed;
     }
 }

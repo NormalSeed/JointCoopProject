@@ -202,7 +202,8 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         {
             GameObject sword = Instantiate(_swordPrefab, transform.position, Quaternion.identity);
             // ���� ������ �ʱ�ȭ
-            sword.GetComponent<PlayerSwordController>().Init(transform, _attackDirection, PlayerStatManager.Instance._attackSpeed, PlayerStatManager.Instance._attackDamage, _skillManager, PlayerStatManager.Instance._attackRange);
+            float calcNextDamage = CalcNextDamage();
+            sword.GetComponent<PlayerSwordController>().Init(transform, _attackDirection, PlayerStatManager.Instance._attackSpeed, (int)calcNextDamage, _skillManager, PlayerStatManager.Instance._attackRange);
 
             // Attack Animation
             AttackDirection(_selectAttackDir);
@@ -342,5 +343,16 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         }
 
         return (int)leftover;
+    }
+
+    private int CalcNextDamage()
+    {
+        int returnValue = PlayerStatManager.Instance._attackDamage;
+        if (PlayerStatManager.Instance._attackBonus != 0)
+        {
+            returnValue = (int)(PlayerStatManager.Instance._attackDamage + PlayerStatManager.Instance._attackBonus);
+            PlayerStatManager.Instance._attackBonus = 0;
+        }
+        return returnValue;
     }
 }

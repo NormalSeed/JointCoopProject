@@ -108,4 +108,7 @@ public class PlayerStatManager : MonoBehaviour
 
     [SerializeField] bool isParry = false;
     public bool _isParry { get { return isParry; } set { isParry = value; } }
+
+    [SerializeField] float attackBonus = 0f;
+    public float _attackBonus { get { return attackBonus; } set { attackBonus = value; } }
 }
