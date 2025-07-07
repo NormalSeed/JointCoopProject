@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-// using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 [System.Serializable]
 public struct ItemSlot
@@ -33,15 +33,15 @@ public class InventoryManager : TempSingleton<InventoryManager>
     [SerializeField]
     private GameItem activeItem;
     public GameItem _activeItem { get { return activeItem; } private set { activeItem = value; } }
-    private ItemDataSO _activeItemData;
-    private SkillDataSO _activeSkillData;
+    public ItemDataSO _activeItemData;
+    public SkillDataSO _activeSkillData;
     [SerializeField]
     private List<GameItem> _activeItemPool;
 
     public List<ItemSlot> _visItemList = new List<ItemSlot>(SLOT_COUNT);
 
     // UI invisible
-    private List<ItemSlot> _invItemList = new List<ItemSlot>();
+    public List<ItemSlot> _invItemList = new List<ItemSlot>();
 
     // Expend Items Info
     private int coinCount = 1000;
@@ -50,6 +50,12 @@ public class InventoryManager : TempSingleton<InventoryManager>
     private int bombCount;
     public int _bombCount { get { return bombCount; } private set { bombCount = value; } }
     [SerializeField] private GameObject _bombPrefab;
+
+    private float _activeSkillTimer = 0f;
+
+    [SerializeField] private Image _cooldownImage;
+
+    private Coroutine _skillCooldownRoutine;
 
     public bool TryGetItem(GameItem insertItem, Transform pickupPos)
     {
@@ -61,6 +67,9 @@ public class InventoryManager : TempSingleton<InventoryManager>
 
                 _activeItemData = insertItem._itemData;
                 _activeSkillData = insertItem._itemSkill[0];
+
+                _activeSkillTimer = 0f;
+                StopCountActiveCooldown();
 
                 insertResult = true;
                 break;
@@ -206,9 +215,15 @@ public class InventoryManager : TempSingleton<InventoryManager>
     }
     public void UseActiveSkill(Transform usePos)
     {
-        if (_activeSkillData != null)
+        if (_activeSkillData != null && _activeSkillTimer == 0f)
         {
             _activeSkillData.UseSkill(usePos);
+            _activeSkillTimer = _activeSkillData.skillCooldown;
+
+            if (_skillCooldownRoutine == null)
+            {
+                _skillCooldownRoutine = StartCoroutine(CountSkillCooltime());
+            }
         }
     }
     private void DropPrevActiveItem(ItemDataSO _itemData, Transform dropPos)
@@ -223,6 +238,26 @@ public class InventoryManager : TempSingleton<InventoryManager>
                 }
             }
         }
+    }
 
+    private IEnumerator CountSkillCooltime()
+    {
+        while (_activeSkillTimer > 0f)
+        {
+            _activeSkillTimer -= Time.deltaTime;
+            // _cooldownImage.fillAmount = _activeSkillTimer / _activeSkillData.skillCooldown;
+
+            yield return new WaitForFixedUpdate();
+        }
+
+        StopCountActiveCooldown();
+    }
+    private void StopCountActiveCooldown()
+    {
+        if (_skillCooldownRoutine != null)
+        {
+            StopCoroutine(_skillCooldownRoutine);
+            _skillCooldownRoutine = null;
+        }
     }
 }
