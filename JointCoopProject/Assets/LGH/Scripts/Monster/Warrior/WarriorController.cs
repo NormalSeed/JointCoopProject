@@ -147,4 +147,17 @@ public class WarriorController : MonsterBase
         SoundManager.Instance.StopBGM();
         SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);
     }
+
+    private void OnDisable()
+    {
+        if (SoundManager.Instance.audioBgm != null)
+        {
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);
+        }
+        else
+        {
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);
+        }
+    }
 }

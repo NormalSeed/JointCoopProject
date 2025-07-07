@@ -90,4 +90,17 @@ public class GolluxController : MonsterBase
         SoundManager.Instance.StopBGM();
         SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage1);
     }
+
+    private void OnDisable()
+    {
+        if (SoundManager.Instance.audioBgm != null)
+        {
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage1);
+        }
+        else
+        {
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage1);
+        }
+    }
 }

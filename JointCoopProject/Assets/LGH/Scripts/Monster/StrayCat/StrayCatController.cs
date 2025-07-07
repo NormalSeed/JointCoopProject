@@ -222,6 +222,10 @@ public class StrayCatController : MonsterBase
     public override void Die()
     {
         base.Die();
+    }
+
+    private void OnDisable()
+    {
         SoundManager.Instance.StopBGM();
     }
 }

@@ -148,4 +148,17 @@ public class IncubusController : MonsterBase
         SoundManager.Instance.StopBGM();
         SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage3);
     }
+
+    private void OnDisable()
+    {
+        if (SoundManager.Instance.audioBgm != null)
+        {
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage3);
+        }
+        else
+        {
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage3);
+        }
+    }
 }
