@@ -202,6 +202,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
 
         if (_attackDirection != Vector2.zero && _wieldTimer <= 0f)
         {
+            SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_PlayerAttack);
             GameObject sword = Instantiate(_swordPrefab, transform.position, Quaternion.identity);
             // 검의 데이터 초기화
             sword.GetComponent<PlayerSwordController>().Init(transform, _attackDirection, PlayerStatManager.Instance._attackSpeed, PlayerStatManager.Instance._attackDamage, _skillManager, PlayerStatManager.Instance._attackRange);
@@ -277,11 +278,13 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     // Player Hp Down
     public void HealthDown(int damage)
     {
+        // TODO : 플레이어 피격 사운드
+        SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_PlayerDamage);
+
         if (PlayerStatManager.Instance._playerHp > 1)
         {
             PlayerStatManager.Instance._playerHp -= damage;
-            Debug.Log($"플레이어의 체력이 {PlayerStatManager.Instance._playerHp} 입니다.");
-            // TODO : 플레이어 피격 사운드
+            
         }
         else
         {
@@ -289,9 +292,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
             PlayerStatManager.Instance._playerHp = 0;
 
             // Player Death
-            SoundManager.Instance.StopBGM();
-            SoundManager.Instance.RStopSFX();
-            _capsuleCollider.enabled = false;
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Title);
             PlayerStatManager.Instance._alive = false;
         }
     }
@@ -309,7 +310,6 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         PlayerStatManager.Instance._alive = true;
         UIManager.Instance.OpenUi(UIKeyList.deathWindow);
         _playerAnimator.Play(DOWN_IDLE_HASH);
-        _capsuleCollider.enabled = true;
         CancelInvoke();
     }
 
