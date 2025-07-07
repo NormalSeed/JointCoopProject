@@ -77,7 +77,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         StateMachineInit();
     }
 
-    protected void OnEnable()
+    protected virtual void OnEnable()
     {
         _player = GameObject.FindWithTag("Player");
         if (_player != null)

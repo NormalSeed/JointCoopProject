@@ -36,6 +36,13 @@ public class WarriorController : MonsterBase
         _stateMachine._stateDic.Add(EState.Stun, new Warrior_Stun(this));
     }
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        SoundManager.Instance.StopBGM();
+        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
+    }
+
     protected override void Update()
     {
         base.Update();
@@ -137,5 +144,7 @@ public class WarriorController : MonsterBase
     {
         base.Die();
         SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_WarriorDie);
+        SoundManager.Instance.StopBGM();
+        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);
     }
 }

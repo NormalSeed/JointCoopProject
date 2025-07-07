@@ -28,6 +28,13 @@ public class GolluxController : MonsterBase
         _stateMachine._stateDic.Add(EState.Stun, new Gollux_Stun(this));
     }
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        SoundManager.Instance.StopBGM();
+        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
+    }
+
     protected override void Update()
     {
         base.Update();
@@ -80,5 +87,7 @@ public class GolluxController : MonsterBase
     {
         base.Die();
         SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_GolluxDie);
+        SoundManager.Instance.StopBGM();
+        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage1);
     }
 }
