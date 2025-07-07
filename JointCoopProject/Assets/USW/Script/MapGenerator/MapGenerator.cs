@@ -10,45 +10,54 @@ using Vector3 = UnityEngine.Vector3;
 
 public class MapGenerator : MonoBehaviour
 {
-    [Header("방 프리팹들")] public GameObject startRoomPrefab;
-    public GameObject[] defaultRoomPrefabs = new GameObject[20];
+    [Header("방 프리팹들")] 
+    public GameObject startRoomPrefab;
+    public GameObject[] defaultRoomPrefabs = new GameObject[23];
     public GameObject shopRoomPrefab;
     public GameObject itemRoomPrefab;
     public GameObject secretRoomPrefab;
-    public GameObject[] bossRoomPrefabs = new GameObject[3];
+    public GameObject[] bossRoomPrefabs = new GameObject[2];
 
     [Header("맵 설정")] public int mapSize = 13;
     public Vector2Int startPosition = new Vector2Int(7, 7);
     public int totalRooms;
     public float roomGenerationChance = 0.7f;
 
-    [Header("프리팹 설정")] public Vector2 prefabSize = new Vector2(15, 9); // 방 프리팹 크기
+    [Header("프리팹 설정")] 
+    public Vector2 prefabSize = new Vector2(15, 9); // 방 프리팹 크기
 
-    [Header("플레이어 설정")] public GameObject playerPrefab; // 플레이어 프리팹
+    [Header("플레이어 설정")] 
+    public GameObject playerPrefab; // 플레이어 프리팹
     public Vector2 playerSpawnOffset = new Vector2(7.5f, 4.5f); // 스폰 오프셋
 
 
-    [Header("문 설정")] public Sprite wallUpPrefab;
+    [Header("문 설정")] 
+    public Sprite wallUpPrefab;
     public Sprite wallDownPrefab;
     public Sprite wallLeftPrefab;
     public Sprite wallRightPrefab;
-
+    
     public Sprite doorClosedUpPrefab;
     public Sprite doorClosedDownPrefab;
     public Sprite doorClosedLeftPrefab;
     public Sprite doorClosedRightPrefab;
-
+    
     public Sprite doorOpenUpPrefab;
     public Sprite doorOpenDownPrefab;
     public Sprite doorOpenLeftPrefab;
     public Sprite doorOpenRightPrefab;
+    
+    public Sprite secretWallUpPrefab;
+    public Sprite secretWallDownPrefab;
+    public Sprite secretWallLeftPrefab;
+    public Sprite secretWallRightPrefab;
 
     // 문 위치 설정
     private Vector2 doorUpPos = new Vector2(7.5f, 8.5f);
     private Vector2 doorDownPos = new Vector2(7.5f, 0.5f);
     private Vector2 doorLeftPos = new Vector2(0.5f, 4.5f);
     private Vector2 doorRightPos = new Vector2(14.5f, 4.5f);
-    
+
     // 방 클리어시 문 상태 업데이트
     private RoomMonsterManager roomMonsterManager;
     private bool isDoorInit = false;
@@ -70,10 +79,16 @@ public class MapGenerator : MonoBehaviour
 
     public Dictionary<Vector2Int, RoomData> generatedRooms = new Dictionary<Vector2Int, RoomData>();
     private List<Vector2Int> availablePositions = new List<Vector2Int>();
+
+    private Dictionary<GameObject, Vector2Int> secretWallToSecretRoom = new Dictionary<GameObject, Vector2Int>();
+    private Dictionary<GameObject, Direction> secretWallToDirection = new Dictionary<GameObject, Direction>();
+    
+    private HashSet<Vector2Int> openedSecretRooms = new HashSet<Vector2Int>();
+
     private GameObject spawnedPlayer;
     private int currentAttempts = 0;
     private int maxGenerationAttempts = 50;
-
+    
     // 디버그 관련
     public bool enableDebugLogs = false;
     private int failsafe = 0; // 무한루프 방지
@@ -111,7 +126,7 @@ public class MapGenerator : MonoBehaviour
     void Start()
     {
         GenerateMap();
-        
+
         ReinitializePlayerRoom();
 
         StartCoroutine(InitializeDoorSystem());
@@ -178,15 +193,16 @@ public class MapGenerator : MonoBehaviour
         InstantiateRooms();
 
         GenerateDoorsAndWalls();
-
+        
         SpawnPlayer();
         SetupSystems();
 
         currentAttempts = 0; // 성공하면 시도 횟수 리셋
         Debug.Log("맵 생성 성공 총 방 개수: " + generatedRooms.Count);
-        
+
         isDoorInit = false;
         StartCoroutine(InitializeDoorSystem());
+        
         Debug.Log("문 열고 닫기 성공!");
     }
 
@@ -462,10 +478,7 @@ public class MapGenerator : MonoBehaviour
         // 기존 플레이어가 있으면 제거
         if (spawnedPlayer != null)
         {
-            if (Application.isPlaying)
-                Destroy(spawnedPlayer);
-            else
-                DestroyImmediate(spawnedPlayer);
+            Destroy(spawnedPlayer);
         }
 
         RoomData startRoom = generatedRooms[startPosition];
@@ -598,7 +611,7 @@ public class MapGenerator : MonoBehaviour
         {
             perfectCandidates = FindPositionsWithSurroundingCount(3);
         }
-        
+
         if (perfectCandidates.Count == 0)
         {
             perfectCandidates = FindPositionsWithSurroundingCount(2, true);
@@ -690,24 +703,22 @@ public class MapGenerator : MonoBehaviour
         {
             if (room.instantiatedRoom != null)
             {
-                if (Application.isPlaying)
-                    Destroy(room.instantiatedRoom);
-                else
-                    DestroyImmediate(room.instantiatedRoom);
+                Destroy(room.instantiatedRoom);
             }
         }
 
         // 플레이어 제거
         if (spawnedPlayer != null)
         {
-            if (Application.isPlaying)
-                Destroy(spawnedPlayer);
+            Destroy(spawnedPlayer);
         }
 
         // 데이터 초기화
         generatedRooms.Clear();
         availablePositions.Clear();
         roomDoors.Clear();
+        secretWallToSecretRoom.Clear();
+        secretWallToDirection.Clear();
         failsafe = 0;
     }
 
@@ -739,6 +750,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+    // 비밀방 Check 부분 
     void CheckAndCreateDoor(Vector2Int roomPos, Direction direction, Vector2Int directionVector)
     {
         Vector2Int adjacentRoomPos = roomPos + directionVector;
@@ -746,12 +758,26 @@ public class MapGenerator : MonoBehaviour
         Vector3 doorWorldPos = GetDoorWorldPosition(roomWorldPos, direction);
 
         Sprite doorSprite;
+        bool isSecretWall = false;
+        Vector2Int secretRoomPos = Vector2Int.zero;
 
         // 인접한 방이 있는지 확인
         if (generatedRooms.ContainsKey(adjacentRoomPos))
         {
-            // 인접 방이 있으면 방향별 닫힌 문
-            doorSprite = GetClosedDoorSprite(direction);
+            // adjacentrompos 가 secret인경우
+            if (generatedRooms[adjacentRoomPos].roomType == RoomType.Secret)
+            {
+                Debug.Log("secret wall 생성");
+                doorSprite = GetWallSprite(direction);
+                isSecretWall = true;
+                secretRoomPos = adjacentRoomPos;
+                Debug.Log("secret wall 생성");
+            }
+            else
+            {
+                Debug.Log("secret wall 아님생성");
+                doorSprite = GetClosedDoorSprite(direction);
+            }
         }
         else
         {
@@ -768,16 +794,88 @@ public class MapGenerator : MonoBehaviour
 
             SpriteRenderer spriteRenderer = door.AddComponent<SpriteRenderer>();
             spriteRenderer.sprite = doorSprite;
-
-            // 정렬 순서 설정
             spriteRenderer.sortingOrder = 1;
-            
+
             BoxCollider2D collider = door.AddComponent<BoxCollider2D>();
+
+            if (isSecretWall)
+            {
+                door.name = $"SecretWall_{direction}_{roomPos.x}_{roomPos.y}";
+                secretWallToSecretRoom[door] = secretRoomPos; // 비밀방 위치 저장
+                secretWallToDirection[door] = direction; // 벽 방향 지정
+            }
 
             roomDoors[roomPos][direction] = door;
         }
     }
 
+    public void DamagedSecretWall(GameObject wall)
+    {
+
+
+        if (!secretWallToSecretRoom.ContainsKey(wall)) return;
+        
+       // 비밀방 위치 가져오기
+       Vector2Int secretRoomPos = secretWallToSecretRoom[wall];
+       
+       // 비밀방 열림 상태 add
+       openedSecretRooms.Add(secretRoomPos);
+
+        BoxCollider2D collider = wall.GetComponent<BoxCollider2D>();
+        
+        if (collider != null)
+        {
+            collider.enabled = false;
+        }
+
+        SpriteRenderer renderer = wall.GetComponent<SpriteRenderer>();
+        
+        if (renderer != null)
+        {
+            Direction wallDirection = secretWallToDirection[wall];
+            Sprite secretSprite = GetSecretWallSprite(wallDirection);
+            if (secretSprite != null)
+            {
+                renderer.sprite = secretSprite;
+            }
+        }
+        
+        
+        if (minimapManager != null)
+        {
+            minimapManager.RevealSecretRoom(secretRoomPos);
+        }
+
+        secretWallToSecretRoom.Remove(wall);
+        secretWallToDirection.Remove(wall);
+
+        // 렌더러가 != null 이면
+        // 방향 가져오고 
+        // 스프라이트도 비밀방 스프라이트 가져오고 ? 
+        // 비밀방 스프라이트 != 이면 이제 damaged sprite를 한번더 칭해줘야햐나 ? 
+        // 비밀방 도 reveal 처리를 미니맵에 전해주려면 얘고 가져와야하고 . 
+        // 잠시만 잠시만 
+        // 미니맵도 연동해야하면 미리 메서드를 따로 분류시켜야함 
+        
+        //2025/7/7 새벽 비밀방 자체는 8,8좌표에 생성이 되나 ,
+        // 비밀방 미니맵상은 9,8 좌표에 생성함. 
+        // 폭발위치하고 비밀방 위치 계산에 대한 오차가 있는듯 ,
+        
+        // 또한 비밀방의 해금조건이 만족했음에도 불구하고
+        // mayienterthisroom 메서드가 실행을 안함 . ( secretroom 예외조건이 너무 빡빡했나봄 ) 
+        
+
+        // 근데 direction 어디에다가 뒀던것같은데 어디있냐 ... 
+        // var 로 그냥 처리할까 근데 튜플 너무 어려웡 포기행
+        // 미니맵연동은 그냥 따로 vector2int로 파기. 
+    }
+
+    public bool IsSecretRoomOpen(Vector2Int secretRoomPos)
+    {
+        return openedSecretRooms.Contains(secretRoomPos);
+    }
+
+    #region 스프라이트 관련 메서드
 
     Sprite GetWallSprite(Direction direction)
     {
@@ -815,6 +913,20 @@ public class MapGenerator : MonoBehaviour
             default: return null;
         }
     }
+
+    Sprite GetSecretWallSprite(Direction direction)
+    {
+        switch (direction)
+        {
+            case Direction.Up: return secretWallUpPrefab;
+            case Direction.Down: return secretWallDownPrefab;
+            case Direction.Left: return secretWallLeftPrefab;
+            case Direction.Right: return secretWallRightPrefab;
+            default: return null;
+        }
+    }
+
+    #endregion
 
     Vector3 GetDoorWorldPosition(Vector3 roomWorldPos, Direction direction)
     {
@@ -855,7 +967,7 @@ public class MapGenerator : MonoBehaviour
     IEnumerator InitializeDoorSystem()
     {
         yield return new WaitForSeconds(0.5f);
-        
+
         roomMonsterManager = FindObjectOfType<RoomMonsterManager>();
 
         if (roomMonsterManager != null)
@@ -892,13 +1004,13 @@ public class MapGenerator : MonoBehaviour
         {
             isCleared = true;
         }
-        
+
         var doors = roomDoors[roomPos];
-        
-        UpdateSingleDoorState(roomPos, Direction.Up, Vector2Int.up, doors,isCleared);
-        UpdateSingleDoorState(roomPos, Direction.Down, Vector2Int.down, doors,isCleared);
-        UpdateSingleDoorState(roomPos, Direction.Left, Vector2Int.left, doors,isCleared);
-        UpdateSingleDoorState(roomPos, Direction.Right, Vector2Int.right, doors,isCleared);
+
+        UpdateSingleDoorState(roomPos, Direction.Up, Vector2Int.up, doors, isCleared);
+        UpdateSingleDoorState(roomPos, Direction.Down, Vector2Int.down, doors, isCleared);
+        UpdateSingleDoorState(roomPos, Direction.Left, Vector2Int.left, doors, isCleared);
+        UpdateSingleDoorState(roomPos, Direction.Right, Vector2Int.right, doors, isCleared);
         // 클리어 되어있는지 확인하고 
         // 시작방은 항상 클리어 된걸로
         // var 로 도어 가져와서 
@@ -907,14 +1019,22 @@ public class MapGenerator : MonoBehaviour
         //updatesingledoor 하나하나 딕셔너리에서 뽑기 , 이러면 monsterbase 도 참조해야할듯 ? 
     }
 
+
     void UpdateSingleDoorState(Vector2Int roomPos, Direction direction, Vector2Int directionVector,
         Dictionary<Direction, GameObject> doors, bool isRoomCleared)
     {
         if (!doors.ContainsKey(direction)) return;
-        
+
         GameObject door = doors[direction];
         if (door == null) return;
+
         
+        // 비밀방 벽인지 확인
+        if (secretWallToSecretRoom.ContainsKey(door))
+        {
+            return;
+        }
+
         SpriteRenderer doorRenderer = door.GetComponent<SpriteRenderer>();
         if (doorRenderer == null) return;
 
@@ -925,14 +1045,13 @@ public class MapGenerator : MonoBehaviour
         {
             if (isRoomCleared)
             {
-                Debug.Log($"방 {roomPos}{direction} 문열림");
                 doorRenderer.sprite = GetOpenDoorSprite(direction);
             }
             else
             {
-                Debug.Log($"방 {roomPos}{direction} 문닫음");
                 doorRenderer.sprite = GetClosedDoorSprite(direction);
             }
         }
     }
+    
 }

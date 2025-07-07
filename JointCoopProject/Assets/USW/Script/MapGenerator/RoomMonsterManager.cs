@@ -180,7 +180,6 @@ public class RoomMonsterManager : MonoBehaviour
         }
 
         List<MonsterBase> monsters = roomMonsters[roomPos];
-        Debug.Log($"{roomPos} 에 {monsters.Count}");
         // 살아있는 몬스터가 하나라도 있으면 아직 클리어 안됨
         for(int i = 0; i < monsters.Count; i++)
         {
