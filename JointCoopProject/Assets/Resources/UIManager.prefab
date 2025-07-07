@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3926612566912862777
+--- !u!1 &1356765771904284773
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 350176955103054661}
-  - component: {fileID: 2216296038363308194}
+  - component: {fileID: 2154980355615023606}
+  m_Layer: 0
+  m_Name: UIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2154980355615023606
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356765771904284773}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1723.3574, y: 965.46375, z: 9.099861}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4791706405223901566}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8150861075855962848
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4791706405223901566}
+  - component: {fileID: 1996184792581229082}
   m_Layer: 0
   m_Name: UiManager
   m_TagString: Untagged
@@ -17,28 +49,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &350176955103054661
+--- !u!4 &4791706405223901566
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3926612566912862777}
+  m_GameObject: {fileID: 8150861075855962848}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1001.2015, y: 560.98315, z: -5.8009}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -722.15594, y: -404.4806, z: -14.900761}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 2154980355615023606}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2216296038363308194
+--- !u!114 &1996184792581229082
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3926612566912862777}
+  m_GameObject: {fileID: 8150861075855962848}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 110b26c2d75ef5547a4f7ad7fe4f4145, type: 3}
@@ -57,8 +89,8 @@ MonoBehaviour:
   _fortuneUI: {fileID: 0}
   _itemTitleUI: {fileID: 0}
   _itemDescriptionUI: {fileID: 0}
-  _mainOptionUI: {fileID: 7343923614135690327, guid: 8e663d9d98f5e7946964ab615be27556, type: 3}
-  _creditUI: {fileID: 5133160622008788641, guid: c5c109e3f2c7a8e4dab8c067aa040e0f, type: 3}
+  _mainOptionUI: {fileID: 0}
+  _creditUI: {fileID: 0}
   _optionWindowButton: {fileID: 0}
   _mainMenuButton: {fileID: 0}
   _inventoryCloseButton: {fileID: 0}
@@ -67,3 +99,4 @@ MonoBehaviour:
   _optionCloseButton: {fileID: 0}
   _deathMainMenuButton: {fileID: 0}
   _playerHeartController: {fileID: 0}
+  _itemGuageController: {fileID: 0}

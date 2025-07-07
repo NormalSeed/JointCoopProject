@@ -47,12 +47,12 @@ public class ShardSlayerController : MonsterBase
     protected override void Update()
     {
         base.Update();
-        if (Vector2.Distance(transform.position, _player.transform.position) <= _model._attack1Range && !_isDamaged && _attackType == 1)
+        if (_player != null && Vector2.Distance(transform.position, _player.transform.position) <= _model._attack1Range && !_isDamaged && _attackType == 1)
         {
             _movement._isTrace = false;
             _isAttack1 = true;
         }
-        if (Vector2.Distance(transform.position, _player.transform.position) <= _model._attack2Range && !_isDamaged && _attackType == 2)
+        if (_player != null && Vector2.Distance(transform.position, _player.transform.position) <= _model._attack2Range && !_isDamaged && _attackType == 2)
         {
             _movement._isTrace = false;
             _isAttack2 = true;

@@ -22,13 +22,17 @@ public class MainMenuController : MonoBehaviour
     {
         // 클릭 이벤트 초기화 세팅
         // Open Button
-        _playButton.onClick.AddListener(() => GameSceneManager.Instance.LoadStage1Scene());
-        _optionButton.onClick.AddListener(() => GameSceneManager.Instance.OpenUi(UIKeyList.mainOption));
-        _creditsButton.onClick.AddListener(() => GameSceneManager.Instance.OpenUi(UIKeyList.credit));
+        _playButton.onClick.AddListener(() =>
+        {
+            GameSceneManager.Instance.LoadStage1Scene();
+        });
+        _optionButton.onClick.AddListener(() => UIManager.Instance.OpenUi(UIKeyList.mainOption));
+        _creditsButton.onClick.AddListener(() => UIManager.Instance.OpenUi(UIKeyList.credit));
         _exitButton.onClick.AddListener(() => Application.Quit());
 
         // Close Button
-        _mainMenuButton1.onClick.AddListener(() => GameSceneManager.Instance.CloseUi());
-        _mainMenuButton2.onClick.AddListener(() => GameSceneManager.Instance.CloseUi());
+        _mainMenuButton1.onClick.AddListener(() => UIManager.Instance.CloseUi());
+        _mainMenuButton2.onClick.AddListener(() => UIManager.Instance.CloseUi());
+
     }
 }

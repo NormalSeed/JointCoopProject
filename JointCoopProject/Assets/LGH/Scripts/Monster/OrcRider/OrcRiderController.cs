@@ -39,7 +39,7 @@ public class OrcRiderController : MonsterBase
     protected override void Update()
     {
         base.Update();
-        if (Vector2.Distance(transform.position, _player.transform.position) <= _model._attack1Range && !_isDamaged && _attack1Cooldown <= 0f && !_isAttack2)
+        if (_player != null && Vector2.Distance(transform.position, _player.transform.position) <= _model._attack1Range && !_isDamaged && _attack1Cooldown <= 0f && !_isAttack2)
         {
             _movement._isTrace = false;
             _isAttack1 = true;
@@ -50,7 +50,7 @@ public class OrcRiderController : MonsterBase
             _attack1Cooldown -= Time.deltaTime;
         }
 
-        if (Vector2.Distance(transform.position, _player.transform.position) <= _model._attack2Range && !_isDamaged && _attack2Cooldown <= 0f && !_isAttack1)
+        if (_player != null && Vector2.Distance(transform.position, _player.transform.position) <= _model._attack2Range && !_isDamaged && _attack2Cooldown <= 0f && !_isAttack1)
         {
             _movement._isTrace = false;
             _isAttack2 = true;

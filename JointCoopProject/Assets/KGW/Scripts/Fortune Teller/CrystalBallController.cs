@@ -6,7 +6,7 @@ using UnityEngine;
 public class CrystalBallController : MonoBehaviour
 {
     [SerializeField] Animator _effectAni;
-    [SerializeField] float _FortuneTextTime = 2f;
+    [SerializeField] float _FortuneTextTime = 3f;
 
     bool _isContact = false;
     float _timer;
@@ -113,7 +113,7 @@ public class CrystalBallController : MonoBehaviour
         // 운세 UI 열림
         _isFortuneUiOpen = true;
 
-        GameSceneManager.Instance.OpenUi(UIKeyList.fortune);
+        UIManager.Instance.OpenUi(UIKeyList.fortune);
         GameObject fortuneUi = UIManager.Instance.GetUI(UIKeyList.fortune);
         
         if (fortuneUi != null)
@@ -130,7 +130,7 @@ public class CrystalBallController : MonoBehaviour
     // 지정된 시간이 지나면 운세 UI 닫힘
     private void OnFortuneUiClose()
     {
-        GameSceneManager.Instance.CloseUi();
+        UIManager.Instance.CloseUi();
         _isFortuneUiOpen = false;
     }
 }
