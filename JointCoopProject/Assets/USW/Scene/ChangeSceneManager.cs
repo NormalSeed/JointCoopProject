@@ -119,7 +119,6 @@ public class ChangeSceneManager : MonoBehaviour
         if (videoPlayer != null)
         {
             videoPlayer.Stop();
-            SoundManager.Instance.StopBGM();
         }
 
         GoToNextScene();
@@ -275,19 +274,16 @@ public class ChangeSceneManager : MonoBehaviour
                 break;
             case 2:
             case 3:
-                SoundManager.Instance.StopBGM();
                 SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage1);    // Stage1,2 BGM ON
                 _CursceneIndex = sceneIndex;
                 break;
             case 4:
             case 5:
-                SoundManager.Instance.StopBGM();
                 SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);    // stage3,4 BGM ON
                 _CursceneIndex = sceneIndex;
                 break;
             case 6:
             case 7:
-                SoundManager.Instance.StopBGM();
                 SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage3);    // stage5,6 BGM ON
                 _CursceneIndex = sceneIndex;
                 break;
@@ -376,7 +372,6 @@ public class ChangeSceneManager : MonoBehaviour
     public void StartGame()
     {
         if (isLoading) return;
-        SoundManager.Instance.StopBGM();
         GoToNextScene();
     }
 }
