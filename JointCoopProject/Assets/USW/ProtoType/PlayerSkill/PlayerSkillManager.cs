@@ -99,7 +99,7 @@ public class PlayerSkillManager : MonoBehaviour
             TMP_Text[] skillText = getSkillsInfo.GetComponentsInChildren<TMP_Text>(true);
             UIManager.Instance.OpenUi(UIKeyList.itemInfo);
             skillText[0].text = newSkill.skillName;
-            skillText[1].text = "상세 내용 기입";
+            skillText[1].text = newSkill.skillDescription;
         }
         else    // 공격 강화 스킬이 아니면 패시브 리스트에 추가
         {
@@ -117,7 +117,7 @@ public class PlayerSkillManager : MonoBehaviour
             TMP_Text[] skillText = getSkillsInfo.GetComponentsInChildren<TMP_Text>(true);
             UIManager.Instance.OpenUi(UIKeyList.itemInfo);
             skillText[0].text = newSkill.skillName;
-            skillText[1].text = "상세 내용 기입";
+            skillText[1].text = newSkill.skillDescription;
         }
     }
 

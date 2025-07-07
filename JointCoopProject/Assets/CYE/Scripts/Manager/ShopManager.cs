@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ShopManager : TempSingleton<ShopManager>
+public class ShopManager : _TempSingleton<ShopManager>
 {
     [Serializable]
     private class SellItemSlot
