@@ -13,6 +13,10 @@ public class SimpleMovingBackground : MonoBehaviour
    public float resetPositionX = 10f;
    public float triggerPositionX = 10f;
 
+   
+   
+   // fixedupdate 에서 velo주고 
+   // 181 - > 150scale diff  25
    private void Update()
    {
       transform.Translate(moveSpeed * Time.deltaTime);
