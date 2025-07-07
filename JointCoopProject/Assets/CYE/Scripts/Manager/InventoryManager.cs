@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+
 // using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Events;
@@ -25,7 +27,7 @@ public struct ItemSlot
         }
     }
 }
-public class InventoryManager : TempSingleton<InventoryManager>
+public class InventoryManager : _TempSingleton<InventoryManager>
 {
     private const int SLOT_COUNT = 12;
 
@@ -51,6 +53,34 @@ public class InventoryManager : TempSingleton<InventoryManager>
     public int _bombCount { get { return bombCount; } private set { bombCount = value; } }
     [SerializeField] private GameObject _bombPrefab;
 
+    // Text Timer
+    [SerializeField] float _skillTitleTextTime = 3f;
+    float _timer;
+    bool _isSkillTitleOpen = false;
+
+    private void Start()
+    {
+        _timer = _skillTitleTextTime;
+    }
+
+    private void Update()
+    {
+        if (_isSkillTitleOpen)
+        {
+            _timer -= Time.deltaTime;
+            if(_timer < 0)
+            {
+                OnSkillTitleUiClose();
+            }
+        }
+    }
+
+    private void OnSkillTitleUiClose()
+    {
+        UIManager.Instance.CloseUi();
+        _isSkillTitleOpen = false;
+    }
+
     public bool TryGetItem(GameItem insertItem, Transform pickupPos)
     {
         bool insertResult = false;
@@ -61,6 +91,13 @@ public class InventoryManager : TempSingleton<InventoryManager>
 
                 _activeItemData = insertItem._itemData;
                 _activeSkillData = insertItem._itemSkill[0];
+                // 획득한 액티브 아이템 정보 UI 출력
+                _isSkillTitleOpen = true;
+                GameObject getActiveItem = UIManager.Instance.GetUI(UIKeyList.itemInfo);
+                TMP_Text[] activeItemText = getActiveItem.GetComponentsInChildren<TMP_Text>(true);
+                UIManager.Instance.OpenUi(UIKeyList.itemInfo);
+                activeItemText[0].text = _activeItemData._itemName;
+                activeItemText[1].text = _activeItemData._itemDesc;
 
                 insertResult = true;
                 break;

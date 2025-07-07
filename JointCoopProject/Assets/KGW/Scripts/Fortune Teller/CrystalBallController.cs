@@ -79,6 +79,7 @@ public class CrystalBallController : MonoBehaviour
                 return;
             }
 
+            Debug.Log("버프 생성");
             // 랜덤 버퍼 룰렛 생성
             IBuff randomBuff = BuffCreateFactory.BuffRoulette();
             // 버퍼 적용

@@ -104,6 +104,8 @@ public class UIManager : MonoBehaviour
             GetItem();
             UseItem();
         }
+        ChipUpdateUI();
+        BombUpdateUI();
     }
 
     private void OnDestroy()
@@ -258,6 +260,23 @@ public class UIManager : MonoBehaviour
         luckText.text = (PlayerStatManager.Instance._playerLuck).ToString();
     }
 
+    // 칩 획득량 UI 업데이트
+    public void ChipUpdateUI()
+    {
+        GameObject curCoin = UIManager.Instance.GetUI(UIKeyList.Chip);
+        TMP_Text curCoinCount = curCoin.GetComponentInChildren<TMP_Text>();
+        curCoinCount.text = TempManager.inventory._coinCount.ToString();
+
+    }
+
+    // 폭탄 획득량 UI 업데이트
+    public void BombUpdateUI()
+    {
+        GameObject curBomb = UIManager.Instance.GetUI(UIKeyList.bomb);
+        TMP_Text curBombCount = curBomb.GetComponentInChildren<TMP_Text>();
+        curBombCount.text = TempManager.inventory._bombCount.ToString();
+    }
+
     // TODO : 아이템 사용 관련 Item Guage UI 확인용 테스트 함수
     public void GetItem()
     {
@@ -285,6 +304,8 @@ public class UIManager : MonoBehaviour
             }
         }
     }
+
+
 
     // UI 열기
     public void OpenUi(UIKeyList uiName)
