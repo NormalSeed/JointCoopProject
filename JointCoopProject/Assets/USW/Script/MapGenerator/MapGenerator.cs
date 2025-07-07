@@ -78,7 +78,6 @@ public class MapGenerator : MonoBehaviour
         new Dictionary<Vector2Int, Dictionary<Direction, GameObject>>();
 
     public Dictionary<Vector2Int, RoomData> generatedRooms = new Dictionary<Vector2Int, RoomData>();
-    
     private List<Vector2Int> availablePositions = new List<Vector2Int>();
 
     private Dictionary<GameObject, Vector2Int> secretWallToSecretRoom = new Dictionary<GameObject, Vector2Int>();
