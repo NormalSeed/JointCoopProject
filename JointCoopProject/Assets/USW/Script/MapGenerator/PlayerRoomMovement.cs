@@ -12,6 +12,10 @@ public class PlayerRoomMovement : MonoBehaviour
     public Vector2 rightDoorPos = new Vector2(14, 5); 
     public float doorDetectionDistance = 1.0f; // 문 감지 거리
 
+    public float roomTransitionCooldown = 4.0f;
+    private float lastTransitionTime = 0.0f;
+    private bool canTransition = true;
+    
     [Header("이동 설정")] public float transitionSpeed = 2f;
     public bool doorActive = true;
 
@@ -123,6 +127,7 @@ public class PlayerRoomMovement : MonoBehaviour
             // 왜 감지가 안되는데
             // Detectedroom 왜 안되는데 
         }
+        UpdateTransitionCooldown();
     }
 
     Vector2Int GetGridPos(Vector3 worldPos)
@@ -162,15 +167,32 @@ public class PlayerRoomMovement : MonoBehaviour
         float distance = Vector2.Distance(playerPos, doorPos);
         
         
-        if (distance <= doorDetectionDistance)
+        if (distance <= doorDetectionDistance && canTransition)
         {
             Vector2Int targetRoom = currentRoom + direction;
             
-            Debug.Log($"문 감지됨 , 현재방 {currentRoom}, 목표방 {targetRoom}");
             if (mapGen.generatedRooms.ContainsKey(targetRoom))
             {
-                Debug.Log($"목표방 이동가능");
                 StartTransition(targetRoom, direction);
+            }
+        }
+        else if (distance <= doorDetectionDistance && !canTransition)
+        {
+            float remainingCooldown = (lastTransitionTime + roomTransitionCooldown) - Time.time;
+        }
+    }
+    void StartCooldown()
+    {
+        canTransition = false;
+        lastTransitionTime = Time.time;
+    }
+    void UpdateTransitionCooldown()
+    {
+        if (!canTransition)
+        {
+            if (Time.time >= lastTransitionTime + roomTransitionCooldown)
+            {
+                canTransition = true;
             }
         }
     }
@@ -179,7 +201,13 @@ public class PlayerRoomMovement : MonoBehaviour
     {
         if (moving) return;
 
+        if (!canTransition) return;
+        
+
         if (!MayIEnterThisRoom(targetRoom)) return;
+        
+        StartCooldown();
+        
         
         StartCoroutine(Dotransition(targetRoom, direction));
     }
@@ -215,7 +243,7 @@ public class PlayerRoomMovement : MonoBehaviour
         {
             minimap.SetCurrentRoom(currentRoom);
         }
-        
+        StartCooldown();
         moving = false;
     }
 
