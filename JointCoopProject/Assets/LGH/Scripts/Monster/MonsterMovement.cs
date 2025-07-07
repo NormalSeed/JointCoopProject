@@ -11,7 +11,7 @@ public abstract class MonsterMovement : MonoBehaviour
     public bool _isPatrol;
     public bool _isTrace;
     private SpriteRenderer _sprRend;
-    private Rigidbody2D _rb;
+    public Rigidbody2D _rb;
     private Vector2 _patrolDir;
     private float _moveTimer;
     private float _changeInterval = 1.5f;
