@@ -18,6 +18,7 @@ public class SkillDataSO : ScriptableObject
     public bool _isSwordAttack;
     public string skillDescription;
     public GameObject skillPrefab;
+    public float skillDuration;
 
     // 위치만 설정
     public virtual void UseSkill(Transform caster)
@@ -35,6 +36,15 @@ public class SkillDataSO : ScriptableObject
     {
         GameObject skillInstance = Instantiate(this.skillPrefab);
         useResult = true;
+    }
+
+    public virtual void ReleaseSkill()
+    { 
+        // 스킬 해제
+    }
+    public virtual void ReleaseSkill(Transform caster)
+    {
+        // 스킬 해제
     }
 }
 

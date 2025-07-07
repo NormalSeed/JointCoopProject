@@ -7,11 +7,11 @@ using UnityEngine.Events;
 public class ShopManager : _TempSingleton<ShopManager>
 {
     [Serializable]
-    private struct SellItemSlot
+    private class SellItemSlot
     {
         public ItemDataSO itemData;
         public int maxStock;
-        private int curStock;
+        public int curStock;
         public SellItemSlot(ItemDataSO itemData, int maxStock)
         {
             this.itemData = itemData;
@@ -20,9 +20,9 @@ public class ShopManager : _TempSingleton<ShopManager>
         }
         public bool TryDecreaseCurStock()
         {     
-            if (curStock > 0)
+            if (curStock > 0 || maxStock == 0)
             {
-                curStock--;
+                this.curStock--;
                 return true;
             }
             return false;

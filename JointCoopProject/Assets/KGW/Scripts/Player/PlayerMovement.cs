@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
 {
     [Header("Player Weapon Status")]
     [SerializeField] GameObject _swordPrefab;
-    [SerializeField] float _swordAttackDelay = 1f;    // ±ÙÁ¢ °ø°Ý µô·¹ÀÌ
+    [SerializeField] float _swordAttackDelay = 1f;    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
     [Header("Player KnockBack & Invincible")]
     [SerializeField] public float _hitCoolTime = 0.5f;
@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     Vector2 _curVelocity;
     Vector2 _dashDirection;
 
-    float _wieldTimer;   
+    float _wieldTimer;
     bool _isDash = false;
     bool _isDamaged = false;
     bool _isKnockBack = false;
@@ -46,14 +46,14 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     {
         Init();
     }
-    
+
     private void Update()
     {
         if (PlayerStatManager.Instance._alive)
         {
             MoveInput();
 
-            if (PlayerStatManager.Instance._canDash && _isDash)
+            if (_isDash && PlayerStatManager.Instance._canDash)
             {
                 MoveDash();
             }
@@ -133,7 +133,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (_moveInput != Vector2.zero && _dashCoolTime <= 0f )
+            if (_moveInput != Vector2.zero && _dashCoolTime <= 0f)
             {
                 _isDash = true;
                 _dashProgressTime = PlayerStatManager.Instance._dashDurationTime;
@@ -204,18 +204,19 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         {
             SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_PlayerAttack);
             GameObject sword = Instantiate(_swordPrefab, transform.position, Quaternion.identity);
-            // °ËÀÇ µ¥ÀÌÅÍ ÃÊ±âÈ­
-            sword.GetComponent<PlayerSwordController>().Init(transform, _attackDirection, PlayerStatManager.Instance._attackSpeed, PlayerStatManager.Instance._attackDamage, _skillManager, PlayerStatManager.Instance._attackRange);
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
+            float calcNextDamage = CalcNextDamage();
+            sword.GetComponent<PlayerSwordController>().Init(transform, _attackDirection, PlayerStatManager.Instance._attackSpeed, (int)calcNextDamage, _skillManager, PlayerStatManager.Instance._attackRange);
 
             // Attack Animation
             AttackDirection(_selectAttackDir);
 
-            // °ø°Ý¼Óµµ¿¡ ºñ·ÊÇÏ¿© ±ÙÁ¢ °ø°Ý ÄðÅ¸ÀÓ °è»ê
+            // ï¿½ï¿½ï¿½Ý¼Óµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½
             _wieldTimer = _swordAttackDelay / PlayerStatManager.Instance._attackSpeed;
         }
         _wieldTimer -= Time.deltaTime;
-        
-        // ÇÃ·¹ÀÌ¾î °ø°Ý ¾Ö´Ï¸ÞÀÌ¼Ç ¼Óµµ ¿øº¹
+
+        // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½
         _playerAnimator.speed = 1f;
     }
 
@@ -253,8 +254,10 @@ public class PlayerMovement : MonoBehaviour, IDamagable
 
         _isDamaged = true;
 
+        // Player Shield Discount
+        int leftDamage = TakeDamageOnShield(damage);
         // Player Hp Down
-        HealthDown(damage);
+        HealthDown(leftDamage);
 
         // Player hit Reaction
         _PlayerSprite.color = new Color(1, 0.4f, 0.1f, 0.7f);
@@ -278,7 +281,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     // Player Hp Down
     public void HealthDown(int damage)
     {
-        // TODO : ÇÃ·¹ÀÌ¾î ÇÇ°Ý »ç¿îµå
+        // TODO : ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ç°ï¿½ ï¿½ï¿½ï¿½ï¿½
         SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_PlayerDamage);
 
         if (PlayerStatManager.Instance._playerHp > 1)
@@ -288,7 +291,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         }
         else
         {
-            Debug.Log("ÇÃ·¹ÀÌ¾î°¡ »ç¸ÁÇß½À´Ï´Ù.");
+            Debug.Log("ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½.");
             PlayerStatManager.Instance._playerHp = 0;
 
             // Player Death
@@ -302,7 +305,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     {
         _playerAnimator.SetBool("IsDeath", true);
         Invoke("OnDeathUI", 3f);
-        
+
     }
 
     private void OnDeathUI()
@@ -329,5 +332,31 @@ public class PlayerMovement : MonoBehaviour, IDamagable
         _playerRigid.velocity = Vector2.zero;
         _curVelocity = Vector2.zero;
         _isKnockBack = false;
+    }
+
+    private int TakeDamageOnShield(int damage)
+    {
+        float leftover = 0;
+        PlayerStatManager.Instance._shield -= damage;
+
+        if (PlayerStatManager.Instance._shield <= 0)
+        {
+            leftover = Mathf.Abs(PlayerStatManager.Instance._shield);
+            PlayerStatManager.Instance._shield = 0;
+            TempManager.inventory._activeSkillData.ReleaseSkill(transform);
+        }
+
+        return (int)leftover;
+    }
+
+    private int CalcNextDamage()
+    {
+        int returnValue = PlayerStatManager.Instance._attackDamage;
+        if (PlayerStatManager.Instance._attackBonus != 0)
+        {
+            returnValue += (int)PlayerStatManager.Instance._attackBonus;
+            PlayerStatManager.Instance._attackBonus = 0;
+        }
+        return returnValue;
     }
 }
