@@ -55,6 +55,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] PlayerHeartController _playerHeartController;  // 플레이어 하트 컨트롤 스크립트
     [SerializeField] ItemGuageController _itemGuageController;  // 아이템 게이지 컨트롤 스크립트
 
+    bool _isInventoryOpen = false;
+
     // 초기 UIManager 생성
     public static UIManager Instance
     {
@@ -90,10 +92,9 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        if (_inventoryUI != null)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             OnInventoryOpen();
-            StatUpdateUI();
         }
         if (_playerHpUI != null)
         {
@@ -207,29 +208,57 @@ public class UIManager : MonoBehaviour
     // 인벤토리 창 오픈
     public void OnInventoryOpen()
     {
-
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (UIManager.Instance == null)
         {
-            if (UIManager.Instance != null)
-            {
-                UIManager.Instance.OpenUi(UIKeyList.inventory);
-                // 인벤토리 창
-                _inventoryCloseButton.onClick.AddListener(() => UIManager.Instance.CloseUi());   // 인벤토리 창 닫음
-                _optionWindowButton.onClick.AddListener(() => UIManager.Instance.OpenUi(UIKeyList.optionWindow));    // 옵션 창 열기
-                _mainMenuButton.onClick.AddListener(() => UIManager.Instance.OpenUi(UIKeyList.confirmWindow));   // 확인 창 열기
+            Debug.LogWarning("GameSceneManager가 초기화되지 않았습니다.");
+            return;
+        }
 
-                // 확인 창
-                _yesButton.onClick.AddListener(() => SceneManager.LoadScene("Real_MainMenu"));    // Yes 버튼 : 메인 창 전환
-                _noButton.onClick.AddListener(() => UIManager.Instance.CloseUi()); // No 버튼 : 인벤토리 창 전환
+        // 스텟 갱신
+        StatUpdateUI();
 
-                // 옵션 창
-                _optionCloseButton.onClick.AddListener(() => UIManager.Instance.CloseUi());  // 옵션 창 닫음 : 인벤토리 창 전환
-            }
-            else
-            {
-                Debug.LogWarning("GameSceneManager가 초기화되지 않았습니다.");
-                return;
-            }
+        // 인벤토리 오픈
+        UIManager.Instance.OpenUi(UIKeyList.inventory);
+
+        // 인벤토리 슬롯 갱신
+        InventorySlotUpdateUI();
+
+        if (!_isInventoryOpen)
+        {
+            // 인벤토리 창
+            _inventoryCloseButton.onClick.AddListener(() => UIManager.Instance.CloseUi());   // 인벤토리 창 닫음
+            _optionWindowButton.onClick.AddListener(() => UIManager.Instance.OpenUi(UIKeyList.optionWindow));    // 옵션 창 열기
+            _mainMenuButton.onClick.AddListener(() => UIManager.Instance.OpenUi(UIKeyList.confirmWindow));   // 확인 창 열기
+
+            // 확인 창
+            _yesButton.onClick.AddListener(() => SceneManager.LoadScene("Real_MainMenu"));    // Yes 버튼 : 메인 창 전환
+            _noButton.onClick.AddListener(() => UIManager.Instance.CloseUi()); // No 버튼 : 인벤토리 창 전환
+
+            // 옵션 창
+            _optionCloseButton.onClick.AddListener(() => UIManager.Instance.CloseUi());  // 옵션 창 닫음 : 인벤토리 창 전환
+
+            _isInventoryOpen = true;
+        }
+    }
+    // 인벤토리 오픈 시 슬롯 갱신
+    private void InventorySlotUpdateUI()
+    {
+        GameObject inventoryUI = UIManager.Instance.GetUI(UIKeyList.inventory);
+
+        if (inventoryUI == null)
+        {
+            return;
+        }
+
+        InventorySlotController controller = inventoryUI.GetComponentInChildren<InventorySlotController>();
+
+        if (controller != null)
+        {
+            controller.ItemSlotUIUpdate();
+        }
+        else
+        {
+            Debug.LogWarning("InventorySlotController가 연결되지 않았습니다.");
         }
     }
 
@@ -304,8 +333,6 @@ public class UIManager : MonoBehaviour
             }
         }
     }
-
-
 
     // UI 열기
     public void OpenUi(UIKeyList uiName)
