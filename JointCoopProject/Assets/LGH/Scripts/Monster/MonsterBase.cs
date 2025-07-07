@@ -215,7 +215,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
 
     protected void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerProjectile"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerStunProjectile"))
         {
             _isParalyzed = true;
         }
