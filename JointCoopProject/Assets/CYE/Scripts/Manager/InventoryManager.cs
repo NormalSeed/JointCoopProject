@@ -7,7 +7,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 
 [System.Serializable]
-public struct ItemSlot
+public class ItemSlot
 {
     public ItemDataSO itemDataSO;
     public int itemStackCount;
@@ -19,14 +19,13 @@ public struct ItemSlot
     public void UpgradeStackCount()
     {
         itemStackCount++;
-        Debug.Log("1");
         if (itemStackCount > 5)
         {
             itemStackCount = 5;
         }
     }
 }
-public class InventoryManager : _TempSingleton<InventoryManager>
+public class InventoryManager : ItemSingleton<InventoryManager>
 {
     private const int SLOT_COUNT = 12;
 
@@ -45,7 +44,7 @@ public class InventoryManager : _TempSingleton<InventoryManager>
     public List<ItemSlot> _invItemList = new List<ItemSlot>();
 
     // Expend Items Info
-    private int coinCount = 1000;
+    private int coinCount = 0;
     public int _coinCount { get { return coinCount; } private set { coinCount = value; } }
     [SerializeField] private GameObject _coinPrefab;
     private int bombCount;
@@ -56,12 +55,22 @@ public class InventoryManager : _TempSingleton<InventoryManager>
     [SerializeField] float _skillTitleTextTime = 1f;
     float _timer;
     bool _isSkillTitleOpen = false;
+    private float _activeCooldownTimer = 0f;
+    private float _activeDurationTimer = 0f;
 
+    [SerializeField] private Image _cooldownImage;
+
+    private Coroutine _skillCooldownRoutine;
+    private Coroutine _skillDurationRoutine;
+
+    private void Awake()
+    {
+        Init();
+    }
     private void Start()
     {
         _timer = _skillTitleTextTime;
     }
-
     private void Update()
     {
         if (_isSkillTitleOpen)
@@ -74,20 +83,28 @@ public class InventoryManager : _TempSingleton<InventoryManager>
         }     
     }
 
+    private void Init()
+    { 
+        _activeItem = null;
+        _activeItemData = null;
+        _activeSkillData = null;
+        _activeItemPool = null;
+        _visItemList = new List<ItemSlot>(SLOT_COUNT);
+        _invItemList = new List<ItemSlot>();
+        _coinCount /= 2;
+        _skillTitleTextTime = 1f;
+        _timer = 0f;
+        _isSkillTitleOpen = false;
+        _activeCooldownTimer = 0f;
+        _activeDurationTimer = 0f;
+        _skillCooldownRoutine = null;
+        _skillDurationRoutine = null;
+    }
     private void OnSkillTitleUiClose()
     {
         UIManager.Instance.CloseUi();
         _isSkillTitleOpen = false;
     }
-    
-    private float _activeCooldownTimer = 0f;
-    private float _activeDurationTimer = 0f;
-
-    [SerializeField] private Image _cooldownImage;
-
-    private Coroutine _skillCooldownRoutine;
-    private Coroutine _skillDurationRoutine;
-
     public bool TryGetItem(GameItem insertItem, Transform pickupPos)
     {
         bool insertResult = false;
@@ -152,15 +169,21 @@ public class InventoryManager : _TempSingleton<InventoryManager>
         bool insertResult = false;
         if (_coinCount >= insertItem._itemData._itemPrice)
         {
-            if (insertItem._isVisibleInInventory)
+            if (insertItem._itemData._itemType == ItemType.shop)
             {
-                insertResult = InsertBoughtItemToList(insertItem, insertItem._itemData._canStack, insertItem._isVisibleInInventory);
+                if (insertItem._isVisibleInInventory)
+                {
+                    insertResult = InsertBoughtItemToList(insertItem, insertItem._itemData._canStack, insertItem._isVisibleInInventory);
+                }
+                else
+                {
+                    insertResult = InsertBoughtItemToList(insertItem, insertItem._itemData._canStack);
+                }
             }
             else
             {
-                insertResult = InsertBoughtItemToList(insertItem, insertItem._itemData._canStack);
+                insertResult = true;
             }
-
             if (insertResult)
             {
                 insertItem._itemSkill[0].UseSkill(insertItem.transform, out bool useSkillResult);
@@ -219,7 +242,6 @@ public class InventoryManager : _TempSingleton<InventoryManager>
     }
     public void UseCoin(int useAmount)
     {
-        Debug.Log($"{_coinCount}");
         _coinCount -= useAmount;
     }
     public void GetBomb(int getAmount)
@@ -250,7 +272,6 @@ public class InventoryManager : _TempSingleton<InventoryManager>
                     if (_itemData._itemID == item.itemDataSO._itemID)
                     {
                         grade = item.itemStackCount;
-                        Debug.Log($"{grade}");
                         break; // >> foreach break;
                     }
                 }
@@ -262,7 +283,6 @@ public class InventoryManager : _TempSingleton<InventoryManager>
         }
         return grade;
     }
-
     private void DropPrevActiveItem(Transform dropPos)
     {
         if (_activeItemData != null)

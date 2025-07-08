@@ -24,13 +24,6 @@ public class ShopItem : Item, IPickable
         Init();
         _priceTag = GetComponentInChildren<TMP_Text>();
     }
-    // void OnCollisionEnter2D(Collision2D collision)
-    // {
-    //     if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-    //     {
-    //         PickUp(collision.transform);
-    //     }
-    // }
     void OnEnable()
     { 
         _priceTag.text = (_showPrice)?$"{_itemData._itemPrice}C":"";   
@@ -40,15 +33,18 @@ public class ShopItem : Item, IPickable
     #region // IPickable
     public void PickUp(Transform pickupPos)
     {
-        bool buyResult = TempManager.shop.TrySellItem(this._itemData);
-        bool insertResult = TempManager.inventory.TryBuyItem(this);
-        if (buyResult&&insertResult)
+        bool buyResult = ItemManager.shop.TrySellItem(this._itemData);
+        if (buyResult)
         {
-            TempManager.inventory.UseCoin(_itemData._itemPrice);
-            if (_itemData._itemPrice == 0)
+            bool insertResult = ItemManager.inventory.TryBuyItem(this);
+            if (insertResult)
             {
-                Destroy(gameObject);
-            }
+                ItemManager.inventory.UseCoin(_itemData._itemPrice);
+                if (_itemData._itemPrice == 0)
+                {
+                    Destroy(gameObject);
+                }
+            }    
         }
     }
     public void Drop(Transform dropPos)

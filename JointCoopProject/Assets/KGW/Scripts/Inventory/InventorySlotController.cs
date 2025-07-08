@@ -4,21 +4,21 @@ using UnityEngine;
 
 public class InventorySlotController : MonoBehaviour
 {
-    [SerializeField] ItemSlotUI[] _itemSlot;    // ÀÎº¥Åä¸® UI Slot
+    [SerializeField] ItemSlotUI[] _itemSlot;    // ï¿½Îºï¿½ï¿½ä¸® UI Slot
 
     public void ItemSlotUIUpdate()
     {
-        var items = TempManager.inventory._visItemList;
+        var items = ItemManager.inventory._visItemList;
 
         for(int i = 0; i < _itemSlot.Length; i++)
         {
             if (i < items.Count)
             {
-                _itemSlot[i].SetItemSlot(items[i]); // ½½·Ô¿¡ ¾ÆÀÌÅÛ Á¤º¸ ÀúÀå
+                _itemSlot[i].SetItemSlot(items[i]); // ï¿½ï¿½ï¿½Ô¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             }
             else
             {
-                _itemSlot[i].SetItemSlot(new ItemSlot());   // ½½·Ô¿¡ ¾ÆÀÌÅÛ Á¤º¸ ÀúÀå
+                _itemSlot[i].SetItemSlot(new ItemSlot());   // ï¿½ï¿½ï¿½Ô¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             }
         }
     }
