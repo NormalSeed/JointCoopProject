@@ -63,6 +63,11 @@ public class LaserProjectile : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.gameObject.layer != LayerMask.NameToLayer("Enemy"))
+        {
+            return;
+        }
+        
         IDamagable damagable = other.GetComponent<IDamagable>();
         if (damagable != null)
         {
