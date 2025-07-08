@@ -12,13 +12,10 @@ public class ParrySkillSO : SkillDataSO
 
     public override void UseSkill(Transform caster)
     {
-        Debug.Log("Parry");
-        // 플레이어 반격 상태
         PlayerStatManager.Instance._isParry = true;
     }
     public override void ReleaseSkill()
     {
-        Debug.Log("Parry End");
         PlayerStatManager.Instance._attackBonus = PlayerStatManager.Instance._attackDamage;
         PlayerStatManager.Instance._isParry = false;
     }

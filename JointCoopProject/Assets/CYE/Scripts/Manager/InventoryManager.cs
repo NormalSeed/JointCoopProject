@@ -19,7 +19,6 @@ public struct ItemSlot
     public void UpgradeStackCount()
     {
         itemStackCount++;
-        Debug.Log("1");
         if (itemStackCount > 5)
         {
             itemStackCount = 5;
@@ -152,7 +151,6 @@ public class InventoryManager : _TempSingleton<InventoryManager>
         bool insertResult = false;
         if (_coinCount >= insertItem._itemData._itemPrice)
         {
-            Debug.Log($"{(insertItem._itemData._itemType == ItemType.shop)}");
             if (insertItem._itemData._itemType == ItemType.shop)
             {
                 if (insertItem._isVisibleInInventory)
@@ -168,8 +166,6 @@ public class InventoryManager : _TempSingleton<InventoryManager>
             {
                 insertResult = true;
             }
-            Debug.Log($"{insertResult}");
-
             if (insertResult)
             {
                 insertItem._itemSkill[0].UseSkill(insertItem.transform, out bool useSkillResult);
@@ -228,7 +224,6 @@ public class InventoryManager : _TempSingleton<InventoryManager>
     }
     public void UseCoin(int useAmount)
     {
-        Debug.Log($"{_coinCount}");
         _coinCount -= useAmount;
     }
     public void GetBomb(int getAmount)
@@ -259,7 +254,6 @@ public class InventoryManager : _TempSingleton<InventoryManager>
                     if (_itemData._itemID == item.itemDataSO._itemID)
                     {
                         grade = item.itemStackCount;
-                        Debug.Log($"{grade}");
                         break; // >> foreach break;
                     }
                 }

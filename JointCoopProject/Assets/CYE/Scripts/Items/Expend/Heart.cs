@@ -15,13 +15,6 @@ public class Heart : Item, IPickable
     {
         Init();
     }
-    // void OnCollisionEnter2D(Collision2D collision)
-    // {
-    //     if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-    //     {
-    //         PickUp(collision.transform);
-    //     }
-    // }
     #endregion
 
     #region // IPickable

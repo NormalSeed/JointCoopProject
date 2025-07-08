@@ -24,13 +24,6 @@ public class ShopItem : Item, IPickable
         Init();
         _priceTag = GetComponentInChildren<TMP_Text>();
     }
-    // void OnCollisionEnter2D(Collision2D collision)
-    // {
-    //     if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-    //     {
-    //         PickUp(collision.transform);
-    //     }
-    // }
     void OnEnable()
     { 
         _priceTag.text = (_showPrice)?$"{_itemData._itemPrice}C":"";   

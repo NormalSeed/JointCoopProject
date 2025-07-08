@@ -10,7 +10,6 @@ public class DashAttackController : MonoBehaviour
         IDamagable damagableComponent = collision.GetComponent<IDamagable>();
         if (damagableComponent != null && collision.CompareTag("Enemy"))
         {
-            Debug.Log("take Damage to Enemy!");
             damagableComponent.TakeDamage((int)_dashDamage, transform.position);
         }
     }
