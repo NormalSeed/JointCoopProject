@@ -97,7 +97,7 @@ public class UIManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            OnInventoryOpen();
+            EscapeInventory();
         }
         if (_playerHpUI != null)
         {
@@ -217,6 +217,20 @@ public class UIManager : MonoBehaviour
         return uiKeyName;
     }
 
+    void EscapeInventory()
+    {
+        if (_UiStack.Count > 0)
+        {
+            CloseUi();
+        }
+        else
+        {
+            OnInventoryOpen();
+        }
+        
+    }
+    
+    
     // �κ��丮 â ����
     public void OnInventoryOpen()
     {
