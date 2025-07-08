@@ -32,17 +32,19 @@ public class GameItem : Item, IPickable
         {
             playerSkillManager.AddSkill(_itemSkill[0]); // 첫번째 스킬을 넣음
         }
-        
-        
     }
     #region // IPickable
     public void PickUp(Transform pickupPos)
     {
         bool insertResult = TempManager.inventory.TryGetItem(this, transform);
+        Debug.Log($"{insertResult}");
         if (insertResult)
         {
-            if(_itemData._itemType==ItemType.PassiveAttack||_itemData._itemType==ItemType.PassiveAuto)
+            if (_itemData._itemType == ItemType.PassiveAttack || _itemData._itemType == ItemType.PassiveAuto)
+            {
+
                 UpgradePassiveSkill(pickupPos);
+            }
             Destroy(gameObject);
         }
     }

@@ -159,6 +159,8 @@ public class PlayerMovement : MonoBehaviour, IDamagable
             gameObject.layer = 6;   // Player Layer Change
             _isDash = false;
             _PlayerSprite.color = new Color(1, 1, 1, 1);
+            
+            TempManager.inventory._activeSkillData.ReleaseSkill(transform);
         }
     }
 

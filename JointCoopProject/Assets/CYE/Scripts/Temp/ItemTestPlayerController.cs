@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ItemTestPlayerController : MonoBehaviour
 {
+    private bool _canItemPickUp = true;
+    private Coroutine _delayRoutine = null;
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.B))
@@ -15,12 +17,29 @@ public class ItemTestPlayerController : MonoBehaviour
             TempManager.inventory.UseActiveSkill(transform);
         }
     }
-    
+
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.transform.CompareTag("Item"))
+        if (_canItemPickUp && collision.transform.CompareTag("Item"))
         {
             collision.transform.GetComponent<IPickable>().PickUp(transform);
+            if (_delayRoutine == null)
+            { 
+                _delayRoutine = StartCoroutine(DelayItemPickUp());
+            }
+        }
+    }    
+
+    private IEnumerator DelayItemPickUp()
+    {
+        _canItemPickUp = false;
+        yield return new WaitForSeconds(0.1f);
+
+        _canItemPickUp = true;
+        if (_delayRoutine != null)
+        {
+            StopCoroutine(_delayRoutine);
+            _delayRoutine = null;
         }
     }
 }
