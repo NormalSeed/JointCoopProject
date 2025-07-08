@@ -85,7 +85,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void Awake()
     {
         CreateUIManager();
         Init();
