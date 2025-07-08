@@ -372,7 +372,9 @@ public class ChangeSceneManager : MonoBehaviour
     public void StartGame()
     {
         PlayerStatManager.Instance.CreatePlayerStatManager();   // Player Stat Reset
-    
+        PlayerStatManager.Instance._alive = true;
+        InventoryManager.GetInstance().Init();
+        //InventoryManager.CreateInstance();
         if (isLoading) return;
         GoToNextScene();
     }
