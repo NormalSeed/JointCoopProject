@@ -11,6 +11,11 @@ public class ItemSlot
 {
     public ItemDataSO itemDataSO;
     public int itemStackCount;
+    public ItemSlot()
+    {
+        itemDataSO = new();
+        itemStackCount = 0;
+    }
     public ItemSlot(ItemDataSO itemDataSO, int itemStackCount)
     {
         this.itemDataSO = itemDataSO;
