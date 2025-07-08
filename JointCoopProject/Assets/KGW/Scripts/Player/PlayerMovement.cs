@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     [Header("skill Manager Reference")]
     [SerializeField] PlayerSkillManager _skillManager;
 
-    SpriteRenderer _PlayerSprite;
+    public SpriteRenderer _PlayerSprite;
     Rigidbody2D _playerRigid;
     Animator _playerAnimator;
     CapsuleCollider2D _capsuleCollider;
@@ -305,6 +305,8 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     // Player Death
     public void PlayerDeath()
     {
+        TempManager.inventory.StopCountActiveCooldown();
+        TempManager.inventory.StopCountActiveDuration();
         _playerAnimator.SetBool("IsDeath", true);
         Invoke("OnDeathUI", 3f);
 

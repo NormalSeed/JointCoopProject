@@ -161,7 +161,9 @@ public class UIManager : MonoBehaviour
 
         // Main Menu UI �߰�
         _UiDictionary[UIKeyList.mainOption] = _mainOptionUI;
-        _UiDictionary[UIKeyList.credit] = _creditUI;        
+        _UiDictionary[UIKeyList.credit] = _creditUI;
+
+        
     }
 
     private void ReferenceUIReflesh()
@@ -193,10 +195,11 @@ public class UIManager : MonoBehaviour
     // Death Panel ���� �� ���θ޴� ��ȯ
     private void InitDeathPanel()
     {
+
         _deathMainMenuButton.onClick.AddListener(() =>
         {
-            PlayerStatManager.Instance._playerHp = 3;
-            
+            PlayerStatManager.Instance._playerHp = 6;
+
             SceneManager.LoadScene("Real_MainMenu");
             SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Title);
         });

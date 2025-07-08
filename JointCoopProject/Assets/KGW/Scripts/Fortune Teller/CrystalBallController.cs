@@ -64,6 +64,7 @@ public class CrystalBallController : MonoBehaviour
             default:
                 break;
         }
+        _isContact = false;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -84,8 +85,9 @@ public class CrystalBallController : MonoBehaviour
             IBuff randomBuff = BuffCreateFactory.BuffRoulette();
             // 버퍼 적용
             BuffManager.Instance.ApplyBuff(randomBuff, PlayerStatManager.Instance);
+
             // 버프를 받고 수정구슬은 사라지지 않고 남아있지만 다시 접촉을해도 상호작용 없음
-            //_isContact = true;
+            _isContact = true;
 
             // 예언 문구 출력
             if(randomBuff._buffType == BuffType.Fortune)

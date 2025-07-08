@@ -17,6 +17,7 @@ public class FlameMultiDamage : MonoBehaviour
         // 코루틴이 Null이 아니면 Null로 세팅
         if(_flameRoutine != null)
         {
+            StopCoroutine(_flameRoutine);
             _flameRoutine = null;
         }
         _flameRoutine = StartCoroutine(ApplyFlame());
@@ -33,9 +34,9 @@ public class FlameMultiDamage : MonoBehaviour
 
             count++;
             yield return new WaitForSeconds(_flameTime);
-            _flameRoutine = null;
-           
         }
+        _flameRoutine = null;
+
         // 다시 적용하기 위해서 Component 삭제
         Destroy(gameObject.GetComponent<FlameMultiDamage>());
     }
