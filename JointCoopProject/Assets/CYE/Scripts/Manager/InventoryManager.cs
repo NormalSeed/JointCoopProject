@@ -301,7 +301,7 @@ public class InventoryManager : ItemSingleton<InventoryManager>
         {
             _activeSkillData.UseSkill(usePos);
 
-            UIManager.Instance._itemGuageController.ItemUse();
+            // UIManager.Instance._itemGuageController.ItemUse();
             _activeDurationTimer = _activeSkillData.skillDuration;
             if (_skillDurationRoutine == null)
             {
@@ -313,7 +313,7 @@ public class InventoryManager : ItemSingleton<InventoryManager>
             {
                 _skillCooldownRoutine = StartCoroutine(CountSkillCooltime());
                 _activeCooldown.SetCoolTime(_activeCooldownTimer);
-                _activeCooldown.ItemUse();
+                // _activeCooldown.ItemUse();
             }
         }
     }
