@@ -165,6 +165,7 @@ public class Monster_Damaged : MonsterState
     public override void Exit()
     {
         _controller._isDamaged = false;
+        _controller._movement._isTrace = true;
     }
 }
 
