@@ -31,6 +31,8 @@ public class ChangeSceneManager : MonoBehaviour
     public int _CursceneIndex;  // 현재 씬 저장
 
     public Button gameStartButton;
+    public bool isStrayCatRansitioning;
+    [SerializeField] private bool useStrayCatTrigger = true;
 
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -69,7 +71,7 @@ public class ChangeSceneManager : MonoBehaviour
         if (gameStartButton != null)
         {
             gameStartButton.onClick.AddListener(StartGame);
-        }   
+        }
     }
 
     private void Start()
@@ -108,8 +110,26 @@ public class ChangeSceneManager : MonoBehaviour
         }
     }
 
+    public void OnstrayCatDie()
+    {
+        if (!useStrayCatTrigger || isStrayCatRansitioning)
+        {
+            return;
+        }
+
+        StartCoroutine(StrayCatSceneTransition());
+    }
+    
+    private IEnumerator StrayCatSceneTransition()
+    {
+        isStrayCatRansitioning = true;
+
+        yield return new WaitForSeconds(0.5f);
+        
+        GoToNextScene();
+    }
+    
     // 컷씬 
-    //
     void SkipCutScene()
     {
         if (hasSkipped || isLoading) return;

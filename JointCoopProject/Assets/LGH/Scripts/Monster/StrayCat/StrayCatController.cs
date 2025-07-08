@@ -37,10 +37,23 @@ public class StrayCatController : MonsterBase
         base.Init();
         _monsterID = 10401;
 
+        isBoss = true;
+
         _bulletController = GetComponentInChildren<StrayCatBulletController>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
 
         _attackType = Random.Range(1, 4);
+        
+        SetUpEndingScene();
+    }
+
+    void SetUpEndingScene()
+    {
+        ChangeSceneManager sceneManager = FindObjectOfType<ChangeSceneManager>();
+        if (sceneManager != null)
+        {
+            OnBossDied += sceneManager.OnstrayCatDie;
+        }
     }
 
     protected override void StateMachineInit()
