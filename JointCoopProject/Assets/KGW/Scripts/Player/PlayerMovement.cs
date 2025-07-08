@@ -339,13 +339,20 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     private int TakeDamageOnShield(int damage)
     {
         float leftover = 0;
-        PlayerStatManager.Instance._shield -= damage;
-
-        if (PlayerStatManager.Instance._shield <= 0)
+        if (PlayerStatManager.Instance._shield > 0)
         {
-            leftover = Mathf.Abs(PlayerStatManager.Instance._shield);
-            PlayerStatManager.Instance._shield = 0;
-            TempManager.inventory._activeSkillData.ReleaseSkill(transform);
+            PlayerStatManager.Instance._shield -= damage;
+
+            if (PlayerStatManager.Instance._shield <= 0)
+            {
+                leftover = Mathf.Abs(PlayerStatManager.Instance._shield);
+                PlayerStatManager.Instance._shield = 0;
+                TempManager.inventory._activeSkillData.ReleaseSkill(transform);
+            }
+        }
+        else
+        {
+            leftover = damage;
         }
 
         return (int)leftover;
