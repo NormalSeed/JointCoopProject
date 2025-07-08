@@ -312,9 +312,11 @@ public class InventoryManager : _TempSingleton<InventoryManager>
             yield return new WaitForFixedUpdate();
         }
 
-        StopCountActiveCooldown();
+        _activeCooldownTimer = 0f;
+        _skillCooldownRoutine = null; 
+        // StopCountActiveCooldown();
     }
-    private void StopCountActiveCooldown()
+    public void StopCountActiveCooldown()
     {
         if (_skillCooldownRoutine != null)
         {
@@ -329,9 +331,12 @@ public class InventoryManager : _TempSingleton<InventoryManager>
             _activeDurationTimer -= Time.deltaTime;
             yield return new WaitForFixedUpdate();
         }
-        StopCountActiveDuration();
+
+        _activeDurationTimer = 0f;
+        _skillDurationRoutine = null;
+        // StopCountActiveDuration();
     }
-    private void StopCountActiveDuration()
+    public void StopCountActiveDuration()
     {
         if (_skillDurationRoutine != null)
         {

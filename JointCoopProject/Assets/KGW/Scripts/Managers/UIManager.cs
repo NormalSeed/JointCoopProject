@@ -161,7 +161,9 @@ public class UIManager : MonoBehaviour
 
         // Main Menu UI 추가
         _UiDictionary[UIKeyList.mainOption] = _mainOptionUI;
-        _UiDictionary[UIKeyList.credit] = _creditUI;        
+        _UiDictionary[UIKeyList.credit] = _creditUI;
+
+        
     }
 
     private void ReferenceUIReflesh()
@@ -191,12 +193,13 @@ public class UIManager : MonoBehaviour
     }
 
     // Death Panel 세팅 및 메인메뉴 전환
-    private void InitDeathPanel()
+    public void InitDeathPanel()
     {
+
         _deathMainMenuButton.onClick.AddListener(() =>
         {
-            PlayerStatManager.Instance._playerHp = 3;
-            
+            PlayerStatManager.Instance._playerHp = 6;
+
             SceneManager.LoadScene("Real_MainMenu");
             SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Title);
         });

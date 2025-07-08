@@ -17,6 +17,7 @@ public class PoisonAttackMultiDamage : MonoBehaviour
         // 코루틴이 Null이 아니면 Null로 세팅
         if (_poisonRoutine != null )
         {
+            StopCoroutine(_poisonRoutine);
             _poisonRoutine = null;
         }
         _poisonRoutine = StartCoroutine(ApplyPoison());
@@ -33,8 +34,9 @@ public class PoisonAttackMultiDamage : MonoBehaviour
 
             count++;
             yield return new WaitForSeconds(_poisonTime);
-            _poisonRoutine = null;
         }
+        _poisonRoutine = null;
+
         // 다시 적용하기 위해서 Component 삭제
         Destroy(gameObject.GetComponent<PoisonAttackMultiDamage>());
     }

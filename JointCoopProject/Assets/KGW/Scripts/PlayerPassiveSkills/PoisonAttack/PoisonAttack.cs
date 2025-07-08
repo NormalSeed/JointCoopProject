@@ -17,10 +17,10 @@ public class PoisonAttack : SkillDataSO
     {
         int _totalDamage;
         // Level +1 == È®·ü +20%
-        skillPossibility *= _skillLevel;
+        float finalSkillPossibility = skillPossibility *= _skillLevel;
 
         int _randomValue = Random.Range(0, 100);
-        if (_randomValue > skillPossibility)
+        if (_randomValue >= finalSkillPossibility)
         {
             return;
         }
