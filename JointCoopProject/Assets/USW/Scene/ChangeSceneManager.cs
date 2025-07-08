@@ -267,29 +267,7 @@ public class ChangeSceneManager : MonoBehaviour
         
         //비동기 로딩 시작
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneIndex);
-        switch(sceneIndex)
-        {
-            case 1:
-                SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Title); // Title Scene BGM ON
-                break;
-            case 2:
-            case 3:
-                SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage1);    // Stage1,2 BGM ON
-                _CursceneIndex = sceneIndex;
-                break;
-            case 4:
-            case 5:
-                SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);    // stage3,4 BGM ON
-                _CursceneIndex = sceneIndex;
-                break;
-            case 6:
-            case 7:
-                SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage3);    // stage5,6 BGM ON
-                _CursceneIndex = sceneIndex;
-                break;
-            default:
-                break;
-        }
+        
       
         asyncOperation.allowSceneActivation = false;
 
@@ -329,15 +307,38 @@ public class ChangeSceneManager : MonoBehaviour
         {
             yield return null;
         }
-        
-        
-        
+      
         if (loadingUI != null)
         {
             loadingUI.SetActive(false);
         }
 
+        switch (sceneIndex)
+        {
+            case 1:
+                SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Title); // Title Scene BGM ON
+                break;
+            case 2:
+            case 3:
+                SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage1);    // Stage1,2 BGM ON
+                _CursceneIndex = sceneIndex;
+                break;
+            case 4:
+            case 5:
+                SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);    // stage3,4 BGM ON
+                _CursceneIndex = sceneIndex;
+                break;
+            case 6:
+            case 7:
+                SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage3);    // stage5,6 BGM ON
+                _CursceneIndex = sceneIndex;
+                break;
+            default:
+                break;
+        }
+
         isLoading = false;
+
         
     }
 
