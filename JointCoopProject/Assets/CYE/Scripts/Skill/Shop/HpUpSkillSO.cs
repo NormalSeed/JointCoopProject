@@ -7,7 +7,7 @@ using UnityEngine;
 public class HpUpSkillSO : SkillDataSO
 {
     [System.Serializable]
-    private struct ValueProbabilityPair
+    private class ValueProbabilityPair
     {
         public int increaseValue;
         public int probability;
@@ -19,7 +19,7 @@ public class HpUpSkillSO : SkillDataSO
     }
     [Tooltip("결과값과 해당 결과값의 확률을 기입합니다.")]
     [SerializeField] private List<ValueProbabilityPair> _valueProbabilities;
-    private System.Random _randomInstance = new System.Random((int)ItemUtil.GetUnixTimeStamp());
+    private System.Random _randomInstance = new System.Random();
 
     public override void UseSkill(Transform caster, out bool useResult)
     {

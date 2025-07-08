@@ -100,7 +100,7 @@ public class InventoryManager : ItemSingleton<InventoryManager>
         _activeSkillData = null;
         _visItemList = new List<ItemSlot>(SLOT_COUNT);
         _invItemList = new List<ItemSlot>();
-        _coinCount /= 2;
+        _coinCount = (_coinCount == 0) ? 30 : 2;
         _timer = 0f;
         _isSkillTitleOpen = false;
         _activeCooldownTimer = 0f;
@@ -301,7 +301,7 @@ public class InventoryManager : ItemSingleton<InventoryManager>
         {
             _activeSkillData.UseSkill(usePos);
 
-            UIManager.Instance._itemGuageController.ItemUse();
+            // UIManager.Instance._itemGuageController.ItemUse();
             _activeDurationTimer = _activeSkillData.skillDuration;
             if (_skillDurationRoutine == null)
             {
@@ -313,7 +313,7 @@ public class InventoryManager : ItemSingleton<InventoryManager>
             {
                 _skillCooldownRoutine = StartCoroutine(CountSkillCooltime());
                 _activeCooldown.SetCoolTime(_activeCooldownTimer);
-                _activeCooldown.ItemUse();
+                // _activeCooldown.ItemUse();
             }
         }
     }

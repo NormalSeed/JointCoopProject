@@ -25,7 +25,7 @@ public class ItemSpawner : MonoBehaviour
     void Awake()
     {
         _mapGenerator = FindObjectOfType<MapGenerator>();
-        _randomInstance = new System.Random((int)ItemUtil.GetUnixTimeStamp());
+        _randomInstance = new System.Random();
     }
     void Start()
     {

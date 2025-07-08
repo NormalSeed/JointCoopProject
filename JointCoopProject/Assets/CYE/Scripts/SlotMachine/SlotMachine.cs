@@ -66,7 +66,7 @@ public class SlotMachine : MonoBehaviour
     }
     private void Init()
     {
-        _randomInstance = new System.Random((int)ItemUtil.GetUnixTimeStamp());
+        _randomInstance = new System.Random();
         _animator = GetComponentInChildren<Animator>();
         _canUse = true;
     } 
