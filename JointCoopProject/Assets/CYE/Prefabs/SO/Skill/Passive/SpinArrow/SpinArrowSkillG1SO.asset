@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: SpinArrowSkillG1SO
   m_EditorClassIdentifier: 
   skillName: Spin Arrow
-  skillCooldown: 0
-  skillPossibility: 0
+  skillCooldown: 2
+  skillPossibility: 100
   skillIcon: {fileID: 21300000, guid: 23ec16d01f5c998408401b8dcbe73e8d, type: 3}
   _isTrace: 0
   _isSwordAttack: 0
@@ -23,5 +23,6 @@ MonoBehaviour:
   skillPrefab: {fileID: 7894444349529807209, guid: 437877c4268345d4bb36a80525f30e05, type: 3}
   skillDuration: 0
   detectionRange: 4
-  projectileSpeed: 0
+  projectileSpeed: 5
+  arrowDamage: 15
   enemyTag: Enemy

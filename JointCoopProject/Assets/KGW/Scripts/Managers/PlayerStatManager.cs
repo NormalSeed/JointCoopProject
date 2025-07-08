@@ -5,6 +5,9 @@ using UnityEngine;
 public class PlayerStatManager : MonoBehaviour
 {
     static PlayerStatManager instance;
+    int _damageRand;
+    int _luckRand;
+    float _attackSpeedRand;
 
     // �ʱ� PlayerStatManager ����
     public static PlayerStatManager Instance
@@ -23,6 +26,13 @@ public class PlayerStatManager : MonoBehaviour
     private void Awake()
     {
         CreatePlayerStatManager();
+        _damageRand = Random.Range(8, 14);
+        _luckRand = Random.Range(0, 3);
+        _attackSpeedRand = Random.Range(1.6f, 2.0f);
+
+        _attackDamage = _damageRand;
+        _attackSpeed = _attackSpeedRand;
+        _playerLuck = _luckRand;
     }
 
     private void CreatePlayerStatManager()
@@ -38,21 +48,23 @@ public class PlayerStatManager : MonoBehaviour
         }
     }
 
+    
+
     [Header("Player Status")]
     // Player HP
-    [SerializeField] float playerHp = 3;
+    [SerializeField] float playerHp = 6;
     public float _playerHp { get { return playerHp; } set { playerHp = value; } }
 
     // Player Max Hp (�б� ����)
-    [SerializeField] float playerMaxHp = 12;
+    [SerializeField] float playerMaxHp = 24;
     public float _playerMaxHp { get { return playerMaxHp; } }
 
     // Player Attack Damage
-    [SerializeField] int attackDamage = 8;
+    [SerializeField] int attackDamage;
     public int _attackDamage { get { return attackDamage; } set { attackDamage = value; } }
 
     // Player Move Speed
-    [SerializeField][Range(0, 10)] float moveSpeed = 3f;
+    [SerializeField][Range(0, 10)] float moveSpeed = 5f;
     public float _moveSpeed { get { return moveSpeed; } set { moveSpeed = value; } }
 
     // Player Acceleration Speed
@@ -80,7 +92,7 @@ public class PlayerStatManager : MonoBehaviour
     public float _attackRange { get { return attackRange; } set { attackRange = value; } }
 
     // Player Attack Speed
-    [SerializeField] float attackSpeed = 1f;
+    [SerializeField] float attackSpeed;
     public float _attackSpeed { get { return attackSpeed; } set { attackSpeed = value; } }
 
     // Player Dash Ability Check
@@ -88,7 +100,7 @@ public class PlayerStatManager : MonoBehaviour
     public bool _canDash { get { return canDash; } set { canDash = value; } }
 
     // Player Luck
-    [SerializeField] int playerLuck = 0;
+    [SerializeField] int playerLuck;
     public int _playerLuck { get { return playerLuck; } set { playerLuck = value; } }
 
     // Player Alive

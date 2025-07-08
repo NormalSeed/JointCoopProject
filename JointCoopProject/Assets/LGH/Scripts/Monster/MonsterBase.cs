@@ -38,8 +38,6 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     public bool _isDamaged;
     public bool _isDead;
     public bool _isParalyzed;
-    private Coroutine _coOffDamage;
-    private WaitForSeconds _damageDelay = new WaitForSeconds(1f);
     public bool isBoss = false;
     public Action OnBossDied;
 
@@ -223,26 +221,26 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
 
     public void TakeDamage(int damage, Vector2 targetPos)
     {
-        if (_isDamaged) return;
 
-        _movement._isTrace = false;
-        _isAttack1 = false;
-        _isDamaged = true;
-        _model._curHP.Value -= damage;
+        if (isBoss)
+        {
+            _model._curHP.Value -= damage;
+        }
+        else
+        {
+            _movement._isTrace = false;
+            _isAttack1 = false;
+            _isAttack2 = false;
+            _isDamaged = true;
+            _model._curHP.Value -= damage;
+        }
+
+        Debug.Log($"몬스터 현재 체력 : {_model._curHP.Value}");
 
         if (_model._curHP.Value <= 0)
         {
             Die();
         }
-
-        _coOffDamage = StartCoroutine(CoOffDamage());
-    }
-
-    private IEnumerator CoOffDamage()
-    {
-        yield return _damageDelay;
-        _movement._isTrace = true;
-        _isDamaged = false;
     }
 
     public virtual void Die()
