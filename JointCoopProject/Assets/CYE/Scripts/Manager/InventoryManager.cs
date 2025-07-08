@@ -88,7 +88,7 @@ public class InventoryManager : ItemSingleton<InventoryManager>
         }     
     }
 
-    private void Init()
+    public void Init()
     { 
         _activeItem = null;
         _activeItemData = null;
