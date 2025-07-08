@@ -1,22 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class LightningStrike : MonoBehaviour
 {
     [Header("번개 설정")]
-    public int damage = 15;            
-    public float strikeRadius = 1f;      
+    public float strikeRadius = 1f;
     public float duration = 1f;
-    public LayerMask enemyLayer;  
-    
-    private bool hasStruck = false;     
+
+    private int damage;
+    private LayerMask enemyLayer;
+    private bool hasStruck = false;
     
     void Start()
     {
-        // 번개 수명 설정
         Destroy(gameObject, duration);
+        Invoke("StrikeEnemies", 0.1f);
+    }
+    
+    public void SetDamage(int damageValue)
+    {
+        damage = damageValue;
+    }
+    
+    public void SetEnemyLayer(LayerMask layer)
+    {
+        enemyLayer = layer;
     }
     
     void StrikeEnemies()
@@ -24,30 +33,21 @@ public class LightningStrike : MonoBehaviour
         if (hasStruck) return;
         hasStruck = true;
         
-        
-        // 번개 범위 내 모든 적들에게 데미지
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, strikeRadius, enemyLayer);
         
-        int hitCount = 0;
         foreach (Collider2D enemy in hitEnemies)
         {
-            //MonsterBase monster = enemy.GetComponent<MonsterBase>();
-            //if (monster != null && !monster._isDead)
-            //{
-            //    monster.TakeDamage(damage, transform.position);
-            //    hitCount++;
-            //}
-            if (enemy.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            IDamagable damagable = enemy.GetComponent<IDamagable>();
+            if (damagable != null)
             {
-                IDamagable damagable = enemy.gameObject.GetComponent<IDamagable>();
-                if (damagable != null)
+                MonsterBase monster = enemy.GetComponent<MonsterBase>();
+                if (monster != null && monster._isDead)
                 {
-                    damagable.TakeDamage(damage, transform.position);
-                    hitCount++;
+                    continue;
                 }
+                
+                damagable.TakeDamage(damage, transform.position);
             }
         }
-        
     }
-    
 }
