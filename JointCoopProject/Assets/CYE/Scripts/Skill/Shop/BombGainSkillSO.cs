@@ -5,9 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Skills/Shop/Bomb Gain")]
 public class BombGainSkillSO : SkillDataSO
 {
-    public override void UseSkill(Transform caster)
+    public override void UseSkill(Transform caster, out bool useResult)
     {
-        // base.UseSkill(caster);
-        // Inventory Get Bomb 1
+        TempManager.inventory.GetBomb(1);
+        useResult = true;
     }
 }

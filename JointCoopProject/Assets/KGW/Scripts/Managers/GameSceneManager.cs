@@ -2,155 +2,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameSceneManager : MonoBehaviour
-{
-    static GameSceneManager instance;
-    // UI¸¦ StackÀ¸·Î °ü¸®
-    Stack<GameObject> _UiStack = new Stack<GameObject>();
+// ChangeSceneManagerì—ì„œ ì‚¬ìš©
 
-    // ÃÊ±â SceneManager »ı¼º
-    public static GameSceneManager Instance
-    {
-        get
-        {
-            if(instance == null)
-            {
-                GameObject gameObject = new GameObject("GameSceneManager");
-                instance = gameObject.AddComponent<GameSceneManager>();
-            }
-            return instance;
-        }
-    }
+//public class GameSceneManager : MonoBehaviour
+//{
+//    static GameSceneManager instance;
 
-    private void Awake()
-    {
-        CreateSceneManager();
-    }
+//    // ì´ˆê¸° SceneManager ìƒì„±
+//    public static GameSceneManager Instance
+//    {
+//        get
+//        {
+//            if(instance == null)
+//            {
+//                GameObject gameObject = new GameObject("GameSceneManager");
+//                instance = gameObject.AddComponent<GameSceneManager>();
+//            }
+//            return instance;
+//        }
+//    }
 
-    private void CreateSceneManager()
-    {
-        if(instance == null)    // »ı¼ºÀÌ µÇ¾î ÀÖÀ¸¸é ´õ ¸¸µéÁö ¾Ê°í »ç¿ë
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else    // Áßº¹ »èÁ¦
-        {
-            Destroy(gameObject);
-        }
-            
-    }
+//    private void Awake()
+//    {
+//        CreateSceneManager();
+//    }
 
-    // UI ¿­±â
-    public void OpenUi(UIKeyList uiName)
-    {
-        GameObject openUi = UIManager.Instance.GetUI(uiName);
-        if(openUi == null)
-        {
-            return;
-        }
+//    private void CreateSceneManager()
+//    {
+//        if(instance == null)    // ìƒì„±ì´ ë˜ì–´ ìˆìœ¼ë©´ ë” ë§Œë“¤ì§€ ì•Šê³  ì‚¬ìš©
+//        {
+//            instance = this;
+//            DontDestroyOnLoad(gameObject);
+//        }
+//        else    // ì¤‘ë³µ ì‚­ì œ
+//        {
+//            Destroy(gameObject);
+//        }
 
-        if (_UiStack.Count > 0)
-        {
-            // ¿­·ÁÀÖ´Â UI°¡ ÀÖÀ¸¸é ¼û±è
-            _UiStack.Peek().SetActive(false);
-        }
-        openUi.SetActive(true);
-        _UiStack.Push(openUi);
-    }
+//    }
 
-    // UI ´İ±â
-    public void CloseUi()
-    {
-        if (_UiStack.Count == 0)
-        {
-            return;
-        }
-        GameObject closeUi = _UiStack.Pop();
-        closeUi.SetActive(false);
+//    // ì…ë ¥í•œ ì”¬ ì „í™˜ (ì´ë¦„)
+//    public void LoadScene(string sceneName)
+//    {
+//        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+//    }
 
-        if (_UiStack.Count > 0)
-        {
-            _UiStack.Peek().SetActive(true);
-        }
-    }
-
-    // ÀÔ·ÂÇÑ ¾À ÀüÈ¯ (ÀÌ¸§)
-    public void LoadScene(string sceneName)
-    {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
-    }
-
-    // ÀÔ·ÂÇÑ ¾À ÀüÈ¯ (¼ıÀÚ)
-    public void LoadScene(int sceneNumber)
-    {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneNumber);
-    }
-
-    // ÄÆ ¾À ÀüÈ¯
-    public void LoadCutScene()
-    {
-        LoadScene("Real_CutScene");
-    }
-
-    // ¸ŞÀÎ ¾À ÀüÈ¯
-    public void LoadMainScene()
-    {
-        LoadScene("Real_MainMenu");
-    }
-
-    // ÀÎ °ÔÀÓ ¾À ÀüÈ¯
-    public void LoadIngameScene()
-    {
-        LoadScene("Rear_InGame");
-    }
-
-    // Å¬¸®¾î ¾À ÀüÈ¯
-    public void LoadClearScene()
-    {
-        LoadScene("Rear_Clear");
-    }
-
-    // ½ºÅ×ÀÌÁö 1 ÀüÈ¯
-    public void LoadStage1Scene()
-    {
-        LoadScene("Rear_Stage1");
-    }
-
-    // ½ºÅ×ÀÌÁö 2 ÀüÈ¯
-    public void LoadStage2Scene()
-    {
-        LoadScene("Rear_Stage2");
-    }
-
-    // ½ºÅ×ÀÌÁö 3 ÀüÈ¯
-    public void LoadStage3Scene()
-    {
-        LoadScene("Rear_Stage3");
-    }
-
-    // ½ºÅ×ÀÌÁö 4 ÀüÈ¯
-    public void LoadStage4Scene()
-    {
-        LoadScene("Rear_Stage4");
-    }
-
-    // ½ºÅ×ÀÌÁö 5 ÀüÈ¯
-    public void LoadStage5Scene()
-    {
-        LoadScene("Rear_Stage5");
-    }
-
-    // ½ºÅ×ÀÌÁö 6 ÀüÈ¯
-    public void LoadStage6Scene()
-    {
-        LoadScene("Rear_Stage6");
-    }
-
-    // ½ºÅ×ÀÌÁö 7 ÀüÈ¯
-    public void LoadStage7Scene()
-    {
-        LoadScene("Rear_Stage7");
-    }
-
-}
+//    // ì…ë ¥í•œ ì”¬ ì „í™˜ (ìˆ«ì)
+//    public void LoadScene(int sceneNumber)
+//    {
+//        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneNumber);
+//    }
+//}

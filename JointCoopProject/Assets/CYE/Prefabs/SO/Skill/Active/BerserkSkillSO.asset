@@ -12,10 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d2ee980cfb21a44f8eb077abdb18198, type: 3}
   m_Name: BerserkSkillSO
   m_EditorClassIdentifier: 
-  skillName: 
-  skillCooldown: 0
-  skillPossibility: 0
-  skillIcon: {fileID: 0}
+  skillName: Berserk
+  skillCooldown: 10
+  skillPossibility: 100
+  skillIcon: {fileID: 21300000, guid: 37a6fd00ee90df74d8a346fb6ddd93eb, type: 3}
   _isTrace: 0
   _isSwordAttack: 0
+  skillDescription: "\uCCB4\uB825\uC744 \uC18C\uBAA8\uD558\uC5EC \uACF5\uACA9\uC18D\uB3C4\uB97C
+    \uB300\uD3ED \uC0C1\uC2B9\uC2DC\uD0A8\uB2E4."
   skillPrefab: {fileID: 0}
+  skillDuration: 3
+  _skillDamageRate: 0
+  _skillRange: 0
+  _HealthRecovery: 0
+  _cost: 2

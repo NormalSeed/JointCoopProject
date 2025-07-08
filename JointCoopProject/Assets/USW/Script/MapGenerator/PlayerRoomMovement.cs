@@ -10,8 +10,12 @@ public class PlayerRoomMovement : MonoBehaviour
     public Vector2 bottomDoorPos = new Vector2(7, 1); 
     public Vector2 leftDoorPos = new Vector2(1, 4); 
     public Vector2 rightDoorPos = new Vector2(14, 5); 
-    public float doorDetectionDistance = 1.5f; // 문 감지 거리
+    public float doorDetectionDistance = 1.0f; // 문 감지 거리
 
+    public float roomTransitionCooldown = 4.0f;
+    private float lastTransitionTime = 0.0f;
+    private bool canTransition = true;
+    
     [Header("이동 설정")] public float transitionSpeed = 2f;
     public bool doorActive = true;
 
@@ -19,6 +23,7 @@ public class PlayerRoomMovement : MonoBehaviour
     private MapGenerator mapGen;
     private CameraController camSystem;
     private MinimapManager minimap;
+    private RoomMonsterManager roomMonster;
 
     // 현재 상태
     private Vector2Int currentRoom;
@@ -51,6 +56,7 @@ public class PlayerRoomMovement : MonoBehaviour
             mapGen = FindObjectOfType<MapGenerator>();
             camSystem = FindObjectOfType<CameraController>();
             minimap = FindObjectOfType<MinimapManager>();
+            roomMonster = FindObjectOfType<RoomMonsterManager>();
         }
     }
 
@@ -84,8 +90,7 @@ public class PlayerRoomMovement : MonoBehaviour
         }
         
     }
-
-
+    
     // required 넣고
     // 맵 초기화까지 넣어버리면 이게 
     // 아 방전환 기능자체를 비활성화 해서 하면 되긴해 , 그러면 여기에서 그걸 잡아도 되는걸까 ? 
@@ -122,6 +127,7 @@ public class PlayerRoomMovement : MonoBehaviour
             // 왜 감지가 안되는데
             // Detectedroom 왜 안되는데 
         }
+        UpdateTransitionCooldown();
     }
 
     Vector2Int GetGridPos(Vector3 worldPos)
@@ -130,7 +136,6 @@ public class PlayerRoomMovement : MonoBehaviour
         int y = Mathf.RoundToInt(worldPos.y / mapGen.prefabSize.y);
         return new Vector2Int(x, y);
     }
-    
     
 
     void CheckDoors()
@@ -160,14 +165,34 @@ public class PlayerRoomMovement : MonoBehaviour
     void CheckSingleDoor(Vector2 playerPos, Vector2 doorPos, Vector2Int direction)
     {
         float distance = Vector2.Distance(playerPos, doorPos);
-
-        if (distance <= doorDetectionDistance)
+        
+        
+        if (distance <= doorDetectionDistance && canTransition)
         {
             Vector2Int targetRoom = currentRoom + direction;
-
+            
             if (mapGen.generatedRooms.ContainsKey(targetRoom))
             {
                 StartTransition(targetRoom, direction);
+            }
+        }
+        else if (distance <= doorDetectionDistance && !canTransition)
+        {
+            float remainingCooldown = (lastTransitionTime + roomTransitionCooldown) - Time.time;
+        }
+    }
+    void StartCooldown()
+    {
+        canTransition = false;
+        lastTransitionTime = Time.time;
+    }
+    void UpdateTransitionCooldown()
+    {
+        if (!canTransition)
+        {
+            if (Time.time >= lastTransitionTime + roomTransitionCooldown)
+            {
+                canTransition = true;
             }
         }
     }
@@ -176,7 +201,13 @@ public class PlayerRoomMovement : MonoBehaviour
     {
         if (moving) return;
 
-        if (!MayIEnterThisRoom()) return;
+        if (!canTransition) return;
+        
+
+        if (!MayIEnterThisRoom(targetRoom)) return;
+        
+        StartCooldown();
+        
         
         StartCoroutine(Dotransition(targetRoom, direction));
     }
@@ -212,7 +243,7 @@ public class PlayerRoomMovement : MonoBehaviour
         {
             minimap.SetCurrentRoom(currentRoom);
         }
-        
+        StartCooldown();
         moving = false;
     }
 
@@ -240,7 +271,7 @@ public class PlayerRoomMovement : MonoBehaviour
         float duration = 1f / transitionSpeed;
 
         while (elapsed < duration)
-        {
+        {   
             elapsed += Time.deltaTime;
             float t = Mathf.SmoothStep(0,1,elapsed/duration);
             transform.position = Vector3.Lerp(startPos, targetPos, t);
@@ -250,17 +281,63 @@ public class PlayerRoomMovement : MonoBehaviour
         transform.position = targetPos;
     }
 
-    bool MayIEnterThisRoom()
+    bool MayIEnterThisRoom(Vector2Int targetRoom)
     {
-        if (mapGen.generatedRooms.ContainsKey(currentRoom))
-        {
-            var roomData = mapGen.generatedRooms[currentRoom];
-            
-            if(roomData.roomType == MapGenerator.RoomType.Start)
-                return true;
-        }
+        if (!mapGen.generatedRooms.ContainsKey(currentRoom)) return false;
+        
+        var roomData = mapGen.generatedRooms[currentRoom];
 
-        return true;
+        
+        if (IsSecretWallBlocking(currentRoom, targetRoom)&& !mapGen.IsSecretRoomOpen(targetRoom))
+        {
+            return false;
+        }
+        if (roomData.roomType == MapGenerator.RoomType.Start)
+        {
+         
+            return true;
+        }
+       
+        // mapGen 은 mapgenerator 의 객체
+        // 하지만 MapGenerator 자체는 클래스니깐 
+        // 객체하고 클래스맴버는 다르니깐 
+        // 객체 enum 은 당연히 못쓰잖아. 
+        // 그니깐 ? 클래스에서 직접 참조해서 enum 을 쓴다. 라고 말할수는 있을거야 하지만 ? 
+        // 이해를 못함.
+        // 약간 ㅌ뭔말알 ? 층류현상 ? 
+        // 이게 뭐냐면 기름이 일정한 속력과 일정한 양이 뿜으면 멈춰져있는것처럼 보이는 현상을 층류 현상
+        // 실제로 왜 이렇게 일어나는가에 대한거는 모르겠다. 
+        //return roomMonster.IsRoomClear(currentRoom);
+        // 일반방도 체크하고 , 비밀방 벽부터 체크한다음 시작방은 항상이동가능으로 둬야하나 ? 아니 그럴필요없잖아
+        // 그리고 일단 reveal부분부터 손보자. 
+        bool isCleared = roomMonster.IsRoomClear(currentRoom);
+        
+
+        return isCleared;
+    }
+    
+    bool IsSecretWallBlocking(Vector2Int fromRoom, Vector2Int toRoom)
+    {
+        // 목표방이 비밀방인지 확인함.
+        if (!mapGen.generatedRooms.ContainsKey(toRoom) || mapGen.generatedRooms[toRoom].roomType 
+            != MapGenerator.RoomType.Secret) return false;  
+        
+        Vector2Int secretDir = toRoom - fromRoom;
+
+        MapGenerator.Direction wallDir;
+
+        switch (secretDir.x,secretDir.y)
+        {
+            case (0,1): wallDir = MapGenerator.Direction.Up; break;
+            case (0,-1): wallDir = MapGenerator.Direction.Down; break;
+            case (-1,0): wallDir = MapGenerator.Direction.Left; break;
+            case (1,0): wallDir = MapGenerator.Direction.Right; break;
+            default: return false;
+        }
+        
+        return mapGen.roomDoors.ContainsKey(fromRoom) &&
+               mapGen.roomDoors[fromRoom].ContainsKey(wallDir)&&
+               mapGen.roomDoors[fromRoom][wallDir]?.name.Contains("SecretWall")==true;
     }
     
     // 퍼블릭 메서드들 여기에서 가져갈것이..

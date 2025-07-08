@@ -58,7 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 7090766043594075331, guid: 37d48b3be05df9245bcb4a407bb244a3, type: 2}
+  - {fileID: -4710288607027950780, guid: bac87a903e8f58d44ad05c07ff03d269, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -102,8 +102,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 000C
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 37d48b3be05df9245bcb4a407bb244a3, type: 2}
-  m_sharedMaterial: {fileID: 7090766043594075331, guid: 37d48b3be05df9245bcb4a407bb244a3, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: bac87a903e8f58d44ad05c07ff03d269, type: 2}
+  m_sharedMaterial: {fileID: -4710288607027950780, guid: bac87a903e8f58d44ad05c07ff03d269, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -196,9 +196,9 @@ GameObject:
   - component: {fileID: 8013010800201513055}
   - component: {fileID: 6504588110565818041}
   - component: {fileID: 879445379201439984}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ItemAllStatUp
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -232,11 +232,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16f7ad9452357d244957d93440c6b180, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemType: 3
   _itemData: {fileID: 11400000, guid: f1d99b0fb1384634a92bd1bccfba16c7, type: 2}
-  _itemSkill: {fileID: 11400000, guid: 309920249b283a5439ee0cad16fadd8e, type: 2}
+  _itemSkill:
+  - {fileID: 11400000, guid: 309920249b283a5439ee0cad16fadd8e, type: 2}
   isVisibleInInventory: 0
-  showPrice: 1
+  showPrice: 0
 --- !u!58 &6504588110565818041
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -298,7 +298,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 7
 --- !u!1 &5697996195462562548
 GameObject:
   m_ObjectHideFlags: 0

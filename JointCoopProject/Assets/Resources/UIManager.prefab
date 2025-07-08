@@ -1,0 +1,101 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1356765771904284773
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2154980355615023606}
+  m_Layer: 0
+  m_Name: UIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2154980355615023606
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356765771904284773}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1723.3574, y: 965.46375, z: 9.099861}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4791706405223901566}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8150861075855962848
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4791706405223901566}
+  - component: {fileID: 1996184792581229082}
+  m_Layer: 0
+  m_Name: UiManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4791706405223901566
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8150861075855962848}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -722.15594, y: -404.4806, z: -14.900761}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2154980355615023606}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1996184792581229082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8150861075855962848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 110b26c2d75ef5547a4f7ad7fe4f4145, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _miniMapUI: {fileID: 0}
+  _playerHpUI: {fileID: 0}
+  _activeItemUI: {fileID: 0}
+  _activeItemGuageUI: {fileID: 0}
+  _ChipUI: {fileID: 0}
+  _bombUI: {fileID: 0}
+  _inventoryUI: {fileID: 0}
+  _confirmWindowUI: {fileID: 0}
+  _optionWindowUI: {fileID: 0}
+  _deathWindowUI: {fileID: 0}
+  _fortuneUI: {fileID: 0}
+  _itemInfoUI: {fileID: 0}
+  _mainOptionUI: {fileID: 0}
+  _creditUI: {fileID: 0}
+  _optionWindowButton: {fileID: 0}
+  _mainMenuButton: {fileID: 0}
+  _inventoryCloseButton: {fileID: 0}
+  _yesButton: {fileID: 0}
+  _noButton: {fileID: 0}
+  _optionCloseButton: {fileID: 0}
+  _deathMainMenuButton: {fileID: 0}
+  _playerHeartController: {fileID: 0}
+  _itemGuageController: {fileID: 0}

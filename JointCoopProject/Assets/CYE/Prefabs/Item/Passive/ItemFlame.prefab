@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 4686670449261492676}
   - component: {fileID: 3081225594178199848}
   - component: {fileID: 5143853558533448127}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ItemFlame
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -48,9 +48,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0606f37efb9345a498c2b1ee0ef10131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemType: 2
   _itemData: {fileID: 11400000, guid: d5cce386bb8a1ee4a9b9bb36fbb8f740, type: 2}
-  _itemSkill: {fileID: 11400000, guid: f930abc9d5bbdfc4c9f51da369388648, type: 2}
+  _itemSkill:
+  - {fileID: 11400000, guid: 403c4a5e1a6ce47489a0f6f99a4faf1b, type: 2}
+  - {fileID: 11400000, guid: 3190215eb1a3c72428c06b234eb3953b, type: 2}
+  - {fileID: 11400000, guid: f09b86a7a7870fb42911ee09cbb49756, type: 2}
+  - {fileID: 11400000, guid: c6729a89d2a72cc4db1c25ca32277746, type: 2}
+  - {fileID: 11400000, guid: 8bab0ace173ce4d49adac570140d7d2a, type: 2}
 --- !u!58 &3081225594178199848
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -112,7 +116,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!1 &6506834097811098979
 GameObject:
   m_ObjectHideFlags: 0
@@ -192,7 +196,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.5, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

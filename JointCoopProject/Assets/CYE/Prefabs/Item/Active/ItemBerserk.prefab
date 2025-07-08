@@ -109,9 +109,9 @@ GameObject:
   - component: {fileID: 185284638909775430}
   - component: {fileID: 6834792095952010128}
   - component: {fileID: 6972706393864993365}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ItemBerserk
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -125,7 +125,7 @@ Transform:
   m_GameObject: {fileID: 2539423013514785837}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -145,9 +145,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0606f37efb9345a498c2b1ee0ef10131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemType: 0
   _itemData: {fileID: 11400000, guid: e5d1afb2de408454d8846ee11fa418b7, type: 2}
-  _itemSkill: {fileID: 11400000, guid: a67095fdd763a8646a125ba55e7caf1a, type: 2}
+  _itemSkill:
+  - {fileID: 11400000, guid: a67095fdd763a8646a125ba55e7caf1a, type: 2}
 --- !u!58 &6834792095952010128
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -180,9 +180,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.0033726096}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.154311
 --- !u!50 &6972706393864993365
 Rigidbody2D:
   serializedVersion: 4
@@ -209,7 +209,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!1 &4595871560700116422
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,7 +289,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.5, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

@@ -6,12 +6,12 @@ public class LaserProjectile : MonoBehaviour
 {
     [Header("레이저 설정")]
     public float speed = 15f;          
-    public int damage = 10;             
     public float lifeTime = 5f;        
     
     private Transform target;           
     private Vector3 direction;         
-    private bool hasTarget = false;    
+    private bool hasTarget = false;
+    private int damage;
     
     void Start()
     {
@@ -22,6 +22,11 @@ public class LaserProjectile : MonoBehaviour
     {
         MoveLaser();
     }
+
+    public void SetDamage(int damageValue)
+    {
+        damage = damageValue;
+    }
     
     public void SetTarget(Transform newTarget)
     {
@@ -30,7 +35,6 @@ public class LaserProjectile : MonoBehaviour
         
         if (target != null)
         {
-            // 타겟 방향 계산
             direction = (target.position - transform.position).normalized;
         }
     }
@@ -39,17 +43,17 @@ public class LaserProjectile : MonoBehaviour
     {
         if (!hasTarget) return;
         
-        // 타겟이 살아있으면 계속 추적
         if (target != null && target.gameObject.activeInHierarchy)
         {
-            // 실시간으로 방향 업데이트 (추적 레이저)
-            direction = (target.position - transform.position).normalized;
+            MonsterBase monster = target.GetComponent<MonsterBase>();
+            if (monster != null && !monster._isDead)
+            {
+                direction = (target.position - transform.position).normalized;
+            }
         }
         
-        // 레이저 이동
         transform.position += direction * speed * Time.deltaTime;
         
-        // 레이저 회전 (방향에 맞게)
         if (direction != Vector3.zero)
         {
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
@@ -59,14 +63,17 @@ public class LaserProjectile : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // 몬스터와 충돌 시
-        MonsterBase monster = other.GetComponent<MonsterBase>();
-        if (monster != null && !monster._isDead)
+        IDamagable damagable = other.GetComponent<IDamagable>();
+        if (damagable != null)
         {
-            // 데미지 적용
-            monster.TakeDamage(damage, transform.position);
+            MonsterBase monster = other.GetComponent<MonsterBase>();
+            if (monster != null && monster._isDead)
+            {
+                return;
+            }
             
-            // 레이저 제거
+            damagable.TakeDamage(damage, transform.position);
+            
             Destroy(gameObject);
         }
     }

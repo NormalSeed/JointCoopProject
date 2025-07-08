@@ -20,6 +20,7 @@ public class DragonController : MonsterBase
         base.Init();
         _monsterID = 10151;
         _flameController = GetComponentInChildren<DragonFlameController>();
+        isBoss = true;
     }
 
     protected override void StateMachineInit()
@@ -31,7 +32,7 @@ public class DragonController : MonsterBase
     protected override void Update()
     {
         base.Update();
-        if (Vector2.Distance(transform.position, _player.transform.position) <= _model._attack1Range && !_isDamaged && _attack1Cooldown <= 0f)
+        if (_player != null && Vector2.Distance(transform.position, _player.transform.position) <= _model._attack1Range && !_isDamaged && _attack1Cooldown <= 0f)
         {
             _movement._isTrace = false;
             _isAttack1 = true;
@@ -41,7 +42,15 @@ public class DragonController : MonsterBase
         {
             _attack1Cooldown -= Time.deltaTime;
         }
+    }
 
+    protected override void PlayBossBGM()
+    {
+        if (SoundManager.Instance.audioBgm != null)
+        {
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
+        }
     }
 
     public void GetAttack1Dir1()
@@ -86,5 +95,18 @@ public class DragonController : MonsterBase
     {
         base.Die();
         SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_DragonDie);
+    }
+
+    private void OnDisable()
+    {
+        if (SoundManager.Instance.audioBgm != null)
+        {
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage1);
+        }
+        else
+        {
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage1);
+        }
     }
 }

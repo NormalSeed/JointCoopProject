@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 4015778350813013678}
   m_Layer: 7
   m_Name: GreedySkeleton
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -36,7 +36,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 9155347364823187983}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7747499286756394615
@@ -192,11 +193,16 @@ MonoBehaviour:
   _model: {fileID: 0}
   _view: {fileID: 0}
   _player: {fileID: 0}
+  _moneyDropSkill: {fileID: 0}
   _isAttack1: 0
   _isAttack2: 0
   _isAttack3: 0
   _isDamaged: 0
   _isDead: 0
+  isBoss: 0
+  _halfHeart: {fileID: 3563366269529705748, guid: fd4d03d72cd307d4681153e4ff63511a, type: 3}
+  _fullHeart: {fileID: 8856065638226913574, guid: 05ed2d4abbda99a41be1fdb9f27e26b5, type: 3}
+  _coin: {fileID: 5365777301004421327, guid: 3f309c5352d629c46ac7fc891068718d, type: 3}
 --- !u!114 &1936681309841485094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,6 +239,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isPatrol: 0
   _isTrace: 0
+  checkDist: 1
+  rayCount: 16
+  maxAvoidAngle: 90
+  smoothTime: 0.12
+  avoidWeight: 1
 --- !u!114 &4015778350813013678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,3 +257,70 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 0}
+--- !u!1 &6180758144393008809
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9155347364823187983}
+  - component: {fileID: 3859046719580212749}
+  m_Layer: 12
+  m_Name: EtoECollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9155347364823187983
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6180758144393008809}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3007465011040059086}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &3859046719580212749
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6180758144393008809}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.15

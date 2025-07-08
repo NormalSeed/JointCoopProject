@@ -109,9 +109,9 @@ GameObject:
   - component: {fileID: 3642099657750299015}
   - component: {fileID: 1230269785399747631}
   - component: {fileID: 7562726310965251170}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ItemDagger
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -145,9 +145,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0606f37efb9345a498c2b1ee0ef10131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemType: 2
   _itemData: {fileID: 11400000, guid: 8639b26a62c41b5439edeccaab05e1dc, type: 2}
-  _itemSkill: {fileID: 11400000, guid: 2ffed6a6e14d34b4991634d06f5e4bb6, type: 2}
+  _itemSkill:
+  - {fileID: 11400000, guid: 5e5209b5f25f4514c85a348b5f035e17, type: 2}
+  - {fileID: 11400000, guid: 025b2e48e967bda4eb1cefdf0756f05f, type: 2}
+  - {fileID: 11400000, guid: c3e19b03df30cfe479c546a5152cb950, type: 2}
+  - {fileID: 11400000, guid: 622b73ce252ea41429ae6d5e2b6321f4, type: 2}
+  - {fileID: 11400000, guid: 130618ede714fd94aa347352e64b91f8, type: 2}
 --- !u!58 &1230269785399747631
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -209,7 +213,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!1 &5034676877234914297
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,7 +293,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.5, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

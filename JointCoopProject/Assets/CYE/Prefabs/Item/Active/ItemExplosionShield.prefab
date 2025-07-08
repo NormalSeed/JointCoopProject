@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 444542063082334755}
   - component: {fileID: 857965863514071766}
   - component: {fileID: 6987351937886068063}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ItemExplosionShield
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 3841542125563124675}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -48,9 +48,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0606f37efb9345a498c2b1ee0ef10131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemType: 0
   _itemData: {fileID: 11400000, guid: 52b963968a2d7c7439ee06f6daa538c9, type: 2}
-  _itemSkill: {fileID: 11400000, guid: 56da68d3309fc89489fbab303f197787, type: 2}
+  _itemSkill:
+  - {fileID: 11400000, guid: 56da68d3309fc89489fbab303f197787, type: 2}
 --- !u!58 &857965863514071766
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -83,9 +83,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.00505884}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.15093847
 --- !u!50 &6987351937886068063
 Rigidbody2D:
   serializedVersion: 4
@@ -112,7 +112,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!1 &6575065888730164909
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,7 +289,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.5, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

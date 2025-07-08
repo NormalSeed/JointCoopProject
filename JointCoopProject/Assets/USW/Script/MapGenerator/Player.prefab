@@ -16,7 +16,9 @@ GameObject:
   - component: {fileID: -5897431971549558117}
   - component: {fileID: 4104457703395391541}
   - component: {fileID: 7253463210670998077}
-  - component: {fileID: 3431380373541907273}
+  - component: {fileID: -8089260879578206188}
+  - component: {fileID: 247606933546216887}
+  - component: {fileID: 3748538036093370335}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -34,7 +36,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 4, y: 4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -80,12 +82,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 5
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 660313994, guid: 36530ce75c7baca4a8e31c6ea3690f13, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.17, y: 0.24}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -98,18 +100,19 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2443373463263467340}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 10b9e8280e222564a8e87925c76493f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tearPrefab: {fileID: 0}
   _swordPrefab: {fileID: 0}
-  _tearAttackDelay: 0.3
   _swordAttackDelay: 0.5
-  _isMeleeWeapon: 0
-  _playerRigid: {fileID: 0}
-  _curVelocity: {x: 0, y: 0}
+  _hitCoolTime: 0.5
+  _knockBackForce: 3
+  _knockBackTime: 0.2
+  _skillManager: {fileID: 7253463210670998077}
+  _moveInput: {x: 0, y: 0}
+  _attackDirection: {x: 0, y: 0}
 --- !u!114 &7479352143652051611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,7 +125,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f022a6c3a534974fa430895e5f01079, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerHp: 3
+  playerHp: 999
+  playerMaxHp: 13
   attackDamage: 1
   moveSpeed: 0
   accelerationSpeed: 0
@@ -130,17 +134,11 @@ MonoBehaviour:
   dashSpeed: 5
   dashDurationTime: 0
   dashCoolTime: 0
-  shotSpeed: 0
+  attackRange: 0.8
   attackSpeed: 0
   canDash: 0
   playerLuck: 0
-  _playerMove: {fileID: 0}
-  _animator: {fileID: 0}
-  _hitCoolTime: 0.4
-  _knockBackForce: 1.5
-  _knockBackTime: 0.2
-  _isAlive: 0
-  _isKnockBack: 0
+  alive: 1
 --- !u!114 &3126570863453909825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,7 +158,8 @@ MonoBehaviour:
   doorDetectionDistance: 1.5
   transitionSpeed: 2
   doorActive: 1
-  debugMode: 0
+  disableRoomTransition: 0
+  autoDetectMapGenerator: 1
 --- !u!50 &-5897431971549558117
 Rigidbody2D:
   serializedVersion: 4
@@ -187,7 +186,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &4104457703395391541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,9 +212,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a531e5f5b2fa9ff438351cb7c0c61eb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerMove: {fileID: 0}
+  _attackRange: {fileID: 0}
   autoskills: []
---- !u!58 &3431380373541907273
-CircleCollider2D:
+  swordUpgradeskills: []
+--- !u!95 &-8089260879578206188
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2443373463263467340}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e199d4151dc1f5243ba4dcb8ff5463ed, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!70 &247606933546216887
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -243,9 +266,21 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
+  m_Offset: {x: 0.002552938, y: -0.002028279}
+  m_Size: {x: 0.1235176, y: 0.2224664}
+  m_Direction: 0
+--- !u!114 &3748538036093370335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2443373463263467340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61912e06c31f5fd48a624d263bd215e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

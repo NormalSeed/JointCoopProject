@@ -28,7 +28,7 @@ public class EliteOrcController : MonsterBase
     protected override void Update()
     {
         base.Update();
-        if (Vector2.Distance(transform.position, _player.transform.position) <= _model._attack1Range && !_isDamaged && _attack1Cooldown <= 0f)
+        if (_player != null && Vector2.Distance(transform.position, _player.transform.position) <= _model._attack1Range && !_isDamaged && _attack1Cooldown <= 0f)
         {
             _movement._isTrace = false;
             _isAttack1 = true;

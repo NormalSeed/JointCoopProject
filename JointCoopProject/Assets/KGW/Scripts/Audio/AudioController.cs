@@ -4,64 +4,57 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Video;
 
-[RequireComponent(typeof(VideoPlayer), typeof(AudioSource))]
-public class AudioController : MonoBehaviour
-{
-    VideoPlayer _videoPlayer;
-    AudioSource _audioSource;
-    public AudioMixer _audioMixer;
-    public AudioMixerGroup _videoGroup;
+// ChangeSceneManagerì—ì„œ ì‚¬ìš©
 
-    private void Start()
-    {
-        Init();
-        VideoSetting();
-    }
+//public class AudioController : MonoBehaviour
+//{
+//    VideoPlayer _videoPlayer;
 
-    private void Update()
-    {
-        // ½ºÅµ Å°
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            GameSceneManager.Instance.LoadMainScene();    
-        }
-    }
+//    private void Start()
+//    {
+//        Init();
+//        VideoSetting();
+//    }
 
-    private void Init()
-    {
-        _videoPlayer = GetComponent<VideoPlayer>();
-        _audioSource = GetComponent<AudioSource>();
-        _audioSource.outputAudioMixerGroup = _videoGroup;
-    }
+//    private void Update()
+//    {
+//        // ìŠ¤í‚µ í‚¤
+//        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(0))
+//        {
+//            SkipCutScene();
+//        }
+//    }
 
-    private void VideoSetting()
-    {
-        // ºñµğ¿À ¼¼ÆÃ
-        _videoPlayer.audioOutputMode = VideoAudioOutputMode.AudioSource;    // ¿µ»ó¿¡ ÀúÀåµÈ ¿Àµğ¿À »ç¿ë
+//    private void Init()
+//    {
+//        _videoPlayer = GetComponent<VideoPlayer>();
+//    }
 
-        // Æ®·¢ È®ÀÎ
-        if (_videoPlayer.audioTrackCount > 0 )
-        {
-            Debug.Log("Æ®·¢ Àç»ı");
-            _videoPlayer.EnableAudioTrack(0, true); // 0¹ø Track »ç¿ë (True)
-            _videoPlayer.SetTargetAudioSource(0, _audioSource);
-        }
-        else
-        {
-            Debug.Log("Æ®·¢ ¾øÀ½");
-        }
+//    private void VideoSetting()
+//    {
+//        // ë¹„ë””ì˜¤ ì„¸íŒ…
+        
 
-        // ¿µ»ó ³¡³­ ÈÄ Main SceneÀüÈ¯ ÀÌº¥Æ® µî·Ï
-        _videoPlayer.loopPointReached -= SceneChange;   // Áßº¹ µî·Ï ¹®Á¦·Î ÀÎÇÏ¿© ÀÏ´Ü »èÁ¦ ÈÄ Ãß°¡
-        _videoPlayer.loopPointReached += SceneChange;
+        
 
-        _videoPlayer.Play();
-    }
+//        // ì˜ìƒ ëë‚œ í›„ Main Sceneì „í™˜ ì´ë²¤íŠ¸ ë“±ë¡
+//        _videoPlayer.loopPointReached -= SceneChange;   // ì¤‘ë³µ ë“±ë¡ ë¬¸ì œë¡œ ì¸í•˜ì—¬ ì¼ë‹¨ ì‚­ì œ í›„ ì¶”ê°€
+//        _videoPlayer.loopPointReached += SceneChange;
 
-    // Scene ÀüÈ¯
-    private void SceneChange(VideoPlayer videoPlayer)
-    {
-        GameSceneManager.Instance.LoadMainScene();
-    }
+//        _videoPlayer.Play();
+//    }
 
-}
+//    private void SkipCutScene()
+//    {
+//        SoundManager.Instance.StopBGM();
+//        GameSceneManager.Instance.LoadMainScene();
+//    }
+
+//    // Scene ì „í™˜
+//    private void SceneChange(VideoPlayer videoPlayer)
+//    {
+//        SoundManager.Instance.StopBGM();
+//        GameSceneManager.Instance.LoadMainScene();
+//    }
+
+//}

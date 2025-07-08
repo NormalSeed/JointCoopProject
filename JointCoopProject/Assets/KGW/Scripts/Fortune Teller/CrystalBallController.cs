@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class CrystalBallController : MonoBehaviour
 {
+    [SerializeField] ChangeSceneManager _changeSceneManager;
     [SerializeField] Animator _effectAni;
-    [SerializeField] float _FortuneTextTime = 2f;
+    [SerializeField] float _FortuneTextTime = 3f;
 
     bool _isContact = false;
     float _timer;
@@ -25,6 +26,12 @@ public class CrystalBallController : MonoBehaviour
         _timer = _FortuneTextTime;
     }
 
+    private void OnEnable()
+    {
+        // 생성시 점술가, 상점방 BGM ON
+        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_FortuneTellersShop);
+    }
+
     private void Update()
     {
         if (_isFortuneUiOpen)
@@ -36,6 +43,27 @@ public class CrystalBallController : MonoBehaviour
                 OnFortuneUiClose();
             }
         }        
+    }
+
+    private void OnDisable()
+    {
+        switch (_changeSceneManager._CursceneIndex)
+        {
+            case 2:
+            case 3:
+                SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage1);    // Stage1,2 BGM ON
+                break;
+            case 4:
+            case 5:
+                SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);    // stage3,4 BGM ON
+                break;
+            case 6:
+            case 7:
+                SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage3);    // stage5,6 BGM ON
+                break;
+            default:
+                break;
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -51,6 +79,7 @@ public class CrystalBallController : MonoBehaviour
                 return;
             }
 
+            Debug.Log("버프 생성");
             // 랜덤 버퍼 룰렛 생성
             IBuff randomBuff = BuffCreateFactory.BuffRoulette();
             // 버퍼 적용
@@ -113,7 +142,7 @@ public class CrystalBallController : MonoBehaviour
         // 운세 UI 열림
         _isFortuneUiOpen = true;
 
-        GameSceneManager.Instance.OpenUi(UIKeyList.fortune);
+        UIManager.Instance.OpenUi(UIKeyList.fortune);
         GameObject fortuneUi = UIManager.Instance.GetUI(UIKeyList.fortune);
         
         if (fortuneUi != null)
@@ -130,7 +159,7 @@ public class CrystalBallController : MonoBehaviour
     // 지정된 시간이 지나면 운세 UI 닫힘
     private void OnFortuneUiClose()
     {
-        GameSceneManager.Instance.CloseUi();
+        UIManager.Instance.CloseUi();
         _isFortuneUiOpen = false;
     }
 }

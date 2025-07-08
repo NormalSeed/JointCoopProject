@@ -1,61 +1,125 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
-public class InventoryManager : TempSingleton<InventoryManager>
+[System.Serializable]
+public struct ItemSlot
+{
+    public ItemDataSO itemDataSO;
+    public int itemStackCount;
+    public ItemSlot(ItemDataSO itemDataSO, int itemStackCount)
+    {
+        this.itemDataSO = itemDataSO;
+        this.itemStackCount = itemStackCount;
+    }
+    public void UpgradeStackCount()
+    {
+        itemStackCount++;
+        Debug.Log("1");
+        if (itemStackCount > 5)
+        {
+            itemStackCount = 5;
+        }
+    }
+}
+public class InventoryManager : _TempSingleton<InventoryManager>
 {
     private const int SLOT_COUNT = 12;
 
     // UI visible
+    [SerializeField]
     private GameItem activeItem;
-    public GameItem _activeItem { get { return activeItem; } set { activeItem = value; } }
-    private ItemDataSO _activeItemData;
-    private List<ItemSlot> _visItemList = new List<ItemSlot>(SLOT_COUNT);
+    public GameItem _activeItem { get { return activeItem; } private set { activeItem = value; } }
+    public ItemDataSO _activeItemData;
+    public SkillDataSO _activeSkillData;
+    [SerializeField]
+    private List<GameItem> _activeItemPool;
+
+    public List<ItemSlot> _visItemList = new List<ItemSlot>(SLOT_COUNT);
 
     // UI invisible
-    private List<ItemSlot> _invItemList = new List<ItemSlot>();
+    public List<ItemSlot> _invItemList = new List<ItemSlot>();
 
     // Expend Items Info
-    private int coinCount;
+    private int coinCount = 1000;
     public int _coinCount { get { return coinCount; } private set { coinCount = value; } }
     [SerializeField] private GameObject _coinPrefab;
     private int bombCount;
     public int _bombCount { get { return bombCount; } private set { bombCount = value; } }
     [SerializeField] private GameObject _bombPrefab;
 
-    private struct ItemSlot
+    // Text Timer
+    [SerializeField] float _skillTitleTextTime = 1f;
+    float _timer;
+    bool _isSkillTitleOpen = false;
+
+    private void Start()
     {
-        public ItemDataSO itemDataSO;
-        public int itemStackCount;
-        public ItemSlot(ItemDataSO itemDataSO, int itemStackCount)
-        {
-            this.itemDataSO = itemDataSO;
-            this.itemStackCount = itemStackCount;
-        }
-        public void UpgradeStackCount()
-        {
-            itemStackCount++;
-            if (itemStackCount > 5)
-            {
-                itemStackCount = 5;
-            }
-        }
+        _timer = _skillTitleTextTime;
     }
 
-    public bool TryGetItem(GameItem insertItem, Transform itemPos)
+    private void Update()
+    {
+        if (_isSkillTitleOpen)
+        {
+            _timer -= Time.deltaTime;
+            if(_timer < 0)
+            {
+                OnSkillTitleUiClose();
+            }
+        }     
+    }
+
+    private void OnSkillTitleUiClose()
+    {
+        UIManager.Instance.CloseUi();
+        _isSkillTitleOpen = false;
+    }
+    
+    private float _activeCooldownTimer = 0f;
+    private float _activeDurationTimer = 0f;
+
+    [SerializeField] private Image _cooldownImage;
+
+    private Coroutine _skillCooldownRoutine;
+    private Coroutine _skillDurationRoutine;
+
+    public bool TryGetItem(GameItem insertItem, Transform pickupPos)
     {
         bool insertResult = false;
-        switch (insertItem._itemType)
+        switch (insertItem._itemData._itemType)
         {
             case ItemType.Active:
-                if (_activeItem != null)
-                {
-                    _activeItem.Drop(itemPos);
-                }
-                _activeItem = insertItem;
+                DropPrevActiveItem(pickupPos);
+
                 _activeItemData = insertItem._itemData;
+                _activeSkillData = insertItem._itemSkill[0];
+                UIManager.Instance.SetActiveItemImage(_activeItemData._itemIcon);   // 획득한 액티브 아이템의 이미지 저장
+                UIManager.Instance._itemGuageController.SetCoolTime(_activeSkillData.skillCooldown);    // 액비트 아이템 쿨타임 저장
+                UIManager.Instance._itemGuageController._canUseItem = true;
+
+                // 획득한 액티브 아이템 정보 UI 출력
+                _timer = _skillTitleTextTime;   // UI 오픈마다 타이머 초기화
+                _isSkillTitleOpen = true;
+
+                GameObject getActiveItem = UIManager.Instance.GetUI(UIKeyList.itemInfo);
+                TMP_Text[] activeItemText = getActiveItem.GetComponentsInChildren<TMP_Text>(true);
+                UIManager.Instance.OpenUi(UIKeyList.itemInfo);
+                activeItemText[0].text = _activeItemData._itemName;
+                activeItemText[1].text = _activeItemData._itemDesc;
+
+                _activeSkillData.ReleaseSkill(pickupPos);
+
+                _activeCooldownTimer = 0f;
+                _activeDurationTimer = 0f;
+
+                StopCountActiveCooldown();
+                StopCountActiveDuration();
+
                 insertResult = true;
                 break;
             case ItemType.PassiveAttack:
@@ -64,7 +128,9 @@ public class InventoryManager : TempSingleton<InventoryManager>
                 {
                     if (insertItem._itemData._itemID == item.itemDataSO._itemID)
                     {
-                        item.UpgradeStackCount();
+                        _visItemList.Remove(item);
+                        ItemSlot upgradeItem = new ItemSlot(insertItem._itemData, item.itemStackCount + 1);
+                        _visItemList.Add(upgradeItem);
                         insertResult = true;
                         break; // >> foreach break;
                     }
@@ -82,46 +148,68 @@ public class InventoryManager : TempSingleton<InventoryManager>
         return insertResult;
     }
     public bool TryBuyItem(ShopItem insertItem)
-    { 
+    {
         bool insertResult = false;
-        if (_coinCount > insertItem._itemData._itemPrice)
+        if (_coinCount >= insertItem._itemData._itemPrice)
         {
             if (insertItem._isVisibleInInventory)
             {
-                insertResult = InsertItemToList(insertItem, ref _visItemList, insertItem._itemData._canStack, insertItem._isVisibleInInventory);
+                insertResult = InsertBoughtItemToList(insertItem, insertItem._itemData._canStack, insertItem._isVisibleInInventory);
             }
             else
-            { 
-                insertResult = InsertItemToList(insertItem, ref _invItemList, insertItem._itemData._canStack);
+            {
+                insertResult = InsertBoughtItemToList(insertItem, insertItem._itemData._canStack);
+            }
+
+            if (insertResult)
+            {
+                insertItem._itemSkill[0].UseSkill(insertItem.transform, out bool useSkillResult);
+                insertResult = useSkillResult;
             }
         }
         return insertResult;
     }
-    private bool InsertItemToList(Item insertItem, ref List<ItemSlot> insertedList, bool stackable = false, bool checkCapacity = false)
+    private bool InsertBoughtItemToList(Item insertItem, bool stackable = false, bool checkCapacity = false)
     {
         bool insertResult = false;
-        if (stackable)
+        if (stackable && checkCapacity)
         {
-            foreach (ItemSlot item in insertedList)
+            foreach (ItemSlot item in _visItemList)
             {
                 if (insertItem._itemData._itemID == item.itemDataSO._itemID)
                 {
                     item.UpgradeStackCount();
-                    insertItem._itemSkill.UseSkill(insertItem.transform);
                     insertResult = true;
                     break;
                 }
             }
         }
-        else
-        { 
-            if (!checkCapacity || insertedList.Count < insertedList.Capacity)
+        else if (stackable && !checkCapacity)
+        {
+            foreach (ItemSlot item in _invItemList)
+            {
+                if (insertItem._itemData._itemID == item.itemDataSO._itemID)
+                {
+                    item.UpgradeStackCount();
+                    insertResult = true;
+                    break;
+                }
+            }
+        }
+        else if (!stackable && checkCapacity) // 사실상 stackable 체크는 필요없음
+        {
+            if (_visItemList.Count < _visItemList.Capacity)
             {
                 ItemSlot newItem = new ItemSlot(insertItem._itemData, 1);
-                insertedList.Add(newItem);
-                insertItem._itemSkill.UseSkill(insertItem.transform);
+                _visItemList.Add(newItem);
                 insertResult = true;
             }
+        }
+        else if (!stackable && !checkCapacity) // 사실상 stackable 체크는 필요없음
+        {
+            ItemSlot newItem = new ItemSlot(insertItem._itemData, 1);
+            _invItemList.Add(newItem);
+            insertResult = true;
         }
         return insertResult;
     }
@@ -131,6 +219,7 @@ public class InventoryManager : TempSingleton<InventoryManager>
     }
     public void UseCoin(int useAmount)
     {
+        Debug.Log($"{_coinCount}");
         _coinCount -= useAmount;
     }
     public void GetBomb(int getAmount)
@@ -140,9 +229,115 @@ public class InventoryManager : TempSingleton<InventoryManager>
     public void UseBomb(Transform playerPos)
     {
         if (_bombCount >= 1)
-        { 
+        {
             _bombCount -= 1;
             _bombPrefab.GetComponent<Bomb>().Install(playerPos);
+        }
+    }
+    public int GetItemSkillGrade(ItemDataSO _itemData)
+    {
+        int grade = 0;
+        switch (_itemData._itemType)
+        {
+            case ItemType.Active:
+            case ItemType.shop:
+                grade = 1;
+                break;
+            case ItemType.PassiveAttack:
+            case ItemType.PassiveAuto:
+                foreach (ItemSlot item in _visItemList)
+                {
+                    if (_itemData._itemID == item.itemDataSO._itemID)
+                    {
+                        grade = item.itemStackCount;
+                        Debug.Log($"{grade}");
+                        break; // >> foreach break;
+                    }
+                }
+                break;
+            case ItemType.Expend:
+                break;
+            default:
+                break;
+        }
+        return grade;
+    }
+
+    private void DropPrevActiveItem(Transform dropPos)
+    {
+        if (_activeItemData != null)
+        {
+            foreach (GameItem item in _activeItemPool)
+            {
+                if (item._itemData == _activeItemData)
+                {
+                    if (_activeSkillData.skillDuration != 0)
+                    {
+                        _activeSkillData.ReleaseSkill(dropPos);
+                    }
+                    item.Drop(dropPos);
+                }
+            }
+        }
+    }
+    public void UseActiveSkill(Transform usePos)
+    {
+        if (_activeSkillData != null && _activeCooldownTimer <= 0f && _activeDurationTimer <= 0f)
+        {
+            _activeSkillData.UseSkill(usePos);
+
+            UIManager.Instance._itemGuageController.ItemUse();
+            _activeDurationTimer = _activeSkillData.skillDuration;
+            if (_skillDurationRoutine == null)
+            {
+                _skillDurationRoutine = StartCoroutine(CountSkillDuration());
+            }
+
+            _activeCooldownTimer = _activeSkillData.skillCooldown;
+            if (_skillCooldownRoutine == null)
+            {
+                _skillCooldownRoutine = StartCoroutine(CountSkillCooltime());
+            }
+
+        }
+    }
+    private IEnumerator CountSkillCooltime()
+    {
+
+        while (_activeCooldownTimer > 0f)
+        {
+            _activeCooldownTimer -= Time.deltaTime;
+            // UI
+            _cooldownImage.fillAmount = _activeCooldownTimer / _activeSkillData.skillCooldown;
+            yield return new WaitForFixedUpdate();
+        }
+
+        StopCountActiveCooldown();
+    }
+    private void StopCountActiveCooldown()
+    {
+        if (_skillCooldownRoutine != null)
+        {
+            StopCoroutine(_skillCooldownRoutine);
+            _skillCooldownRoutine = null;
+        }
+    }
+    private IEnumerator CountSkillDuration()
+    {
+        while (_activeDurationTimer > 0f)
+        {
+            _activeDurationTimer -= Time.deltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+        StopCountActiveDuration();
+    }
+    private void StopCountActiveDuration()
+    {
+        if (_skillDurationRoutine != null)
+        {
+            _activeSkillData.ReleaseSkill();
+            StopCoroutine(_skillDurationRoutine);
+            _skillDurationRoutine = null;
         }
     }
 }

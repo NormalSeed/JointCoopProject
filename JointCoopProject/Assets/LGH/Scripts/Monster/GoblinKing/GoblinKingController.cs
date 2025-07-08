@@ -24,6 +24,7 @@ public class GoblinKingController : MonsterBase
     {
         base.Init();
         _monsterID = 10352;
+        isBoss = true;
     }
 
     protected override void StateMachineInit()
@@ -47,6 +48,12 @@ public class GoblinKingController : MonsterBase
             _movement._isTrace = false;
             _isAttack1 = true;
         }
+    }
+
+    protected override void PlayBossBGM()
+    {
+        SoundManager.Instance.StopBGM();
+        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
     }
 
     // Attack1 : 십자, X자가 번갈아 나오는 장판형 공격.
@@ -141,5 +148,18 @@ public class GoblinKingController : MonsterBase
     {
         base.Die();
         SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_GoblinKingDie);
+    }
+
+    private void OnDisable()
+    {
+        if (SoundManager.Instance.audioBgm != null)
+        {
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage3);
+        }
+        else
+        {
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage3);
+        }
     }
 }

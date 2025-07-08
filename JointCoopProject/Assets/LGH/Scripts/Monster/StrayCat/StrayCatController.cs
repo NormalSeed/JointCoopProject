@@ -51,6 +51,13 @@ public class StrayCatController : MonsterBase
         _stateMachine._stateDic.Add(EState.Attack3, new StrayCat_Attack3(this));
     }
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        SoundManager.Instance.StopBGM();
+        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
+    }
+
     protected override void Update()
     {
         base.Update();
@@ -210,5 +217,15 @@ public class StrayCatController : MonsterBase
 
         _movement._isTrace = true;
         _isAttack3 = false;
+    }
+
+    public override void Die()
+    {
+        base.Die();
+    }
+
+    private void OnDisable()
+    {
+        SoundManager.Instance.StopBGM();
     }
 }

@@ -176,7 +176,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.5, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -206,9 +206,9 @@ GameObject:
   - component: {fileID: 7588447356851535671}
   - component: {fileID: 3110866301848560661}
   - component: {fileID: 8364739588991419748}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ItemSpinArrow
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -242,9 +242,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0606f37efb9345a498c2b1ee0ef10131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemType: 2
   _itemData: {fileID: 11400000, guid: 1642c2f344fdcc24f83b96f21a0a6ad7, type: 2}
-  _itemSkill: {fileID: 11400000, guid: c554d5fd39c0956428939fae87020745, type: 2}
+  _itemSkill:
+  - {fileID: 11400000, guid: c554d5fd39c0956428939fae87020745, type: 2}
+  - {fileID: 11400000, guid: d8fc1cb62253a084c9ef089424a201f6, type: 2}
+  - {fileID: 11400000, guid: 4c20bb199551a804185c0c92a833b4fd, type: 2}
+  - {fileID: 11400000, guid: 950c31eee3175e64eb15020cd21e42c8, type: 2}
+  - {fileID: 11400000, guid: 9fa2aa34ed3f37b4ba3732bd616492e0, type: 2}
 --- !u!58 &3110866301848560661
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -306,4 +310,4 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4

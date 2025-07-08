@@ -4,25 +4,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ShopManager : TempSingleton<ShopManager>
+public class ShopManager : _TempSingleton<ShopManager>
 {
     [Serializable]
-    private struct SellItemSlot
+    private class SellItemSlot
     {
         public ItemDataSO itemData;
         public int maxStock;
-        private int curStock;
-        public SellItemSlot(ItemDataSO itemData, int sellLimit)
+        public int curStock;
+        public SellItemSlot(ItemDataSO itemData, int maxStock)
         {
             this.itemData = itemData;
-            this.maxStock = sellLimit;
-            this.curStock = this.maxStock;
+            this.maxStock = maxStock;
+            this.curStock = maxStock;
         }
         public bool TryDecreaseCurStock()
         {     
-            if (curStock >= 1)
+            if (curStock > 0 || maxStock == 0)
             {
-                curStock--;
+                this.curStock--;
                 return true;
             }
             return false;

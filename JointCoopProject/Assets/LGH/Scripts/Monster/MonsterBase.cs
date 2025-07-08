@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public abstract class MonsterBase : MonoBehaviour, IDamagable
@@ -25,17 +26,30 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     public Dictionary<int, MonsterData> _dataDic = new();
     public MonsterView _view;
     public StateMachine _stateMachine;
+
     public GameObject _player;
+    private PlayerSkillManager _skillManager;
+    public MoneyDropSkillSO _moneyDropSkill;
+
+
     public bool _isAttack1;
     public bool _isAttack2;
     public bool _isAttack3;
     public bool _isDamaged;
     public bool _isDead;
+    public bool _isParalyzed;
     private Coroutine _coOffDamage;
     private WaitForSeconds _damageDelay = new WaitForSeconds(1f);
     public bool isBoss = false;
     public Action OnBossDied;
-    
+
+    [SerializeField] protected GameObject _halfHeart;
+    [SerializeField] protected GameObject _fullHeart;
+    [SerializeField] protected GameObject _coin;
+    protected float _hHPercentage;
+    protected float _fHPercentage;
+    protected float _cPercentage;
+
     //Monster RoomManager
     private RoomMonsterManager roomMonsterManager;
     private Vector2Int myRoom;
@@ -56,13 +70,21 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _model = GetComponent<MonsterModel>();
         _movement = GetComponent<MonsterMovement>();
         _view = GetComponent<MonsterView>();
-        _player = GameObject.Find("Player");
 
         roomMonsterManager = FindObjectOfType<RoomMonsterManager>();
-        
+
         LoadCSV("MonsterStats");
 
         StateMachineInit();
+    }
+
+    protected virtual void OnEnable()
+    {
+        _player = GameObject.FindWithTag("Player");
+        if (_player != null)
+        {
+            _skillManager = _player.GetComponent<PlayerSkillManager>();
+        }
     }
 
     /// <summary>
@@ -77,6 +99,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _stateMachine._stateDic.Add(EState.Trace, new Monster_Trace(this));
         _stateMachine._stateDic.Add(EState.Damaged, new Monster_Damaged(this));
         _stateMachine._stateDic.Add(EState.Dead, new Monster_Dead(this));
+        _stateMachine._stateDic.Add(EState.Paralyze, new Monster_Paralyze(this));
 
         _stateMachine._curState = _stateMachine._stateDic[EState.Idle];
     }
@@ -90,6 +113,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _isAttack3 = false;
         _isDamaged = false;
         _isDead = false;
+        _isParalyzed = false;
 
         if (_dataDic.TryGetValue(_monsterID, out MonsterData data))
         {
@@ -99,7 +123,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
 
         FindMyRoom();
     }
-    
+
     void FindMyRoom()
     {
         MapGenerator mapGen = FindObjectOfType<MapGenerator>();
@@ -146,13 +170,30 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     /// </summary>
     protected virtual void Update()
     {
-        _activeDelay -= Time.deltaTime;
-        if (_activeDelay < 0f)
+        if (_isActivated == false)
         {
+            _activeDelay -= Time.deltaTime;
+        }
+        
+        if (_activeDelay < 0f && _isActivated == false)
+        {
+            PlayBossBGM();
             _isActivated = true;
             _movement._isTrace = true;
         }
         _stateMachine.Update();
+        if (_skillManager?.swordUpgradeskills != null)
+        {
+            _moneyDropSkill = _skillManager.swordUpgradeskills
+            .Select(x => x.swordSkill)
+            .OfType<MoneyDropSkillSO>()
+            .FirstOrDefault();
+        }
+    }
+
+    protected virtual void PlayBossBGM()
+    {
+        
     }
 
     private void FixedUpdate()
@@ -169,6 +210,14 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
             {
                 damagable.TakeDamage(_model._bodyDamage, transform.position);
             }
+        }
+    }
+
+    protected void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerStunProjectile"))
+        {
+            _isParalyzed = true;
         }
     }
 
@@ -199,7 +248,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     public virtual void Die()
     {
         _isDead = true;
-        
+
         if (roomMonsterManager != null)
         {
             roomMonsterManager.MonsterDied(this, myRoom);
@@ -214,10 +263,119 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
 
     public void UnactivateSelf()
     {
+        DropItems();
         //TODO: ��Ȱ��ȭ�ϸ� ���ÿ� ������ �Ǵ� ��ȭ�� ����ϴ� ��� ���� �ʿ�
         if (_isDead)
         {
             gameObject.SetActive(false);
+        }
+    }
+
+    public void DropItems()
+    {
+        if (!isBoss)
+        {
+            _hHPercentage = 5;
+            _fHPercentage = 5;
+            _cPercentage = 90;
+
+            int random = UnityEngine.Random.Range(0, 100);
+            if (random >= 0 && random < _hHPercentage && _halfHeart != null)
+            {
+                Instantiate(_halfHeart, transform.position, Quaternion.identity);
+            }
+            else if (random >= _hHPercentage && random < _hHPercentage + _fHPercentage && _fullHeart != null)
+            {
+                Instantiate(_fullHeart, transform.position, Quaternion.identity);
+            }
+            else if (random >= _hHPercentage + _fHPercentage && _coin != null)
+            {
+                Instantiate(_coin, transform.position, Quaternion.identity);
+            }
+        }
+        else if (isBoss)
+        {
+            _hHPercentage = 50;
+            _fHPercentage = 50;
+            _cPercentage = 33;
+
+            int hpRandom = UnityEngine.Random.Range(0, 100);
+            int coinRandom = UnityEngine.Random.Range(0, 99);
+
+            if (hpRandom >= 0 && hpRandom < _hHPercentage)
+            {
+                Instantiate(_fullHeart, transform.position, Quaternion.identity);
+            }
+            else if (hpRandom >= _hHPercentage)
+            {
+                Instantiate(_fullHeart, transform.position + new Vector3(0.2f, 0, 0), Quaternion.identity);
+                Instantiate(_fullHeart, transform.position + new Vector3(-0.2f, 0, 0), Quaternion.identity);
+            }
+
+            if (coinRandom >= 0 && coinRandom < _cPercentage)
+            {
+                Instantiate(_coin, transform.position + new Vector3(0.2f, 0, 0), Quaternion.identity);
+                Instantiate(_coin, transform.position + new Vector3(-0.2f, 0, 0), Quaternion.identity);
+                Instantiate(_coin, transform.position + new Vector3(0, 0.3f, 0), Quaternion.identity);
+            }
+            else if (coinRandom >= _cPercentage && coinRandom < _cPercentage * 2)
+            {
+                Instantiate(_coin, transform.position + new Vector3(0.2f, 0, 0), Quaternion.identity);
+                Instantiate(_coin, transform.position + new Vector3(-0.2f, 0, 0), Quaternion.identity);
+                Instantiate(_coin, transform.position + new Vector3(0, 0.3f, 0), Quaternion.identity);
+                Instantiate(_coin, transform.position + new Vector3(0, -0.3f, 0), Quaternion.identity);
+            }
+            else if (coinRandom >= _cPercentage * 2)
+            {
+                Instantiate(_coin, transform.position + new Vector3(0.2f, 0, 0), Quaternion.identity);
+                Instantiate(_coin, transform.position + new Vector3(-0.2f, 0, 0), Quaternion.identity);
+                Instantiate(_coin, transform.position + new Vector3(0.2f, 0.3f, 0), Quaternion.identity);
+                Instantiate(_coin, transform.position + new Vector3(-0.2f, 0.3f, 0), Quaternion.identity);
+                Instantiate(_coin, transform.position + new Vector3(0, -0.3f, 0), Quaternion.identity);
+            }
+        }
+
+        if (_moneyDropSkill != null)
+        {
+            int skillRandom = UnityEngine.Random.Range(0, 10);
+            switch (_moneyDropSkill.name)
+            {
+                case "MoneyDropSkillG1SO":
+                    if (skillRandom < 1)
+                    {
+                        Instantiate(_coin, transform.position, Quaternion.identity);
+                    }
+                    break;
+                case "MoneyDropSkillG2SO":
+                    if (skillRandom < 2)
+                    {
+                        Instantiate(_coin, transform.position, Quaternion.identity);
+                    }
+                    break;
+                case "MoneyDropSkillG3SO":
+                    if (skillRandom < 3)
+                    {
+                        Instantiate(_coin, transform.position, Quaternion.identity);
+                    }
+                    break;
+                case "MoneyDropSkillG4SO":
+                    if (skillRandom < 4)
+                    {
+                        Instantiate(_coin, transform.position, Quaternion.identity);
+                    }
+                    break;
+                case "MoneyDropSkillG5SO":
+                    if (skillRandom < 5)
+                    {
+                        Instantiate(_coin, transform.position, Quaternion.identity);
+                    }
+                    break;
+            }
+            Debug.Log($"적용된 골드드랍 버프스킬 : {_moneyDropSkill.name}");
+        }
+        else
+        {
+            Debug.Log("스킬 참조 못함");
         }
     }
 }

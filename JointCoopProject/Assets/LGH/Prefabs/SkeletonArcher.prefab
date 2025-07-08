@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 3601004907554596016}
   m_Layer: 7
   m_Name: SkeletonArcher
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -38,6 +38,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7965805902985476780}
+  - {fileID: 5014812624689212654}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &4133545046045431145
@@ -193,11 +194,16 @@ MonoBehaviour:
   _model: {fileID: 0}
   _view: {fileID: 0}
   _player: {fileID: 0}
+  _moneyDropSkill: {fileID: 0}
   _isAttack1: 0
   _isAttack2: 0
   _isAttack3: 0
   _isDamaged: 0
   _isDead: 0
+  isBoss: 0
+  _halfHeart: {fileID: 3563366269529705748, guid: fd4d03d72cd307d4681153e4ff63511a, type: 3}
+  _fullHeart: {fileID: 8856065638226913574, guid: 05ed2d4abbda99a41be1fdb9f27e26b5, type: 3}
+  _coin: {fileID: 5365777301004421327, guid: 3f309c5352d629c46ac7fc891068718d, type: 3}
   _mergePoint: {fileID: 7965805902985476780}
   _arrowController: {fileID: 0}
   _attack1Dir: {x: 0, y: 0}
@@ -238,6 +244,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isPatrol: 0
   _isTrace: 0
+  checkDist: 1
+  rayCount: 16
+  maxAvoidAngle: 90
+  smoothTime: 0.12
+  avoidWeight: 1
 --- !u!114 &3601004907554596016
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,6 +262,73 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 0}
+--- !u!1 &2772081266097033442
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5014812624689212654}
+  - component: {fileID: 5794508473155788206}
+  m_Layer: 12
+  m_Name: EtoECollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5014812624689212654
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2772081266097033442}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3058985904441332176}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &5794508473155788206
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2772081266097033442}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.15
 --- !u!1 &3324340061264398214
 GameObject:
   m_ObjectHideFlags: 0

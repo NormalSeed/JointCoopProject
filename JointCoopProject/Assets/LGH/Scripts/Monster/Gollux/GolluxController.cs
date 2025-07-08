@@ -18,6 +18,7 @@ public class GolluxController : MonsterBase
     {
         base.Init();
         _monsterID = 10152;
+        isBoss = true;
     }
 
     protected override void StateMachineInit()
@@ -40,6 +41,12 @@ public class GolluxController : MonsterBase
             _movement._isTrace = false;
             _isAttack1 = true;
         }
+    }
+
+    protected override void PlayBossBGM()
+    {
+        SoundManager.Instance.StopBGM();
+        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
     }
 
     public void Attack1()
@@ -79,5 +86,18 @@ public class GolluxController : MonsterBase
     {
         base.Die();
         SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_GolluxDie);
+    }
+
+    private void OnDisable()
+    {
+        if (SoundManager.Instance.audioBgm != null)
+        {
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage1);
+        }
+        else
+        {
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage1);
+        }
     }
 }

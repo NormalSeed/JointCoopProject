@@ -176,7 +176,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.5, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -206,9 +206,9 @@ GameObject:
   - component: {fileID: 2332572355837017005}
   - component: {fileID: 6034828198657124772}
   - component: {fileID: 166486257623038825}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ItemThunder
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -242,9 +242,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0606f37efb9345a498c2b1ee0ef10131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemType: 2
   _itemData: {fileID: 11400000, guid: 9674bed068f634f4a94e9b2747d1feb3, type: 2}
-  _itemSkill: {fileID: 11400000, guid: 40f45d20c16949e4496fd544c087be56, type: 2}
+  _itemSkill:
+  - {fileID: 11400000, guid: 279bbc1d08bc30c4eafca8f384bf3da7, type: 2}
+  - {fileID: 11400000, guid: ac76d2d10471fbd4692dc85b23702eb5, type: 2}
+  - {fileID: 11400000, guid: ec0b8b97e6144e3479fecf0a467ddb9c, type: 2}
+  - {fileID: 11400000, guid: fb8046873fce65645b165b87646d315e, type: 2}
+  - {fileID: 11400000, guid: 92e672b87e81ba9468ad21419103528b, type: 2}
 --- !u!58 &6034828198657124772
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -306,4 +310,4 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4

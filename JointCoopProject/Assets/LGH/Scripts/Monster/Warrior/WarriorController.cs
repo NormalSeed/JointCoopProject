@@ -15,6 +15,8 @@ public class WarriorController : MonsterBase
     public Coroutine _coAttack2;
     private readonly WaitForSeconds _attackDelay = new WaitForSeconds(1f);
 
+    [SerializeField] private Attack2Mesh _attack2Mesh;
+
     public readonly int ATTACK1_HASH = Animator.StringToHash("Attack1");
     public readonly int ATTACK2_HASH = Animator.StringToHash("Attack2");
     public readonly int STUN_HASH = Animator.StringToHash("Stun");
@@ -23,6 +25,7 @@ public class WarriorController : MonsterBase
     {
         base.Init();
         _monsterID = 10252;
+        isBoss = true;
     }
 
     protected override void StateMachineInit()
@@ -52,11 +55,17 @@ public class WarriorController : MonsterBase
             _isAttack1 = true;
         }
 
-        if (Vector2.Distance(transform.position, _player.transform.position) <= _model._attack2Range && !_isDamaged && _attack2Cooldown <= 0f && !_isAttack1)
+        if (_player != null && Vector2.Distance(transform.position, _player.transform.position) <= _model._attack2Range && !_isDamaged && _attack2Cooldown <= 0f && !_isAttack1)
         {
             _movement._isTrace = false;
             _isAttack2 = true;
         }
+    }
+
+    protected override void PlayBossBGM()
+    {
+        SoundManager.Instance.StopBGM();
+        SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_BossStage);
     }
 
     // Attack1: 실드 패턴, 5초간 지속되고 체력 300만큼의 실드를 획득하고 제자리에 멈춰 있음
@@ -88,7 +97,11 @@ public class WarriorController : MonsterBase
         {
             if (angleToPlayer <= _attack2Angle / 2f)
             {
-                Debug.Log("공격 맞음");
+                IDamagable player = _player.GetComponent<IDamagable>();
+                if (player != null)
+                {
+                    player.TakeDamage(_model._attack2Damage, transform.position);
+                }
             }
         }
     }
@@ -114,9 +127,34 @@ public class WarriorController : MonsterBase
         _isAttack2 = false;
     }
 
+    public void ShowAttack2Mesh()
+    {
+        _attack2Mesh.gameObject.SetActive(true);
+        _attack2Mesh.CreateSector(_attack2Dir);
+    }
+
+    public void HideAttack2Filled()
+    {
+        _attack2Mesh.gameObject.SetActive(false);
+    }
+
+
     public override void Die()
     {
         base.Die();
         SoundManager.Instance.PlaySFX(SoundManager.ESfx.SFX_WarriorDie);
+    }
+
+    private void OnDisable()
+    {
+        if (SoundManager.Instance.audioBgm != null)
+        {
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);
+        }
+        else
+        {
+            SoundManager.Instance.PlayBGM(SoundManager.EBgm.BGM_Stage2);
+        }
     }
 }

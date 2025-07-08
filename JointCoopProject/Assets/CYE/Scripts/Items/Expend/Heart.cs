@@ -27,7 +27,6 @@ public class Heart : Item, IPickable
     #region // IPickable
     public void PickUp(Transform pickupPos)
     {
-        // TempManager.inventory.GetCoin(_itemData._itemPrice);
         PlayerStatManager.Instance._playerHp += (int)_hpUpValue;
         Destroy(gameObject);
     }

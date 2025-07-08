@@ -5,15 +5,28 @@ using UnityEngine;
 
 public abstract class MonsterMovement : MonoBehaviour
 {
-    // »óÇÏÁÂ¿ì·Î ÀÚµ¿À¸·Î ¿òÁ÷ÀÌ´Â °£´ÜÇÑ AI ±¸Çö ÇÊ¿ä
-    // ¿òÁ÷ÀÌÁö ¾Ê´Â ¸ó½ºÅÍµµ ÀÖÀ» ¼ö ÀÖÀ¸¹Ç·Î canMove bool°ªÀ¸·Î ¿Â¿ÀÇÁ °¡´É
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Â¿ï¿½ï¿½ ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ AI ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ï¿½Íµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ canMove boolï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Â¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public bool _isPatrol;
     public bool _isTrace;
     private SpriteRenderer _sprRend;
-    private Rigidbody2D _rb;
+    public Rigidbody2D _rb;
     private Vector2 _patrolDir;
     private float _moveTimer;
     private float _changeInterval = 1.5f;
+
+    public float checkDist = 1f;
+    public int rayCount = 16;           // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ 8ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½ ï¿½ï¿½ ï¿½ï¿½ 16ï¿½ï¿½ï¿½ï¿½
+    public float maxAvoidAngle = 90f;   // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½90ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½
+    private LayerMask obstacleMask;
+
+    private Vector2 _prevMoveDir = Vector2.zero;
+    private Vector2 _velSmooth = Vector2.zero;
+
+    [Header("Steering Smoothing")]
+    [SerializeField] private float smoothTime = 0.12f;     // Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Îµå·´ï¿½ï¿½
+    [SerializeField] private float avoidWeight = 1f;       // rawDirï¿½ï¿½ toTargetï¿½ï¿½ ï¿½ó¸¶³ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ý¿ï¿½ï¿½Ç´ï¿½ï¿½ï¿½
+
 
     private void Awake() => Init();
 
@@ -23,26 +36,77 @@ public abstract class MonsterMovement : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _isPatrol = false;
         _moveTimer = 0f;
+        obstacleMask = LayerMask.GetMask("Obstacle");
+    }
+
+    private void Update()
+    {
+
     }
 
     public void Trace(float moveSpd)
     {
-        GameObject player = GameObject.Find("Player");
+        GameObject player = GameObject.FindWithTag("Player");
         if (player == null) return;
 
         Vector2 currentPos = _rb.position;
-        Vector2 targetPos = player.transform.position;
-        _patrolDir = targetPos - currentPos;
-        Vector2 newPos = Vector2.MoveTowards(currentPos, targetPos, moveSpd * Time.fixedDeltaTime);
+        Vector2 toTarget = (player.transform.position - transform.position).normalized;
 
-        UpdateSpriteDir();
+        // 1) ï¿½ï°¢ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ rawDir ï¿½ï¿½ï¿½
+        Vector2 rawDir = FindFreeDirection(currentPos, toTarget);
 
+        // 2) ï¿½Îµå·¯ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ rawDir
+        //    _velSmoothï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ç´ï¿½ ref ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½
+        Vector2 moveDir = Vector2.SmoothDamp(_prevMoveDir, rawDir, ref _velSmooth, smoothTime);
+
+        _prevMoveDir = moveDir;  // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+
+        // 3) ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
+        Vector2 newPos = currentPos + moveDir * moveSpd * Time.fixedDeltaTime;
         _rb.MovePosition(newPos);
+
+        // 4) ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+        if (moveDir.x < 0) _sprRend.flipX = true;
+        else if (moveDir.x > 0) _sprRend.flipX = false;
     }
+
+    // ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½ï¿½Ï°ï¿½, ï¿½Õ¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    private Vector2 FindFreeDirection(Vector2 origin, Vector2 toTarget)
+    {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Õ·ï¿½ï¿½ï¿½ï¿½ï¿½ toTarget ï¿½×´ï¿½ï¿½
+        if (!Physics2D.CircleCast(origin, 0.2f, toTarget, checkDist, obstacleMask))
+            return toTarget;
+
+        float step = maxAvoidAngle / (rayCount / 2);
+        for (int i = 1; i <= rayCount / 2; i++)
+        {
+            Vector2 dirL = Rotate(toTarget, step * i);
+            if (!Physics2D.CircleCast(origin, 0.2f, dirL, checkDist, obstacleMask))
+                return Vector2.Lerp(toTarget, dirL, avoidWeight).normalized;
+
+            Vector2 dirR = Rotate(toTarget, -step * i);
+            if (!Physics2D.CircleCast(origin, 0.2f, dirR, checkDist, obstacleMask))
+                return Vector2.Lerp(toTarget, dirR, avoidWeight).normalized;
+        }
+
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿£ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµå·´ï¿½ï¿½
+        return -toTarget;
+    }
+
+    // 2D ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    private Vector2 Rotate(Vector2 v, float deg)
+    {
+        float rad = deg * Mathf.Deg2Rad;
+        return new Vector2(
+            v.x * Mathf.Cos(rad) - v.y * Mathf.Sin(rad),
+            v.x * Mathf.Sin(rad) + v.y * Mathf.Cos(rad)
+        ).normalized;
+    }
+
 
     public void Patrol(float moveSpd)
     {
-        // timer ½Ã°£ µ¿¾È ÀÌµ¿
+        // timer ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
         _rb.MovePosition(_rb.position + _patrolDir * moveSpd * Time.fixedDeltaTime);
         UpdateSpriteDir();
         _moveTimer += Time.fixedDeltaTime;
@@ -53,7 +117,7 @@ public abstract class MonsterMovement : MonoBehaviour
         }
     }
 
-    // º® ¶Ç´Â Àå¾Ö¹°°ú ºÎµúÈ÷¸é ChangeDir¸¦ ÇÏµµ·Ï ÇÔ(ÅÂ±×´Â ÇùÀÇ ÈÄ °áÁ¤)
+    // ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ ChangeDirï¿½ï¿½ ï¿½Ïµï¿½ï¿½ï¿½ ï¿½ï¿½(ï¿½Â±×´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
