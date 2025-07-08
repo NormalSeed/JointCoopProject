@@ -12,7 +12,6 @@ public class DashAttackSO : SkillDataSO
 
     public override void UseSkill(Transform caster)
     {
-        Debug.Log("Dash");
         PlayerStatManager.Instance._canDash = true;
 
         // GameObject dashTrigger = caster.GetChild(0).gameObject;
@@ -25,8 +24,6 @@ public class DashAttackSO : SkillDataSO
     }
     public override void ReleaseSkill(Transform caster)
     {
-        Debug.Log("Dash end");
-        // // 대미지를 줄 수 있는 형태에서 다시 돌아옴
         // GameObject dashTrigger = caster.GetChild(0).gameObject;
         // if (dashTrigger != null)
         // { 

@@ -26,7 +26,7 @@ public class ItemLevelUpSkillSO : SkillDataSO
     public ItemSlot[] GetUpgradeSkillList()
     {
         List<ItemSlot> returnList = new();
-        foreach (ItemSlot item in TempManager.inventory._visItemList)
+        foreach (ItemSlot item in ItemManager.inventory._visItemList)
         {
             if (item.itemStackCount < 5)
             {

@@ -12,14 +12,12 @@ public class PredetorSkillSO : SkillDataSO
 
     public override void UseSkill(Transform caster)
     {
-        Debug.Log("Predetor");
         Collider2D[] detectedCollider = Physics2D.OverlapCircleAll(caster.position, _skillRange + 0.5f);
         foreach (Collider2D collider in detectedCollider)
         {
             IDamagable damagableComponent = collider.GetComponent<IDamagable>();
             if (damagableComponent != null && collider.CompareTag("Enemy"))
             {
-                Debug.Log("take Damage to Enemy!");
                 damagableComponent.TakeDamage((int)(PlayerStatManager.Instance._attackDamage * _skillDamageRate), caster.position);
             }
         }
@@ -32,6 +30,6 @@ public class PredetorSkillSO : SkillDataSO
     }
     public override void ReleaseSkill()
     {
-        Debug.Log("Predetor end");
+        // 스킬 해제
     }
 }

@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-// µñ¼Å³Ê¸® Å° ÀÔ·Â¿¡ ´ëÇÑ ¿ÀÅ¸ ¹æÁö·Î enum »ç¿ë
+// ï¿½ï¿½Å³Ê¸ï¿½ Å° ï¿½Ô·Â¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ enum ï¿½ï¿½ï¿½
 public enum UIKeyList
 {
     // MainMenu UIKeyList
@@ -21,58 +21,58 @@ public class UIManager : MonoBehaviour
 {
     static UIManager instance;
     Dictionary<UIKeyList, GameObject> _UiDictionary = new Dictionary<UIKeyList, GameObject>();
-    // UI¸¦ StackÀ¸·Î °ü¸®
+    // UIï¿½ï¿½ Stackï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public Stack<GameObject> _UiStack = new Stack<GameObject>();
 
     [Header("InGame UI References")]
-    [SerializeField] GameObject _miniMapUI;   // ¹Ì´Ï¸Ê UI
-    [SerializeField] GameObject _playerHpUI;    // ÇÃ·¹ÀÌ¾î Ã¼·Â UI
-    [SerializeField] GameObject _activeItemUI; // ¾×Æ¼ºê ¾ÆÀÌÅÛ UI
-    [SerializeField] GameObject _activeItemGuageUI; // ¾×Æ¼ºê ¾ÆÀÌÅÛ UI
-    [SerializeField] GameObject _ChipUI;        // È¹µæÇÑ °ñµå UI
-    [SerializeField] GameObject _bombUI;        // È¹µæÇÑ ÆøÅº UI
-    [SerializeField] GameObject _inventoryUI;   // ÀÎº¥Åä¸® UI
-    [SerializeField] GameObject _confirmWindowUI;   // È®ÀÎ Ã¢ UI
-    [SerializeField] GameObject _optionWindowUI;   // ¿É¼Ç Ã¢ UI
-    [SerializeField] GameObject _deathWindowUI;   // Ä³¸¯ÅÍ Á×À½ Ã¢ UI
-    [SerializeField] GameObject _fortuneUI;   // ¿À´ÃÀÇ ¿î¼¼ Ã¢ UI
-    [SerializeField] GameObject _itemInfoUI;   // ¾ÆÀÌÅÛ Á¤º¸ Ã¢ UI
+    [SerializeField] GameObject _miniMapUI;   // ï¿½Ì´Ï¸ï¿½ UI
+    [SerializeField] GameObject _playerHpUI;    // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Ã¼ï¿½ï¿½ UI
+    [SerializeField] GameObject _activeItemUI; // ï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ UI
+    [SerializeField] GameObject _activeItemGuageUI; // ï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ UI
+    [SerializeField] GameObject _ChipUI;        // È¹ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ UI
+    [SerializeField] GameObject _bombUI;        // È¹ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Åº UI
+    [SerializeField] GameObject _inventoryUI;   // ï¿½Îºï¿½ï¿½ä¸® UI
+    [SerializeField] GameObject _confirmWindowUI;   // È®ï¿½ï¿½ Ã¢ UI
+    [SerializeField] GameObject _optionWindowUI;   // ï¿½É¼ï¿½ Ã¢ UI
+    [SerializeField] GameObject _deathWindowUI;   // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã¢ UI
+    [SerializeField] GameObject _fortuneUI;   // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½î¼¼ Ã¢ UI
+    [SerializeField] GameObject _itemInfoUI;   // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã¢ UI
 
     [Header("MainMenu UI References")]
-    [SerializeField] GameObject _mainOptionUI;    // ¸ÞÀÎ ¿É¼Ç Ã¢ UI
-    [SerializeField] GameObject _creditUI;      // ¸ÞÀÎ Å©·¡µ÷ UI
+    [SerializeField] GameObject _mainOptionUI;    // ï¿½ï¿½ï¿½ï¿½ ï¿½É¼ï¿½ Ã¢ UI
+    [SerializeField] GameObject _creditUI;      // ï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ï¿½ï¿½ UI
 
     [Header("Button UI Reference")]
-    [SerializeField] Button _optionWindowButton;    // ¿É¼Ç Ã¢ ¿­¸² ¹öÆ°
-    [SerializeField] Button _mainMenuButton;    // ¸ÞÀÎ È­¸é ÀÌµ¿ ¹öÆ°
-    [SerializeField] Button _inventoryCloseButton;    // ÀÎº¥Åä¸® ´Ý±â ¹öÆ°
-    [SerializeField] Button _yesButton;    // Yes ¹öÆ°
-    [SerializeField] Button _noButton;    // No ¹öÆ°
-    [SerializeField] Button _optionCloseButton;    // ¿É¼Ç ´Ý±â ¹öÆ°
-    [SerializeField] Button _deathMainMenuButton;    // ¸ÞÀÎ È­¸é ÀÌµ¿ ¹öÆ° (Á×Àº ÈÄ)
+    [SerializeField] Button _optionWindowButton;    // ï¿½É¼ï¿½ Ã¢ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
+    [SerializeField] Button _mainMenuButton;    // ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½Æ°
+    [SerializeField] Button _inventoryCloseButton;    // ï¿½Îºï¿½ï¿½ä¸® ï¿½Ý±ï¿½ ï¿½ï¿½Æ°
+    [SerializeField] Button _yesButton;    // Yes ï¿½ï¿½Æ°
+    [SerializeField] Button _noButton;    // No ï¿½ï¿½Æ°
+    [SerializeField] Button _optionCloseButton;    // ï¿½É¼ï¿½ ï¿½Ý±ï¿½ ï¿½ï¿½Æ°
+    [SerializeField] Button _deathMainMenuButton;    // ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½Æ° (ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½)
 
     [Header("Player Heart Controll")]
-    [SerializeField] PlayerHeartController _playerHeartController;  // ÇÃ·¹ÀÌ¾î ÇÏÆ® ÄÁÆ®·Ñ ½ºÅ©¸³Æ®
-    [SerializeField] public ItemGuageController _itemGuageController;  // ¾ÆÀÌÅÛ °ÔÀÌÁö ÄÁÆ®·Ñ ½ºÅ©¸³Æ®
+    [SerializeField] PlayerHeartController _playerHeartController;  // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Æ® ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½Å©ï¿½ï¿½Æ®
+    [SerializeField] public ItemGuageController _itemGuageController;  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½Å©ï¿½ï¿½Æ®
 
     [Header("Active Item Setting")]
-    [SerializeField] Image _activeItemImage;    // ¾×Æ¼ºê ¾ÆÀÌÅÛ ÀÌ¹ÌÁö
+    [SerializeField] Image _activeItemImage;    // ï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½
 
     bool _isInventoryOpen = false;
 
-    // ÃÊ±â UIManager »ý¼º
+    // ï¿½Ê±ï¿½ UIManager ï¿½ï¿½ï¿½ï¿½
     public static UIManager Instance
     {
         get
         {
             if (instance == null)
             {
-                // ¾À ÀÌµ¿ ½Ã UIManagerÀÇ ÂüÁ¶°¡ NoneÀ¸·Î µÇ´Â Çö»óÀ¸·Î UIManager¸¦ ÇÁ¸®ÆÕÀ¸·Î ¸¸µé¾î »ý¼º
+                // ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½ UIManagerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Noneï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ UIManagerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 GameObject UIManagerPrefab = Resources.Load<GameObject>("UIManager");
 
                 if (UIManagerPrefab == null)
                 {
-                    Debug.LogError("UIManager ÇÁ¸®ÆÕÀ» Resources/UIManager ¿¡¼­ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+                    Debug.LogError("UIManager ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Resources/UIManager ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
                     return null;
                 }
 
@@ -89,7 +89,7 @@ public class UIManager : MonoBehaviour
     {
         CreateUIManager();
         Init();
-        // ¾À Change ½Ã UI ÀçÂüÁ¶ ÁøÇà
+        // ï¿½ï¿½ Change ï¿½ï¿½ UI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -131,21 +131,21 @@ public class UIManager : MonoBehaviour
 
     private void CreateUIManager()
     {
-        if(instance == null)    // »ý¼ºÀÌ µÇ¾î ÀÖÀ¸¸é ´õ ¸¸µéÁö ¾Ê°í »ç¿ë
+        if(instance == null)    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê°ï¿½ ï¿½ï¿½ï¿½
         {
             instance = this;
             Init();
         }
-        else if(instance != this)   // ÀÎ½ºÆåÅÍ °ª º¸Á¸
+        else if(instance != this)   // ï¿½Î½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         {
             Destroy(gameObject);
         }
     }
 
-    // µñ¼Å³Ê¸®¿¡ UI Ãß°¡ (¿ÀÅ¸ ¹æÁö·Î Å° == enum UIKeyList)
+    // ï¿½ï¿½Å³Ê¸ï¿½ï¿½ï¿½ UI ï¿½ß°ï¿½ (ï¿½ï¿½Å¸ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å° == enum UIKeyList)
     private void Init()
     {
-        // InGame UI Ãß°¡
+        // InGame UI ï¿½ß°ï¿½
         _UiDictionary[UIKeyList.miniMap] = _miniMapUI;
         _UiDictionary[UIKeyList.playerHp] = _playerHpUI;
         _UiDictionary[UIKeyList.activeItem] = _activeItemUI;
@@ -159,7 +159,7 @@ public class UIManager : MonoBehaviour
         _UiDictionary[UIKeyList.fortune] = _fortuneUI;
         _UiDictionary[UIKeyList.itemInfo] = _itemInfoUI;
 
-        // Main Menu UI Ãß°¡
+        // Main Menu UI ï¿½ß°ï¿½
         _UiDictionary[UIKeyList.mainOption] = _mainOptionUI;
         _UiDictionary[UIKeyList.credit] = _creditUI;
 
@@ -185,15 +185,15 @@ public class UIManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log($"¾À ÀüÈ¯ {scene.name} UI ÀçÂüÁ¶");
+        Debug.Log($"ï¿½ï¿½ ï¿½ï¿½È¯ {scene.name} UI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
         ReferenceUIReflesh();
         Init();
 
         InitDeathPanel();
     }
 
-    // Death Panel ¼¼ÆÃ ¹× ¸ÞÀÎ¸Þ´º ÀüÈ¯
-    public void InitDeathPanel()
+    // Death Panel ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Î¸Þ´ï¿½ ï¿½ï¿½È¯
+    private void InitDeathPanel()
     {
 
         _deathMainMenuButton.onClick.AddListener(() =>
@@ -205,54 +205,54 @@ public class UIManager : MonoBehaviour
         });
     }
 
-    // UI°¡Á®¿À±â
+    // UIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public GameObject GetUI(UIKeyList uiName)
     {
         GameObject uiKeyName = _UiDictionary.ContainsKey(uiName) ? _UiDictionary[uiName] : null;
         if (uiKeyName == null)
         {
-            Debug.Log($"¿äÃ»ÇÏ½Å UI({uiName})°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.");
+            Debug.Log($"ï¿½ï¿½Ã»ï¿½Ï½ï¿½ UI({uiName})ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.");
         }
 
         return uiKeyName;
     }
 
-    // ÀÎº¥Åä¸® Ã¢ ¿ÀÇÂ
+    // ï¿½Îºï¿½ï¿½ä¸® Ã¢ ï¿½ï¿½ï¿½ï¿½
     public void OnInventoryOpen()
     {
         if (UIManager.Instance == null)
         {
-            Debug.LogWarning("GameSceneManager°¡ ÃÊ±âÈ­µÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.LogWarning("GameSceneManagerï¿½ï¿½ ï¿½Ê±ï¿½È­ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
             return;
         }
 
-        // ½ºÅÝ °»½Å
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         StatUpdateUI();
 
-        // ÀÎº¥Åä¸® ¿ÀÇÂ
+        // ï¿½Îºï¿½ï¿½ä¸® ï¿½ï¿½ï¿½ï¿½
         UIManager.Instance.OpenUi(UIKeyList.inventory);
 
-        // ÀÎº¥Åä¸® ½½·Ô °»½Å
+        // ï¿½Îºï¿½ï¿½ä¸® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         InventorySlotUpdateUI();
 
         if (!_isInventoryOpen)
         {
-            // ÀÎº¥Åä¸® Ã¢
-            _inventoryCloseButton.onClick.AddListener(() => UIManager.Instance.CloseUi());   // ÀÎº¥Åä¸® Ã¢ ´ÝÀ½
-            _optionWindowButton.onClick.AddListener(() => UIManager.Instance.OpenUi(UIKeyList.optionWindow));    // ¿É¼Ç Ã¢ ¿­±â
-            _mainMenuButton.onClick.AddListener(() => UIManager.Instance.OpenUi(UIKeyList.confirmWindow));   // È®ÀÎ Ã¢ ¿­±â
+            // ï¿½Îºï¿½ï¿½ä¸® Ã¢
+            _inventoryCloseButton.onClick.AddListener(() => UIManager.Instance.CloseUi());   // ï¿½Îºï¿½ï¿½ä¸® Ã¢ ï¿½ï¿½ï¿½ï¿½
+            _optionWindowButton.onClick.AddListener(() => UIManager.Instance.OpenUi(UIKeyList.optionWindow));    // ï¿½É¼ï¿½ Ã¢ ï¿½ï¿½ï¿½ï¿½
+            _mainMenuButton.onClick.AddListener(() => UIManager.Instance.OpenUi(UIKeyList.confirmWindow));   // È®ï¿½ï¿½ Ã¢ ï¿½ï¿½ï¿½ï¿½
 
-            // È®ÀÎ Ã¢
-            _yesButton.onClick.AddListener(() => SceneManager.LoadScene("Real_MainMenu"));    // Yes ¹öÆ° : ¸ÞÀÎ Ã¢ ÀüÈ¯
-            _noButton.onClick.AddListener(() => UIManager.Instance.CloseUi()); // No ¹öÆ° : ÀÎº¥Åä¸® Ã¢ ÀüÈ¯
+            // È®ï¿½ï¿½ Ã¢
+            _yesButton.onClick.AddListener(() => SceneManager.LoadScene("Real_MainMenu"));    // Yes ï¿½ï¿½Æ° : ï¿½ï¿½ï¿½ï¿½ Ã¢ ï¿½ï¿½È¯
+            _noButton.onClick.AddListener(() => UIManager.Instance.CloseUi()); // No ï¿½ï¿½Æ° : ï¿½Îºï¿½ï¿½ä¸® Ã¢ ï¿½ï¿½È¯
 
-            // ¿É¼Ç Ã¢
-            _optionCloseButton.onClick.AddListener(() => UIManager.Instance.CloseUi());  // ¿É¼Ç Ã¢ ´ÝÀ½ : ÀÎº¥Åä¸® Ã¢ ÀüÈ¯
+            // ï¿½É¼ï¿½ Ã¢
+            _optionCloseButton.onClick.AddListener(() => UIManager.Instance.CloseUi());  // ï¿½É¼ï¿½ Ã¢ ï¿½ï¿½ï¿½ï¿½ : ï¿½Îºï¿½ï¿½ä¸® Ã¢ ï¿½ï¿½È¯
 
             _isInventoryOpen = true;
         }
     }
-    // ÀÎº¥Åä¸® ¿ÀÇÂ ½Ã ½½·Ô °»½Å
+    // ï¿½Îºï¿½ï¿½ä¸® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     private void InventorySlotUpdateUI()
     {
         GameObject inventoryUI = UIManager.Instance.GetUI(UIKeyList.inventory);
@@ -270,30 +270,30 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("InventorySlotController°¡ ¿¬°áµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.LogWarning("InventorySlotControllerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
         }
     }
 
-    // ÇÃ·¹ÀÌ¾î Ã¼·Â UI ¾÷µ¥ÀÌÆ®
+    // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Ã¼ï¿½ï¿½ UI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     public void HeartUpdateUI(float playerCurrentHp, float playerMaxHp)
     {
         _playerHeartController.HeartsUpdate(playerCurrentHp, playerMaxHp);
     }
 
-    // ÇÃ·¹ÀÌ¾î ½ºÅÈ UI ¾÷µ¥ÀÌÆ®
+    // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ UI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     public void StatUpdateUI()
     {
         GameObject statUI = UIManager.instance.GetUI(UIKeyList.inventory);
         TMP_Text[] texts = statUI.GetComponentsInChildren<TMP_Text>();
 
-        // UI ÇÏÀ§ ÅØ½ºÆ®¿¡¼­ ÀÌ¸§À¸·Î ¼³Á¤
+        // UI ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         TMP_Text speedText = texts.First(t => t.name == "SpeedValue");
         TMP_Text atkText = texts.First(t => t.name == "ATKValue");
         TMP_Text asText = texts.First(t => t.name == "ASValue");
         TMP_Text rangeText = texts.First(t => t.name == "RangeValue");
         TMP_Text luckText = texts.First(t => t.name == "LuckValue");
         
-        // ¼³Á¤µÈ ÅØ½ºÆ®¿¡ ÇÃ·¹ÀÌ¾î ½ºÅÝ ¿¬°á
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Æ®ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         speedText.text = (PlayerStatManager.Instance._moveSpeed).ToString();
         atkText.text = (PlayerStatManager.Instance._attackDamage).ToString();
         asText.text = (PlayerStatManager.Instance._attackSpeed).ToString();
@@ -301,24 +301,24 @@ public class UIManager : MonoBehaviour
         luckText.text = (PlayerStatManager.Instance._playerLuck).ToString();
     }
 
-    // Ä¨ È¹µæ·® UI ¾÷µ¥ÀÌÆ®
+    // Ä¨ È¹ï¿½æ·® UI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     public void ChipUpdateUI()
     {
         GameObject curCoin = UIManager.Instance.GetUI(UIKeyList.Chip);
         TMP_Text curCoinCount = curCoin.GetComponentInChildren<TMP_Text>();
-        curCoinCount.text = TempManager.inventory._coinCount.ToString();
+        curCoinCount.text = ItemManager.inventory._coinCount.ToString();
 
     }
 
-    // ÆøÅº È¹µæ·® UI ¾÷µ¥ÀÌÆ®
+    // ï¿½ï¿½Åº È¹ï¿½æ·® UI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     public void BombUpdateUI()
     {
         GameObject curBomb = UIManager.Instance.GetUI(UIKeyList.bomb);
         TMP_Text curBombCount = curBomb.GetComponentInChildren<TMP_Text>();
-        curBombCount.text = TempManager.inventory._bombCount.ToString();
+        curBombCount.text = ItemManager.inventory._bombCount.ToString();
     }
 
-    // ¾×Æ¼ºê ¾ÆÀÌÅÛ ¾ÆÀÌÄÜ ¼³Á¤
+    // ï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void SetActiveItemImage(Sprite image)
     {
         if (_activeItemImage == null)
@@ -327,30 +327,30 @@ public class UIManager : MonoBehaviour
         }
 
         _activeItemImage.sprite = image;
-        _activeItemImage.enabled = image != null;   // ÀÌ¹ÌÁö°¡ ÀÖÀ¸¸é ÀÌ¹ÌÁö È°¼ºÈ­
+        _activeItemImage.enabled = image != null;   // ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­
     }
 
-    // ¾×Æ¼ºê ¾ÆÀÌÅÛ »ç¿ë
+    // ï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     public void UseItem()
     {
         
-        // ¾ÆÀÌÅÛ °ÔÀÌÁö ¾Ö´Ï¸ÞÀÌ¼Ç µ¿ÀÛ Å×½ºÆ®
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ®
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (_itemGuageController._canUseItem)
             {
-                Transform playerPos = GameObject.FindWithTag("Player").transform;   // ÇÃ·¹ÀÌ¾î À§Ä¡
-                TempManager.inventory.UseActiveSkill(playerPos);
+                Transform playerPos = GameObject.FindWithTag("Player").transform;   // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡
+                ItemManager.inventory.UseActiveSkill(playerPos);
                 
             }
             else
             {
-                Debug.Log("¾ÆÀÌÅÛÀ» »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù");
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½");
             }
         }
     }
 
-    // UI ¿­±â
+    // UI ï¿½ï¿½ï¿½ï¿½
     public void OpenUi(UIKeyList uiName)
     {
         GameObject openUi = GetUI(uiName);
@@ -361,14 +361,14 @@ public class UIManager : MonoBehaviour
 
         if (_UiStack.Count > 0)
         {
-            // ¿­·ÁÀÖ´Â UI°¡ ÀÖÀ¸¸é ¼û±è
+            // ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ UIï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             _UiStack.Peek().SetActive(false);
         }
         openUi.SetActive(true);
         _UiStack.Push(openUi);
     }
 
-    // UI ´Ý±â
+    // UI ï¿½Ý±ï¿½
     public void CloseUi()
     {
         if (_UiStack.Count == 0)

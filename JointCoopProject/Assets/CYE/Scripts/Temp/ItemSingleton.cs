@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class _TempSingleton<T> : MonoBehaviour where T : MonoBehaviour
+public class ItemSingleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;
     public static void CreateInstance()

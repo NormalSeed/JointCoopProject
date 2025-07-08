@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class TempManager
+public static class ItemManager
 {
     public static InventoryManager inventory => InventoryManager.GetInstance();
     public static ShopManager shop => ShopManager.GetInstance(); 

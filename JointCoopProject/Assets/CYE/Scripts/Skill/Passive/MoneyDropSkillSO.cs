@@ -13,6 +13,6 @@ public class MoneyDropSkillSO : SkillDataSO
 
     public override void UseSkill(Transform caster)
     {
-        
+        // 스킬 해제
     }
 }

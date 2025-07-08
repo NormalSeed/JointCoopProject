@@ -11,17 +11,11 @@ public class GameItem : Item, IPickable
     {
         Init();
     }
-    // void OnCollisionEnter2D(Collision2D collision)
-    // {
-    //     if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-    //     {
-    //         PickUp(collision.transform);
-    //     }
-    // }
     #endregion
+
     private void UpgradePassiveSkill(Transform pickupPos)
     {
-        int currentGrade = TempManager.inventory.GetItemSkillGrade(_itemData);
+        int currentGrade = ItemManager.inventory.GetItemSkillGrade(_itemData);
         PlayerSkillManager playerSkillManager = pickupPos.gameObject.GetComponentInChildren<PlayerSkillManager>();
         if (currentGrade > 1)
         {
@@ -36,8 +30,7 @@ public class GameItem : Item, IPickable
     #region // IPickable
     public void PickUp(Transform pickupPos)
     {
-        bool insertResult = TempManager.inventory.TryGetItem(this, transform);
-        Debug.Log($"{insertResult}");
+        bool insertResult = ItemManager.inventory.TryGetItem(this, transform);
         if (insertResult)
         {
             if (_itemData._itemType == ItemType.PassiveAttack || _itemData._itemType == ItemType.PassiveAuto)

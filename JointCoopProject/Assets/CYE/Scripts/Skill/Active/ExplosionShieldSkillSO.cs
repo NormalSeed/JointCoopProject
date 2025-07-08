@@ -12,12 +12,10 @@ public class ExplosionShieldSkillSO : SkillDataSO
     
     public override void UseSkill(Transform caster)
     {
-        Debug.Log("ExplosionShield");
         PlayerStatManager.Instance._shield = PlayerStatManager.Instance._playerHp;
     }
     public override void ReleaseSkill(Transform caster)
     {
-        Debug.Log("ExplosionShield end");
         PlayerStatManager.Instance._shield = 0f;
 
         Collider2D[] detectedCollider = Physics2D.OverlapCircleAll(caster.position, _skillRange + 0.5f);
@@ -26,7 +24,6 @@ public class ExplosionShieldSkillSO : SkillDataSO
             IDamagable damagableComponent = collider.GetComponent<IDamagable>();
             if (damagableComponent != null && collider.CompareTag("Enemy"))
             {
-                Debug.Log("take Damage to Enemy!");
                 damagableComponent.TakeDamage((int)(PlayerStatManager.Instance._attackDamage * _skillDamageRate), caster.position);
             }
         }
