@@ -13,13 +13,26 @@ public class DashAttackSO : SkillDataSO
     public override void UseSkill(Transform caster)
     {
         Debug.Log("Dash");
-        PlayerStatManager.Instance._canDash = true;        
-        // 실제 useSkill땐 플레이어의 충돌체를 대미지를 줄수있는 형태로 변ㄴ경해야함
+        PlayerStatManager.Instance._canDash = true;
+
+        // GameObject dashTrigger = caster.GetChild(0).gameObject;
+        // if (dashTrigger != null)
+        // { 
+        //     dashTrigger.SetActive(true);
+        //     dashTrigger.GetComponent<DashAttackController>().enabled = true;
+        //     dashTrigger.GetComponent<DashAttackController>()._dashDamage = PlayerStatManager.Instance._attackDamage * _skillDamageRate;
+        // }
     }
-    public override void ReleaseSkill()
+    public override void ReleaseSkill(Transform caster)
     {
         Debug.Log("Dash end");
-        // 대미지를 줄 수 있는 형태에서 다시 돌아옴
+        // // 대미지를 줄 수 있는 형태에서 다시 돌아옴
+        // GameObject dashTrigger = caster.GetChild(0).gameObject;
+        // if (dashTrigger != null)
+        // { 
+        //     dashTrigger.GetComponent<DashAttackController>().enabled = false;  
+        //     dashTrigger.SetActive(false);
+        // }
         PlayerStatManager.Instance._canDash = false;
     }
 }

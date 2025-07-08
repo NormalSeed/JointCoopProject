@@ -20,7 +20,7 @@ public class PredetorSkillSO : SkillDataSO
             if (damagableComponent != null && collider.CompareTag("Enemy"))
             {
                 Debug.Log("take Damage to Enemy!");
-                damagableComponent.TakeDamage(PlayerStatManager.Instance._attackDamage, caster.position);
+                damagableComponent.TakeDamage((int)(PlayerStatManager.Instance._attackDamage * _skillDamageRate), caster.position);
             }
         }
 
