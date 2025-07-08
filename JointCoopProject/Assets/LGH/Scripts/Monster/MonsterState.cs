@@ -144,6 +144,7 @@ public class Monster_Damaged : MonsterState
     {
         _damagedTime = 1f;
         _controller._view.PlayAnimation(_controller.DAMAGED_HASH);
+        _controller._movement._rb.velocity = Vector2.zero;
     }
 
     public override void Update()
@@ -153,6 +154,11 @@ public class Monster_Damaged : MonsterState
         if (_damagedTime < 0f)
         {
             _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Idle]);
+        }
+
+        if (_controller._isParalyzed)
+        {
+            _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Paralyze]);
         }
     }
 
@@ -190,6 +196,7 @@ public class Monster_Paralyze : MonsterState
 
     public override void Enter()
     {
+        Debug.Log("스턴 상태 진입");
         _controller._view.PlayAnimation(_controller.IDLE_HASH);
         _paralyzeTimer = 3f;
         _controller._movement._rb.velocity = Vector2.zero;
@@ -210,6 +217,11 @@ public class Monster_Paralyze : MonsterState
         if (!_controller._isParalyzed)
         {
             _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Idle]);
+        }
+
+        if (_controller._isDead)
+        {
+            _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Dead]);
         }
     }
 }
