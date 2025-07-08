@@ -295,9 +295,9 @@ public class UIManager : MonoBehaviour
         
         // ������ �ؽ�Ʈ�� �÷��̾� ���� ����
         speedText.text = (PlayerStatManager.Instance._moveSpeed).ToString();
-        atkText.text = (PlayerStatManager.Instance._attackDamage).ToString();
-        asText.text = (PlayerStatManager.Instance._attackSpeed).ToString();
-        rangeText.text = (PlayerStatManager.Instance._attackRange).ToString();
+        atkText.text = (PlayerStatManager.Instance._attackDamage).ToString("F1");
+        asText.text = (PlayerStatManager.Instance._attackSpeed).ToString("F1");
+        rangeText.text = (PlayerStatManager.Instance._attackRange).ToString("F1");
         luckText.text = (PlayerStatManager.Instance._playerLuck).ToString();
     }
 
