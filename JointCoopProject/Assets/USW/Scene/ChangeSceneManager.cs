@@ -108,7 +108,6 @@ public class ChangeSceneManager : MonoBehaviour
         }
     }
 
-
     // 컷씬 
     //
     void SkipCutScene()
@@ -301,17 +300,6 @@ public class ChangeSceneManager : MonoBehaviour
         }
         
         UpdateLoadingUI(1f);
-        asyncOperation.allowSceneActivation = true;
-
-        while (!asyncOperation.isDone)
-        {
-            yield return null;
-        }
-      
-        if (loadingUI != null)
-        {
-            loadingUI.SetActive(false);
-        }
 
         switch (sceneIndex)
         {
@@ -337,9 +325,18 @@ public class ChangeSceneManager : MonoBehaviour
                 break;
         }
 
-        isLoading = false;
+        asyncOperation.allowSceneActivation = true;
 
-        
+        while (!asyncOperation.isDone)
+        {
+            yield return null;
+        }
+      
+        if (loadingUI != null)
+        {
+            loadingUI.SetActive(false);
+        }
+        isLoading = false;   
     }
 
     void UpdateLoadingUI(float progress)

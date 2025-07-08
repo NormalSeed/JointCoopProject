@@ -81,7 +81,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 4
   m_Sprite: {fileID: 1939213697, guid: 9f6b99b3a06801e4683e1e2f9f52ce19, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -194,6 +194,7 @@ MonoBehaviour:
   _knockBackForce: 3
   _knockBackTime: 0.2
   _skillManager: {fileID: 7736504258023114737}
+  _PlayerSprite: {fileID: 0}
   _moveInput: {x: 0, y: 0}
   _attackDirection: {x: 0, y: 0}
 --- !u!114 &7736504258023114737
