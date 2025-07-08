@@ -38,6 +38,6 @@ public class PoisonAttackMultiDamage : MonoBehaviour
         _poisonRoutine = null;
 
         // 다시 적용하기 위해서 Component 삭제
-        Destroy(gameObject.GetComponent<PoisonAttackMultiDamage>());
+        Destroy(this);
     }
 }

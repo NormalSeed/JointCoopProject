@@ -87,7 +87,7 @@ public class MapGenerator : MonoBehaviour
 
     private GameObject spawnedPlayer;
     private int currentAttempts = 0;
-    private int maxGenerationAttempts = 50;
+    private int maxGenerationAttempts = 100;
     
     // 디버그 관련
     public bool enableDebugLogs = false;
