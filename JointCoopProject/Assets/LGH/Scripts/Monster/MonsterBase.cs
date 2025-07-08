@@ -31,7 +31,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     public GameObject _player;
     private PlayerSkillManager _skillManager;
     public MoneyDropSkillSO _moneyDropSkill;
-
+    [SerializeField] public GameObject _allStatUp;
 
     public bool _isAttack1;
     public bool _isAttack2;
