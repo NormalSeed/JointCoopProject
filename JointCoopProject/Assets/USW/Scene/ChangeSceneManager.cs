@@ -69,7 +69,7 @@ public class ChangeSceneManager : MonoBehaviour
         if (gameStartButton != null)
         {
             gameStartButton.onClick.AddListener(StartGame);
-        }
+        }   
     }
 
     private void Start()
@@ -371,6 +371,8 @@ public class ChangeSceneManager : MonoBehaviour
 
     public void StartGame()
     {
+        PlayerStatManager.Instance.CreatePlayerStatManager();   // Player Stat Reset
+    
         if (isLoading) return;
         GoToNextScene();
     }
