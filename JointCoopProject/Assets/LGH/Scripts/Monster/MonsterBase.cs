@@ -26,6 +26,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     public Dictionary<int, MonsterData> _dataDic = new();
     public MonsterView _view;
     public StateMachine _stateMachine;
+    public Collider2D _collider;
 
     public GameObject _player;
     private PlayerSkillManager _skillManager;
@@ -68,6 +69,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _model = GetComponent<MonsterModel>();
         _movement = GetComponent<MonsterMovement>();
         _view = GetComponent<MonsterView>();
+        _collider = GetComponent<Collider2D>();
 
         roomMonsterManager = FindObjectOfType<RoomMonsterManager>();
 
@@ -201,7 +203,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player") && _collider.enabled)
         {
             IDamagable damagable = collision.gameObject.GetComponent<IDamagable>();
             if (damagable != null)
@@ -246,6 +248,8 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     public virtual void Die()
     {
         _isDead = true;
+
+        _collider.enabled = false;
 
         if (roomMonsterManager != null)
         {
