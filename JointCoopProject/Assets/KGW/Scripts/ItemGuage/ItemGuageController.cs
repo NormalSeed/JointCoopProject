@@ -22,10 +22,10 @@ public class ItemGuageController : MonoBehaviour
     {
         if(!_canUseItem)
         {
-            _guageAnimator.speed = 1f / _coolTime;  // 쿨타임에 맞게 애니메이션 속도 조절
-            _guageAnimator.Play(COOLDOWN_HASH, 0, 0f);
+            GetComponent<Animator>().speed = 1f / _coolTime;
+            GetComponent<Animator>().Play(COOLDOWN_HASH, 0, 0f);
 
-            CancelInvoke("OffCoolDown");    // 중복 금지
+            CancelInvoke("OffCoolDown");
             Invoke("OffCoolDown", _coolTime);
         }
         
@@ -39,7 +39,7 @@ public class ItemGuageController : MonoBehaviour
     private void OffCoolDown()
     {
         _canUseItem = true;
-        _guageAnimator.speed = 1f;
+        GetComponent<Animator>().speed = 1f;
     }
 
     public void ItemUse()
@@ -48,16 +48,14 @@ public class ItemGuageController : MonoBehaviour
         {
             return;
         }
-
-        _guageAnimator.Play(IDLE_HASH, 0, 0f);
-        Debug.Log("아이템 사용");
+        GetComponent<Animator>().Play(IDLE_HASH, 0, 0f);
         _canUseItem = false;
         OnCoolDown();
     }
 
     public void GetItme()
     {
-        _guageAnimator.speed = 1f;
+        GetComponent<Animator>().speed = 1f;
         OnCoolDown();
     }
 }

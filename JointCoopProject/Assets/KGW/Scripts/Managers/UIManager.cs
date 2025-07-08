@@ -103,10 +103,10 @@ public class UIManager : MonoBehaviour
         {
             HeartUpdateUI(PlayerStatManager.Instance._playerHp, PlayerStatManager.Instance._playerMaxHp);
         }
-        if (_activeItemGuageUI != null)
-        {
-            UseItem();
-        }
+        // if (_activeItemGuageUI != null)
+        // {
+        //     UseItem();
+        // }
         if (_ChipUI != null)
         {
             ChipUpdateUI();

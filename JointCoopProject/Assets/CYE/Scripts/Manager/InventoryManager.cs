@@ -57,16 +57,21 @@ public class InventoryManager : ItemSingleton<InventoryManager>
     [SerializeField] private GameObject _bombPrefab;
 
     // Text Timer
-    [SerializeField] float _skillTitleTextTime = 1f;
-    float _timer;
-    bool _isSkillTitleOpen = false;
+    public float _skillTitleTextTime = 1f;
+    public float _timer;
+    public bool _isSkillTitleOpen = false;
     private float _activeCooldownTimer = 0f;
     private float _activeDurationTimer = 0f;
 
-    [SerializeField] private Image _cooldownImage;
+    [SerializeField]
+    [Tooltip("게이지 순서대로 넣어주세요!!!")]
+    private Image[] _cooldownImage;
 
     private Coroutine _skillCooldownRoutine;
     private Coroutine _skillDurationRoutine;
+
+    [SerializeField]
+    private ItemGuageController _activeCooldown;
 
     private void Awake()
     {
@@ -93,11 +98,9 @@ public class InventoryManager : ItemSingleton<InventoryManager>
         _activeItem = null;
         _activeItemData = null;
         _activeSkillData = null;
-        _activeItemPool = null;
         _visItemList = new List<ItemSlot>(SLOT_COUNT);
         _invItemList = new List<ItemSlot>();
         _coinCount /= 2;
-        _skillTitleTextTime = 1f;
         _timer = 0f;
         _isSkillTitleOpen = false;
         _activeCooldownTimer = 0f;
@@ -120,19 +123,6 @@ public class InventoryManager : ItemSingleton<InventoryManager>
 
                 _activeItemData = insertItem._itemData;
                 _activeSkillData = insertItem._itemSkill[0];
-                UIManager.Instance.SetActiveItemImage(_activeItemData._itemIcon);   // 획득한 액티브 아이템의 이미지 저장
-                UIManager.Instance._itemGuageController.SetCoolTime(_activeSkillData.skillCooldown);    // 액비트 아이템 쿨타임 저장
-                UIManager.Instance._itemGuageController._canUseItem = true;
-
-                // 획득한 액티브 아이템 정보 UI 출력
-                _timer = _skillTitleTextTime;   // UI 오픈마다 타이머 초기화
-                _isSkillTitleOpen = true;
-
-                GameObject getActiveItem = UIManager.Instance.GetUI(UIKeyList.itemInfo);
-                TMP_Text[] activeItemText = getActiveItem.GetComponentsInChildren<TMP_Text>(true);
-                UIManager.Instance.OpenUi(UIKeyList.itemInfo);
-                activeItemText[0].text = _activeItemData._itemName;
-                activeItemText[1].text = _activeItemData._itemDesc;
 
                 _activeSkillData.ReleaseSkill(pickupPos);
 
@@ -322,18 +312,21 @@ public class InventoryManager : ItemSingleton<InventoryManager>
             if (_skillCooldownRoutine == null)
             {
                 _skillCooldownRoutine = StartCoroutine(CountSkillCooltime());
+                _activeCooldown.SetCoolTime(_activeCooldownTimer);
+                _activeCooldown.ItemUse();
             }
-
         }
     }
     private IEnumerator CountSkillCooltime()
     {
-
+        // int skillGaugeCnt = 0;
         while (_activeCooldownTimer > 0f)
         {
             _activeCooldownTimer -= Time.deltaTime;
-            // UI
-            _cooldownImage.fillAmount = _activeCooldownTimer / _activeSkillData.skillCooldown;
+            // if (((_activeSkillData.skillCooldown - _activeCooldownTimer) / _activeSkillData.skillCooldown) >= (skillGaugeCnt / _cooldownImage.Length))
+            // {
+            //     skillGaugeCnt++;
+            // }
             yield return new WaitForFixedUpdate();
         }
 

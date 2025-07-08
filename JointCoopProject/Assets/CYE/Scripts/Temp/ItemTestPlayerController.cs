@@ -14,6 +14,7 @@ public class ItemTestPlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            Debug.Log($"{ItemManager.inventory}");
             ItemManager.inventory.UseActiveSkill(transform);
         }
     }
