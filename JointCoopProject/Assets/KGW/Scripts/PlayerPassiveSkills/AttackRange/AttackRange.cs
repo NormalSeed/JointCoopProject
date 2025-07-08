@@ -23,4 +23,11 @@ public class AttackRange : SkillDataSO
         scaleUp.x += _scaleUpRange;
         skillPrefab.transform.localScale = scaleUp;
     }
+
+    private void OnDisable()
+    {
+        Vector3 scaleReset = skillPrefab.transform.localScale;
+        scaleReset.x = 1.5f;
+        skillPrefab.transform.localScale = scaleReset;
+    }
 }

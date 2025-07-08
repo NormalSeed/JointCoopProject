@@ -72,6 +72,8 @@ public class CrystalBallController : MonoBehaviour
         // 충돌체가 플레이어인지 확인
         if (collision.gameObject.CompareTag("Player"))
         {
+            InventoryManager.GetInstance().UseCoin(5);
+
             // 한번 접촉했으면 재접촉 불가
             if (_isContact)
             {
