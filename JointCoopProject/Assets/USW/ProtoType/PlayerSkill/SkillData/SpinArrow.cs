@@ -2,20 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 [CreateAssetMenu(menuName = "Skills/Passive/SpinArrow")]
 public class SpinArrow : SkillDataSO
 {
-    // ´ÜÀÏÅ¸°Ù
-    // ¹üÀ§³» ¸ó½ºÅÍ ÃßÀû
-    // »ç°Å¸® ¾øÀ»½Ã Ä³¸¯ÅÍ ½Ã¼±À¸·Î ¹ß»ç 
-    // °üÅë ¾øÀ½ ( Áï½Ã ÆÄ±« )
-    // 3ÃÊ stunDuration
+    [Header("í™”ì‚´ ì„¤ì •")]
     public float detectionRange = 4f;
-    public float projectileSpeed;
+    public float projectileSpeed = 10f;
+    public float arrowDamage = 15f;
     public string enemyTag = "Enemy";
-
-
 
     public override void UseSkill(Transform caster)
     {
@@ -25,9 +19,25 @@ public class SpinArrow : SkillDataSO
             return;
         }
 
-        // ÁÖº¯ Àû Å½Áö
+        GameObject target = FindClosestEnemy(caster.position);
+        if (target == null)
+        {
+            return;
+        }
 
-        //GameObject target
+        GameObject arrow = Instantiate(skillPrefab);
+        if (arrow == null)
+        {
+            return;
+        }
+
+        arrow.transform.position = caster.position;
+
+        ChasingEnemy chasingEnemy = arrow.GetComponent<ChasingEnemy>();
+        if (chasingEnemy != null)
+        {
+            chasingEnemy.Init(target, projectileSpeed, Mathf.RoundToInt(arrowDamage));
+        }
     }
 
     private GameObject FindClosestEnemy(Vector3 casterPosition)
@@ -37,8 +47,13 @@ public class SpinArrow : SkillDataSO
         float closestDistance = detectionRange;
 
         foreach (GameObject enemy in enemies)
-
         {
+            MonsterBase monster = enemy.GetComponent<MonsterBase>();
+            if (monster != null && monster._isDead)
+            {
+                continue;
+            }
+
             float distance = Vector3.Distance(casterPosition, enemy.transform.position);
             if (distance <= detectionRange && distance < closestDistance)
             {
@@ -47,7 +62,5 @@ public class SpinArrow : SkillDataSO
             }
         }
         return closestEnemy;
-
     }
-    // 
 }
