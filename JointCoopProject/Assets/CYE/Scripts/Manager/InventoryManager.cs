@@ -53,7 +53,7 @@ public class InventoryManager : _TempSingleton<InventoryManager>
     [SerializeField] private GameObject _bombPrefab;
 
     // Text Timer
-    [SerializeField] float _skillTitleTextTime = 3f;
+    [SerializeField] float _skillTitleTextTime = 1f;
     float _timer;
     bool _isSkillTitleOpen = false;
 
@@ -71,7 +71,7 @@ public class InventoryManager : _TempSingleton<InventoryManager>
             {
                 OnSkillTitleUiClose();
             }
-        }
+        }     
     }
 
     private void OnSkillTitleUiClose()
@@ -98,10 +98,14 @@ public class InventoryManager : _TempSingleton<InventoryManager>
 
                 _activeItemData = insertItem._itemData;
                 _activeSkillData = insertItem._itemSkill[0];
+                UIManager.Instance.SetActiveItemImage(_activeItemData._itemIcon);   // 획득한 액티브 아이템의 이미지 저장
+                UIManager.Instance._itemGuageController.SetCoolTime(_activeSkillData.skillCooldown);    // 액비트 아이템 쿨타임 저장
+                UIManager.Instance._itemGuageController._canUseItem = true;
 
                 // 획득한 액티브 아이템 정보 UI 출력
                 _timer = _skillTitleTextTime;   // UI 오픈마다 타이머 초기화
                 _isSkillTitleOpen = true;
+
                 GameObject getActiveItem = UIManager.Instance.GetUI(UIKeyList.itemInfo);
                 TMP_Text[] activeItemText = getActiveItem.GetComponentsInChildren<TMP_Text>(true);
                 UIManager.Instance.OpenUi(UIKeyList.itemInfo);
@@ -282,6 +286,7 @@ public class InventoryManager : _TempSingleton<InventoryManager>
         {
             _activeSkillData.UseSkill(usePos);
 
+            UIManager.Instance._itemGuageController.ItemUse();
             _activeDurationTimer = _activeSkillData.skillDuration;
             if (_skillDurationRoutine == null)
             {
@@ -298,12 +303,12 @@ public class InventoryManager : _TempSingleton<InventoryManager>
     }
     private IEnumerator CountSkillCooltime()
     {
+
         while (_activeCooldownTimer > 0f)
         {
             _activeCooldownTimer -= Time.deltaTime;
             // UI
-            // _cooldownImage.fillAmount = _activeSkillTimer / _activeSkillData.skillCooldown;
-
+            _cooldownImage.fillAmount = _activeCooldownTimer / _activeSkillData.skillCooldown;
             yield return new WaitForFixedUpdate();
         }
 

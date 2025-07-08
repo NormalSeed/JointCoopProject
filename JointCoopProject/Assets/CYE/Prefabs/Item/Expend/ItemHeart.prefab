@@ -79,7 +79,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.5, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -206,7 +206,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5afb9285fa72962499ba2bd2495b4076, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemType: 4
   _itemData: {fileID: 11400000, guid: 5de16d7e7a6eae541940fa607a3f9628, type: 2}
-  _itemSkill: {fileID: 0}
+  _itemSkill:
+  - {fileID: 0}
   _hpUpValue: 2

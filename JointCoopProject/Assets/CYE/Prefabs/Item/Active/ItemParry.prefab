@@ -79,7 +79,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.5, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -145,7 +145,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0606f37efb9345a498c2b1ee0ef10131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemType: 0
   _itemData: {fileID: 11400000, guid: 445316123fb0c5949a61546466e44057, type: 2}
   _itemSkill:
   - {fileID: 11400000, guid: 65d59a1e790fd5547b6e06617bf317d4, type: 2}
@@ -181,9 +180,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.005902022}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.15009528
 --- !u!50 &7646162362987825412
 Rigidbody2D:
   serializedVersion: 4
@@ -210,7 +209,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 6
 --- !u!1 &5710378490521151156
 GameObject:
   m_ObjectHideFlags: 0
