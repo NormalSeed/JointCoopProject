@@ -307,6 +307,9 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     {
         ItemManager.inventory.StopCountActiveCooldown();
         ItemManager.inventory.StopCountActiveDuration();
+        _isDamaged = false;
+        _PlayerSprite.color = new Color(1, 1, 1, 1);
+
         _playerAnimator.SetBool("IsDeath", true);
         Invoke("OnDeathUI", 3f);
 
