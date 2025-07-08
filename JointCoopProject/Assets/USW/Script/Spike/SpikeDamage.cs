@@ -28,9 +28,9 @@ public class SpikeDamage : MonoBehaviour
     
     void OnTriggerStay2D(Collider2D other)
     {
-        Debug.Log("OnTriggerStay2D 호출됨");
+        
         if (!other.CompareTag("Player")) return;
-        Debug.Log("플레이어 감지");
+        
         Vector3 playerPos = other.transform.position;
         Vector3Int cellPos = spikeTilemap.WorldToCell(playerPos);
         
