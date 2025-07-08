@@ -18,7 +18,10 @@ public class GolluxState : BaseState
 
     public override void Update()
     {
-
+        if (_controller._isDead)
+        {
+            _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Dead]);
+        }
     }
 
     public override void Exit()
@@ -43,6 +46,7 @@ public class Gollux_Attack1 : GolluxState
 
     public override void Update()
     {
+        base.Update();
         if (_rushDelay > 0f) _rushDelay -= Time.deltaTime;
 
         if (_controller._movement._isTrace && !_controller._isAttack1)
