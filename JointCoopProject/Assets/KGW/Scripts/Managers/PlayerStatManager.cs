@@ -35,7 +35,7 @@ public class PlayerStatManager : MonoBehaviour
         _playerLuck = _luckRand;
     }
 
-    private void CreatePlayerStatManager()
+    public void CreatePlayerStatManager()
     {
         if (instance == null)   // ������ �Ǿ� ������ �� ������ �ʰ� ���
         {
