@@ -305,8 +305,8 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     // Player Death
     public void PlayerDeath()
     {
-        TempManager.inventory.StopCountActiveCooldown();
-        TempManager.inventory.StopCountActiveDuration();
+        ItemManager.inventory.StopCountActiveCooldown();
+        ItemManager.inventory.StopCountActiveDuration();
         _playerAnimator.SetBool("IsDeath", true);
         Invoke("OnDeathUI", 3f);
 
