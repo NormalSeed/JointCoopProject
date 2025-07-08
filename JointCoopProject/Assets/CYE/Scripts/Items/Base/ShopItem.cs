@@ -41,14 +41,17 @@ public class ShopItem : Item, IPickable
     public void PickUp(Transform pickupPos)
     {
         bool buyResult = TempManager.shop.TrySellItem(this._itemData);
-        bool insertResult = TempManager.inventory.TryBuyItem(this);
-        if (buyResult&&insertResult)
+        if (buyResult)
         {
-            TempManager.inventory.UseCoin(_itemData._itemPrice);
-            if (_itemData._itemPrice == 0)
+            bool insertResult = TempManager.inventory.TryBuyItem(this);
+            if (insertResult)
             {
-                Destroy(gameObject);
-            }
+                TempManager.inventory.UseCoin(_itemData._itemPrice);
+                if (_itemData._itemPrice == 0)
+                {
+                    Destroy(gameObject);
+                }
+            }    
         }
     }
     public void Drop(Transform dropPos)

@@ -152,14 +152,23 @@ public class InventoryManager : _TempSingleton<InventoryManager>
         bool insertResult = false;
         if (_coinCount >= insertItem._itemData._itemPrice)
         {
-            if (insertItem._isVisibleInInventory)
+            Debug.Log($"{(insertItem._itemData._itemType == ItemType.shop)}");
+            if (insertItem._itemData._itemType == ItemType.shop)
             {
-                insertResult = InsertBoughtItemToList(insertItem, insertItem._itemData._canStack, insertItem._isVisibleInInventory);
+                if (insertItem._isVisibleInInventory)
+                {
+                    insertResult = InsertBoughtItemToList(insertItem, insertItem._itemData._canStack, insertItem._isVisibleInInventory);
+                }
+                else
+                {
+                    insertResult = InsertBoughtItemToList(insertItem, insertItem._itemData._canStack);
+                }
             }
             else
             {
-                insertResult = InsertBoughtItemToList(insertItem, insertItem._itemData._canStack);
+                insertResult = true;
             }
+            Debug.Log($"{insertResult}");
 
             if (insertResult)
             {

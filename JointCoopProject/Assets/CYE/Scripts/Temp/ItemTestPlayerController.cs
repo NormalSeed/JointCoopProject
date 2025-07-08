@@ -8,7 +8,7 @@ public class ItemTestPlayerController : MonoBehaviour
     private Coroutine _delayRoutine = null;
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             TempManager.inventory.UseBomb(transform);
         }
