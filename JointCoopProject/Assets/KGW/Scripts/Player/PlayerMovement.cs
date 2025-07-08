@@ -159,6 +159,8 @@ public class PlayerMovement : MonoBehaviour, IDamagable
             gameObject.layer = 6;   // Player Layer Change
             _isDash = false;
             _PlayerSprite.color = new Color(1, 1, 1, 1);
+            
+            TempManager.inventory._activeSkillData.ReleaseSkill(transform);
         }
     }
 
@@ -337,13 +339,20 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     private int TakeDamageOnShield(int damage)
     {
         float leftover = 0;
-        PlayerStatManager.Instance._shield -= damage;
-
-        if (PlayerStatManager.Instance._shield <= 0)
+        if (PlayerStatManager.Instance._shield > 0)
         {
-            leftover = Mathf.Abs(PlayerStatManager.Instance._shield);
-            PlayerStatManager.Instance._shield = 0;
-            TempManager.inventory._activeSkillData.ReleaseSkill(transform);
+            PlayerStatManager.Instance._shield -= damage;
+
+            if (PlayerStatManager.Instance._shield <= 0)
+            {
+                leftover = Mathf.Abs(PlayerStatManager.Instance._shield);
+                PlayerStatManager.Instance._shield = 0;
+                TempManager.inventory._activeSkillData.ReleaseSkill(transform);
+            }
+        }
+        else
+        {
+            leftover = damage;
         }
 
         return (int)leftover;
