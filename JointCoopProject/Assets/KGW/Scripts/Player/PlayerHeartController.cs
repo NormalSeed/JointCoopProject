@@ -17,17 +17,17 @@ public class PlayerHeartController : MonoBehaviour
     {
         for(int i = 0; i < _heartList.Count; i++)
         {
-            float heartstate = Mathf.Clamp(playerCurrentHp - i, 0f, 1f);
+            float heartstate = playerCurrentHp - (i * 2);   // n번째 하트에 현재체력 계산
 
-            if (i < Mathf.CeilToInt(playerMaxHp))
+            if (i < 12)
             {
                 _heartList[i].gameObject.SetActive(true);
 
-                if (heartstate >= 1f)   // 하트의 상태가 풀하트
+                if (heartstate >= 2f)   // 하트의 상태가 풀하트
                 {
                     _heartList[i].sprite = _fullHeart;
                 }
-                else if (heartstate == 0.5f)    // 하트의 상태가 하프 하트
+                else if (heartstate >= 1f)    // 하트의 상태가 하프 하트
                 {
                     _heartList[i].sprite = _halfHeart;
                 }
