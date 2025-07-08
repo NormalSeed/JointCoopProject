@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: LightningSkillG2SO
   m_EditorClassIdentifier: 
   skillName: Lightning
-  skillCooldown: 0
-  skillPossibility: 0
+  skillCooldown: 5
+  skillPossibility: 100
   skillIcon: {fileID: 21300000, guid: 9dfc7b229e618534f812cfd93b8be49d, type: 3}
   _isTrace: 0
   _isSwordAttack: 0
@@ -24,6 +24,7 @@ MonoBehaviour:
   searchRadius: 4
   lightningCount: 3
   lightningDelay: 0.3
+  lightningDamage: 15
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128

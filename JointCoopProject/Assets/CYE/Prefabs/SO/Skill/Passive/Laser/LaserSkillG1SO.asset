@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: LaserSkillG1SO
   m_EditorClassIdentifier: 
   skillName: Laser
-  skillCooldown: 0
-  skillPossibility: 0
+  skillCooldown: 30
+  skillPossibility: 100
   skillIcon: {fileID: 21300000, guid: f29c9f63e4f94ab41b2d6c234daf64f5, type: 3}
   _isTrace: 0
   _isSwordAttack: 0
@@ -25,3 +25,4 @@ MonoBehaviour:
   searchRadius: 4
   laserCount: 3
   laserDelay: 0.2
+  laserDamage: 10

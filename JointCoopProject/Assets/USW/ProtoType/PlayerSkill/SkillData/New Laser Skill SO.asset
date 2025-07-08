@@ -13,14 +13,15 @@ MonoBehaviour:
   m_Name: New Laser Skill SO
   m_EditorClassIdentifier: 
   skillName: laser
-  skillCooldown: 3
+  skillCooldown: 5
   skillPossibility: 100
   skillIcon: {fileID: 0}
   _isTrace: 0
+  _isSwordAttack: 0
+  skillDescription: 
   skillPrefab: {fileID: 5599081506889803857, guid: 8814e1a8f36109945b3f50a0342c5b83, type: 3}
+  skillDuration: 0
   searchRadius: 4
   laserCount: 3
   laserDelay: 0.2
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 128
+  laserDamage: 10
