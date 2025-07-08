@@ -326,7 +326,13 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     // Player KnockBack
     public void PlayerKnockBack(Vector2 targetPos)
     {
+        
+        if (_isKnockBack) return;
+        
         _isKnockBack = true;
+        
+        CancelInvoke("StopKnockBack"); 
+        
         Vector2 hitDirection = ((Vector2)transform.position - targetPos).normalized;
         _playerRigid.velocity = Vector2.zero;
         _playerRigid.AddForce(hitDirection * _knockBackForce, ForceMode2D.Impulse);
