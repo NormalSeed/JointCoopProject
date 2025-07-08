@@ -15,7 +15,7 @@ public class PlayerSkillManager : MonoBehaviour
     private List<SkillDataSO> ownedSkills = new();
     [SerializeField] PlayerMovement _playerMove;
     [SerializeField] AttackRange _attackRange;
-    [SerializeField] float _skillTitleTextTime = 3f;
+    [SerializeField] float _skillTitleTextTime = 1f;
 
     // 현재 레벨 확인
     int _curLevel;

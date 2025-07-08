@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class ItemGuageController : MonoBehaviour
 {
-    [Header("Item Guage Setting")]
-    [SerializeField] float _coolTime = 15f;
+    float _coolTime;
 
     Animator _guageAnimator;
     public bool _canUseItem;
@@ -32,6 +31,11 @@ public class ItemGuageController : MonoBehaviour
         
     }
 
+    public void SetCoolTime(float coolTime)
+    {
+        _coolTime = coolTime;
+    }
+
     private void OffCoolDown()
     {
         _canUseItem = true;
@@ -40,6 +44,11 @@ public class ItemGuageController : MonoBehaviour
 
     public void ItemUse()
     {
+        if (_canUseItem)
+        {
+            return;
+        }
+
         _guageAnimator.Play(IDLE_HASH, 0, 0f);
         Debug.Log("아이템 사용");
         _canUseItem = false;
