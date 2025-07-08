@@ -33,13 +33,13 @@ public class ShopItem : Item, IPickable
     #region // IPickable
     public void PickUp(Transform pickupPos)
     {
-        bool buyResult = TempManager.shop.TrySellItem(this._itemData);
+        bool buyResult = ItemManager.shop.TrySellItem(this._itemData);
         if (buyResult)
         {
-            bool insertResult = TempManager.inventory.TryBuyItem(this);
+            bool insertResult = ItemManager.inventory.TryBuyItem(this);
             if (insertResult)
             {
-                TempManager.inventory.UseCoin(_itemData._itemPrice);
+                ItemManager.inventory.UseCoin(_itemData._itemPrice);
                 if (_itemData._itemPrice == 0)
                 {
                     Destroy(gameObject);

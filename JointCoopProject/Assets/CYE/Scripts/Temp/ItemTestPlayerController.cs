@@ -10,11 +10,11 @@ public class ItemTestPlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            TempManager.inventory.UseBomb(transform);
+            ItemManager.inventory.UseBomb(transform);
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            TempManager.inventory.UseActiveSkill(transform);
+            ItemManager.inventory.UseActiveSkill(transform);
         }
     }
 

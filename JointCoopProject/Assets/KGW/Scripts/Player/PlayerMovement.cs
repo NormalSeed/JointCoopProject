@@ -160,7 +160,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
             _isDash = false;
             _PlayerSprite.color = new Color(1, 1, 1, 1);
             
-            TempManager.inventory._activeSkillData.ReleaseSkill(transform);
+            ItemManager.inventory._activeSkillData.ReleaseSkill(transform);
         }
     }
 
@@ -347,7 +347,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
             {
                 leftover = Mathf.Abs(PlayerStatManager.Instance._shield);
                 PlayerStatManager.Instance._shield = 0;
-                TempManager.inventory._activeSkillData.ReleaseSkill(transform);
+                ItemManager.inventory._activeSkillData.ReleaseSkill(transform);
             }
         }
         else

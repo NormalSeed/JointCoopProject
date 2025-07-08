@@ -7,7 +7,7 @@ public class BombGainSkillSO : SkillDataSO
 {
     public override void UseSkill(Transform caster, out bool useResult)
     {
-        TempManager.inventory.GetBomb(1);
+        ItemManager.inventory.GetBomb(1);
         useResult = true;
     }
 }

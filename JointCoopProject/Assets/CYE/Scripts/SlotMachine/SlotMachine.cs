@@ -88,7 +88,7 @@ public class SlotMachine : MonoBehaviour
     }
     private bool CheckPayFee()
     {
-        return TempManager.inventory._coinCount >= fee;
+        return ItemManager.inventory._coinCount >= fee;
     }
     private IEnumerator GetSlotResult()
     {
@@ -121,7 +121,7 @@ public class SlotMachine : MonoBehaviour
     }
     private SlotResult GetRandomSlotResult()
     {
-        TempManager.inventory.UseCoin(fee);
+        ItemManager.inventory.UseCoin(fee);
         int randomNumber = _randomInstance.Next(0, 100);
         if (randomNumber < ITEM_PROBABILITY)
         {

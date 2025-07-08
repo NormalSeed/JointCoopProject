@@ -16,7 +16,7 @@ public class Coin : Item, IPickable
     #region // IPickable
     public void PickUp(Transform pickupPos)
     {
-        TempManager.inventory.GetCoin(_itemData._itemPrice);
+        ItemManager.inventory.GetCoin(_itemData._itemPrice);
         Destroy(gameObject);
     }
     public void Drop(Transform dropPos)

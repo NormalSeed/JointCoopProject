@@ -15,7 +15,7 @@ public class GameItem : Item, IPickable
 
     private void UpgradePassiveSkill(Transform pickupPos)
     {
-        int currentGrade = TempManager.inventory.GetItemSkillGrade(_itemData);
+        int currentGrade = ItemManager.inventory.GetItemSkillGrade(_itemData);
         PlayerSkillManager playerSkillManager = pickupPos.gameObject.GetComponentInChildren<PlayerSkillManager>();
         if (currentGrade > 1)
         {
@@ -30,7 +30,7 @@ public class GameItem : Item, IPickable
     #region // IPickable
     public void PickUp(Transform pickupPos)
     {
-        bool insertResult = TempManager.inventory.TryGetItem(this, transform);
+        bool insertResult = ItemManager.inventory.TryGetItem(this, transform);
         if (insertResult)
         {
             if (_itemData._itemType == ItemType.PassiveAttack || _itemData._itemType == ItemType.PassiveAuto)
