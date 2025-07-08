@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activeItem: {fileID: 0}
+  _activeItemData: {fileID: 0}
+  _activeSkillData: {fileID: 0}
   _activeItemPool:
   - {fileID: 185284638909775430, guid: 5869eb9494b074a4d96483e6abfcbe78, type: 3}
   - {fileID: 2272291989428406898, guid: 7c1714b9c5251e744b4bdce9f692efbe, type: 3}
@@ -52,5 +54,18 @@ MonoBehaviour:
   - {fileID: 1454084045391871952, guid: 95aec361f8dff864b8cafa22f88ac286, type: 3}
   - {fileID: 8046413683344069195, guid: d7776958b817c6d4ea86c198aa2c6afb, type: 3}
   _visItemList: []
+  _invItemList: []
   _coinPrefab: {fileID: 5365777301004421327, guid: 3f309c5352d629c46ac7fc891068718d, type: 3}
   _bombPrefab: {fileID: 8302141887527019030, guid: 61f51bd093576774786731540e448c7e, type: 3}
+  _skillTitleTextTime: 1
+  _timer: 0
+  _isSkillTitleOpen: 0
+  _cooldownImage:
+  - {fileID: 2373566246999299550, guid: e96f73127e0811f47a8580ed5d5e49c1, type: 3}
+  - {fileID: 5954891828190046311, guid: c264dfb7b49ac0a488101319da3cfa62, type: 3}
+  - {fileID: 4796187923805795925, guid: 6fc042a1f130b174093360c8218f68b8, type: 3}
+  - {fileID: 4160851129599193885, guid: 8731eba3700bc8a489067e01ae95eb07, type: 3}
+  - {fileID: 3940852740356688065, guid: 45877d265ba7ce24ba894c2d77044da3, type: 3}
+  - {fileID: 932118170356607269, guid: 6bed7c7cec8931b4bb1dbf01b69bc6c7, type: 3}
+  - {fileID: 7180092476351131019, guid: 0af0b1fad62b8b14a93d2fca690984d3, type: 3}
+  _activeCooldown: {fileID: 8975052575648580964, guid: e63923d215f42344997f4d39a14aa46e, type: 3}
