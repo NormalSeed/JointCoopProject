@@ -22,7 +22,7 @@ public class UIManager : MonoBehaviour
     static UIManager instance;
     Dictionary<UIKeyList, GameObject> _UiDictionary = new Dictionary<UIKeyList, GameObject>();
     // UI를 Stack으로 관리
-    Stack<GameObject> _UiStack = new Stack<GameObject>();
+    public Stack<GameObject> _UiStack = new Stack<GameObject>();
 
     [Header("InGame UI References")]
     [SerializeField] GameObject _miniMapUI;   // 미니맵 UI
@@ -53,7 +53,10 @@ public class UIManager : MonoBehaviour
 
     [Header("Player Heart Controll")]
     [SerializeField] PlayerHeartController _playerHeartController;  // 플레이어 하트 컨트롤 스크립트
-    [SerializeField] ItemGuageController _itemGuageController;  // 아이템 게이지 컨트롤 스크립트
+    [SerializeField] public ItemGuageController _itemGuageController;  // 아이템 게이지 컨트롤 스크립트
+
+    [Header("Active Item Setting")]
+    [SerializeField] Image _activeItemImage;    // 액티브 아이템 이미지
 
     bool _isInventoryOpen = false;
 
@@ -102,11 +105,16 @@ public class UIManager : MonoBehaviour
         }
         if (_activeItemGuageUI != null)
         {
-            GetItem();
             UseItem();
         }
-        ChipUpdateUI();
-        BombUpdateUI();
+        if (_ChipUI != null)
+        {
+            ChipUpdateUI();
+        }
+        if (_bombUI != null)
+        {
+            BombUpdateUI();
+        }        
     }
 
     private void OnDestroy()
@@ -170,6 +178,7 @@ public class UIManager : MonoBehaviour
         _deathWindowUI = _deathWindowUI != null ? _deathWindowUI : GameObject.Find("DeathPanel");
         _fortuneUI = _fortuneUI != null ? _fortuneUI : GameObject.Find("Fortune_Description");
         _itemInfoUI = _itemInfoUI != null ? _itemInfoUI : GameObject.Find("Item_Info");
+        _activeItemImage = _activeItemImage != null ? _activeItemImage : GameObject.Find("IconImage")?.GetComponent<Image>();
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -306,26 +315,30 @@ public class UIManager : MonoBehaviour
         curBombCount.text = TempManager.inventory._bombCount.ToString();
     }
 
-    // TODO : 아이템 사용 관련 Item Guage UI 확인용 테스트 함수
-    public void GetItem()
+    // 액티브 아이템 아이콘 설정
+    public void SetActiveItemImage(Sprite image)
     {
-        // 아이템 획득
-        if (Input.GetKeyDown(KeyCode.O))
+        if (_activeItemImage == null)
         {
-            _itemGuageController.GetItme();
-            Debug.Log("아이템을 얻었습니다");
+            return;
         }
+
+        _activeItemImage.sprite = image;
+        _activeItemImage.enabled = image != null;   // 이미지가 있으면 이미지 활성화
     }
 
-    // TODO : 아이템 사용 관련 Item Guage UI 확인용 테스트 함수
+    // 액티브 아이템 사용
     public void UseItem()
     {
+        
         // 아이템 게이지 애니메이션 동작 테스트
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (_itemGuageController._canUseItem)
             {
-                _itemGuageController.ItemUse();
+                Transform playerPos = GameObject.FindWithTag("Player").transform;   // 플레이어 위치
+                TempManager.inventory.UseActiveSkill(playerPos);
+                
             }
             else
             {

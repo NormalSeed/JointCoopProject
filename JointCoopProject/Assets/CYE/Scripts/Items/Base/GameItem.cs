@@ -50,9 +50,27 @@ public class GameItem : Item, IPickable
     }
     public void Drop(Transform dropPos)
     {
-        GameObject itemObject = Instantiate(gameObject, dropPos.position, Quaternion.identity);
+        Vector2 dropOffset = dropPos.up * 0.6f;
+        GameObject itemObject = Instantiate(gameObject, (Vector2)dropPos.position + dropOffset, Quaternion.identity);
         itemObject.SetActive(true);
-        itemObject.GetComponent<Rigidbody2D>().AddForce(0.5f * transform.forward);
+
+        Rigidbody2D itemRigid = itemObject.GetComponent<Rigidbody2D>();
+
+        itemRigid.gravityScale = 0f; // 중력 제거
+        Vector2 forceDir = new Vector2(UnityEngine.Random.Range(-1f, 1f), 1f).normalized;
+        itemRigid.AddForce(forceDir * 3f, ForceMode2D.Impulse);
+
+        // 일정 시간 후 속도 정지
+        itemObject.GetComponent<MonoBehaviour>().StartCoroutine(StopMovement(itemRigid));
+
+        itemObject.GetComponent<Rigidbody2D>().AddForce(2f * transform.forward);
+
+    }
+
+    private IEnumerator StopMovement(Rigidbody2D itemRigid)
+    {
+        yield return new WaitForSeconds(0.2f);
+        itemRigid.velocity = Vector2.zero;
     }
     #endregion 
 }
