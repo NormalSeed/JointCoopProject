@@ -6,7 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Skills/Shop/Item Level Up")]
 public class ItemLevelUpSkillSO : SkillDataSO
 {
-    private System.Random _randomInstance = new System.Random((int)ItemUtil.GetUnixTimeStamp());
+    private System.Random _randomInstance = new System.Random();
     
     public override void UseSkill(Transform caster, out bool useResult)
     {
