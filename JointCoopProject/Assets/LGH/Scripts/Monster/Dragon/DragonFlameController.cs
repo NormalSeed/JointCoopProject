@@ -6,7 +6,7 @@ public class DragonFlameController : MonoBehaviour
 {
     private ObjectPool _flamePool;
     [SerializeField] private PooledObject _flame;
-    private float _flameSpd = 10f;
+    private float _flameSpd = 5f;
 
     private void Awake() => Init();
 
