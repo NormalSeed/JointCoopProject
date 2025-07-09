@@ -12,6 +12,7 @@ public class CrystalBallController : MonoBehaviour
     bool _isContact = false;
     float _timer;
     bool _isFortuneUiOpen = false;
+    bool _isNoneCoin = false;
 
     readonly int Bless_Common_Effect = Animator.StringToHash("BlessCommonEffect");
     readonly int Bless_Rare_Effect = Animator.StringToHash("BlessRareEffect");
@@ -72,15 +73,21 @@ public class CrystalBallController : MonoBehaviour
         // 충돌체가 플레이어인지 확인
         if (collision.gameObject.CompareTag("Player"))
         {
-            InventoryManager.GetInstance().UseCoin(5);
+            if (InventoryManager.GetInstance()._coinCount < 5)
+            {
+                _isNoneCoin = true;
+                OnFortuneUiOpen();
+                return;
+            }
 
             // 한번 접촉했으면 재접촉 불가
             if (_isContact)
             {
-                // TODO : 사용했다는 문구 출력?
-                Debug.Log("이미 버프를 받았습니다.");
+                OnFortuneUiOpen();
                 return;
             }
+
+            InventoryManager.GetInstance().UseCoin(5);
 
             Debug.Log("버프 생성");
             // 랜덤 버퍼 룰렛 생성
@@ -146,6 +153,7 @@ public class CrystalBallController : MonoBehaviour
         // 운세 UI 열림
         _isFortuneUiOpen = true;
 
+        UIManager.Instance.CloseUi();
         UIManager.Instance.OpenUi(UIKeyList.fortune);
         GameObject fortuneUi = UIManager.Instance.GetUI(UIKeyList.fortune);
         
@@ -153,7 +161,16 @@ public class CrystalBallController : MonoBehaviour
         {
             TMP_Text fortuneText = fortuneUi.GetComponentInChildren<TMP_Text>(true);    // true로 해야 비활성화 상태에서도 찾아서 가져올수 있다.
 
-            if (fortuneText != null)
+            if (_isNoneCoin)
+            {
+                fortuneText.text = "돈을 주고 점을 봐달라고 하거라~!";
+                _isNoneCoin = false;
+            }
+            else if (_isContact && !_isNoneCoin)
+            {
+                fortuneText.text = "이미 버프를 받았잖니?? 욕심쟁이구나?";
+            }
+            else if (!_isNoneCoin && !_isContact)
             {
                 fortuneText.text = BuffManager.Instance._FortuneExplanation;
             }
