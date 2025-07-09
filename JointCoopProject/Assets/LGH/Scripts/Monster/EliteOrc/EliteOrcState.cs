@@ -49,6 +49,11 @@ public class EliteOrc_Attack1 : EliteOrcState
         {
             _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Stun]);
         }
+
+        if (_controller._isDead)
+        {
+            _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Dead]);
+        }
     }
 
     public override void FixedUpdate()
