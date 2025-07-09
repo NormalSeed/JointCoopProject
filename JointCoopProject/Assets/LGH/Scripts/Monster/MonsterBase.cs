@@ -259,8 +259,6 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         {
             OnBossDied?.Invoke();
         }
-        
-      
     }
 
     public void UnactivateSelf()

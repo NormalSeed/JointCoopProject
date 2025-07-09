@@ -61,6 +61,11 @@ public class OrcRider_Attack1 : OrcRiderState
         {
             _controller.gameObject.transform.position = Vector2.MoveTowards(_controller.gameObject.transform.position, _controller._rushDestination, _controller._model._moveSpd * 1.5f * Time.deltaTime);
         }
+
+        if (_controller._isDead)
+        {
+            _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Dead]);
+        }
     }
 
     public override void Exit()

@@ -178,6 +178,7 @@ public class Monster_Dead : MonsterState
 
     public override void Enter()
     {
+        _controller._movement._rb.velocity = Vector2.zero;
         _controller._view.PlayAnimation(_controller.DEAD_HASH);
     }
 

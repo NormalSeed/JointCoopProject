@@ -15,6 +15,11 @@ public class InfectedGhostController : MonsterBase
         _fireController = GetComponentInChildren<InfectedGhostFireController>();
     }
 
+    protected override void StateMachineInit()
+    {
+        base.StateMachineInit();
+    }
+
     protected override void Update()
     {
         base.Update();
