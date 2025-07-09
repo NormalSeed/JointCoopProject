@@ -335,6 +335,11 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
                 Instantiate(_coin, transform.position + new Vector3(-0.2f, 0.3f, 0), Quaternion.identity);
                 Instantiate(_coin, transform.position + new Vector3(0, -0.3f, 0), Quaternion.identity);
             }
+
+            if (_allStatUp != null)
+            {
+                Instantiate(_allStatUp, transform.position, Quaternion.identity);
+            }
         }
 
         if (_moneyDropSkill != null)
