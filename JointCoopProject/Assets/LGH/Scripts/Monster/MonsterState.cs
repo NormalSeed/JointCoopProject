@@ -119,6 +119,7 @@ public class Monster_Trace : MonsterState
     {
         // TODO : view에서 Move 애니메이션 재생
         _controller._view.PlayAnimation(_controller.MOVE_HASH);
+        _controller._movement.InvokeRepeating("RequestTracePath", 0f, 0.5f);
     }
 
     public override void Update()
@@ -128,7 +129,12 @@ public class Monster_Trace : MonsterState
 
     public override void FixedUpdate()
     {
-        _controller._movement.Trace(_controller._model._moveSpd);
+        _controller._movement.FollowTracePath(_controller._model._moveSpd);
+    }
+
+    public override void Exit()
+    {
+        _controller._movement.CancelInvoke("RequestTracePath");
     }
 }
 

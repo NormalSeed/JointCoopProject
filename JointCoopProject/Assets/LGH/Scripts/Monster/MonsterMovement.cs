@@ -23,6 +23,9 @@ public abstract class MonsterMovement : MonoBehaviour
     [SerializeField] private float _steeringUpdateDelay = 1f; // 방향 재탐색 간격
     private LayerMask obstacleMask;
 
+    Vector3[] path;
+    int pathIndex;
+
     private Vector2 _prevMoveDir = Vector2.zero;
     private Vector2 _velSmooth = Vector2.zero;
 
@@ -48,35 +51,74 @@ public abstract class MonsterMovement : MonoBehaviour
 
     public void Trace(float moveSpd)
     {
+        //GameObject player = GameObject.FindWithTag("Player");
+        //if (player == null) return;
+
+        //Vector2 currentPos = _rb.position;
+        //Vector2 toTarget = (player.transform.position - transform.position).normalized;
+
+        //// 일정 시간마다만 회피 방향 재탐색
+        //if (_steeringCooldown <= 0f)
+        //{
+        //    _steeringDir = FindFreeDirection(currentPos, toTarget);
+        //    _steeringCooldown = _steeringUpdateDelay;
+        //}
+        //else
+        //{
+        //    _steeringCooldown -= Time.deltaTime;
+        //}
+
+        //// 부드러운 이동 처리
+        //Vector2 moveDir = Vector2.SmoothDamp(_prevMoveDir, _steeringDir, ref _velSmooth, smoothTime);
+        //_prevMoveDir = moveDir;
+
+        //// 실제 위치 이동
+        //Vector2 newPos = currentPos + moveDir * moveSpd * Time.fixedDeltaTime;
+        //_rb.MovePosition(newPos);
+
+        //// 좌우 반전
+        //if (moveDir.x < 0) _sprRend.flipX = true;
+        //else if (moveDir.x > 0) _sprRend.flipX = false;
+    }
+
+    public void RequestTracePath()
+    {
         GameObject player = GameObject.FindWithTag("Player");
         if (player == null) return;
 
+        PathRequestManager.RequestPath(transform.position, player.transform.position, OnPathFound);
+    }
+
+    public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
+    {
+        if (pathSuccessful)
+        {
+            path = newPath;
+            pathIndex = 0;
+        }
+    }
+
+    public void FollowTracePath(float moveSpd)
+    {
+        if (path == null || pathIndex >= path.Length) return;
+
+        Vector2 targetPos = path[pathIndex];
         Vector2 currentPos = _rb.position;
-        Vector2 toTarget = (player.transform.position - transform.position).normalized;
 
-        // 일정 시간마다만 회피 방향 재탐색
-        if (_steeringCooldown <= 0f)
+        if (Vector2.Distance(currentPos, targetPos) < 0.1f)
         {
-            _steeringDir = FindFreeDirection(currentPos, toTarget);
-            _steeringCooldown = _steeringUpdateDelay;
-        }
-        else
-        {
-            _steeringCooldown -= Time.deltaTime;
+            pathIndex++;
+            if (pathIndex >= path.Length) return;
+            targetPos = path[pathIndex];
         }
 
-        // 부드러운 이동 처리
-        Vector2 moveDir = Vector2.SmoothDamp(_prevMoveDir, _steeringDir, ref _velSmooth, smoothTime);
-        _prevMoveDir = moveDir;
-
-        // 실제 위치 이동
+        Vector2 moveDir = (targetPos - currentPos).normalized;
         Vector2 newPos = currentPos + moveDir * moveSpd * Time.fixedDeltaTime;
         _rb.MovePosition(newPos);
 
-        // 좌우 반전
-        if (moveDir.x < 0) _sprRend.flipX = true;
-        else if (moveDir.x > 0) _sprRend.flipX = false;
+        _sprRend.flipX = moveDir.x < 0;
     }
+
 
     private Vector2 FindFreeDirection(Vector2 origin, Vector2 toTarget)
     {
