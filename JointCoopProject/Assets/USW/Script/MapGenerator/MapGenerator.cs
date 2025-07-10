@@ -10,8 +10,7 @@ using Vector3 = UnityEngine.Vector3;
 
 public class MapGenerator : MonoBehaviour
 {
-    [Header("방 프리팹들")] 
-    public GameObject startRoomPrefab;
+    [Header("방 프리팹들")] public GameObject startRoomPrefab;
     public GameObject[] defaultRoomPrefabs = new GameObject[23];
     public GameObject shopRoomPrefab;
     public GameObject itemRoomPrefab;
@@ -23,30 +22,27 @@ public class MapGenerator : MonoBehaviour
     public int totalRooms;
     public float roomGenerationChance = 0.7f;
 
-    [Header("프리팹 설정")] 
-    public Vector2 prefabSize = new Vector2(15, 9); // 방 프리팹 크기
+    [Header("프리팹 설정")] public Vector2 prefabSize = new Vector2(15, 9); // 방 프리팹 크기
 
-    [Header("플레이어 설정")] 
-    public GameObject playerPrefab; // 플레이어 프리팹
+    [Header("플레이어 설정")] public GameObject playerPrefab; // 플레이어 프리팹
     public Vector2 playerSpawnOffset = new Vector2(7.5f, 4.5f); // 스폰 오프셋
 
 
-    [Header("문 설정")] 
-    public Sprite wallUpPrefab;
+    [Header("문 설정")] public Sprite wallUpPrefab;
     public Sprite wallDownPrefab;
     public Sprite wallLeftPrefab;
     public Sprite wallRightPrefab;
-    
+
     public Sprite doorClosedUpPrefab;
     public Sprite doorClosedDownPrefab;
     public Sprite doorClosedLeftPrefab;
     public Sprite doorClosedRightPrefab;
-    
+
     public Sprite doorOpenUpPrefab;
     public Sprite doorOpenDownPrefab;
     public Sprite doorOpenLeftPrefab;
     public Sprite doorOpenRightPrefab;
-    
+
     public Sprite secretWallUpPrefab;
     public Sprite secretWallDownPrefab;
     public Sprite secretWallLeftPrefab;
@@ -82,13 +78,13 @@ public class MapGenerator : MonoBehaviour
 
     private Dictionary<GameObject, Vector2Int> secretWallToSecretRoom = new Dictionary<GameObject, Vector2Int>();
     private Dictionary<GameObject, Direction> secretWallToDirection = new Dictionary<GameObject, Direction>();
-    
+
     private HashSet<Vector2Int> openedSecretRooms = new HashSet<Vector2Int>();
 
     private GameObject spawnedPlayer;
     private int currentAttempts = 0;
     private int maxGenerationAttempts = 100;
-    
+
     // 디버그 관련
     public bool enableDebugLogs = false;
     private int failsafe = 0; // 무한루프 방지
@@ -193,7 +189,7 @@ public class MapGenerator : MonoBehaviour
         InstantiateRooms();
 
         GenerateDoorsAndWalls();
-        
+
         SpawnPlayer();
         SetupSystems();
 
@@ -202,7 +198,7 @@ public class MapGenerator : MonoBehaviour
 
         isDoorInit = false;
         StartCoroutine(InitializeDoorSystem());
-        
+
         Debug.Log("문 열고 닫기 성공!");
     }
 
@@ -811,25 +807,23 @@ public class MapGenerator : MonoBehaviour
 
     public void DamagedSecretWall(GameObject wall)
     {
-
-
         if (!secretWallToSecretRoom.ContainsKey(wall)) return;
-        
-       // 비밀방 위치 가져오기
-       Vector2Int secretRoomPos = secretWallToSecretRoom[wall];
-       
-       // 비밀방 열림 상태 add
-       openedSecretRooms.Add(secretRoomPos);
+
+        // 비밀방 위치 가져오기
+        Vector2Int secretRoomPos = secretWallToSecretRoom[wall];
+
+        // 비밀방 열림 상태 add
+        openedSecretRooms.Add(secretRoomPos);
 
         BoxCollider2D collider = wall.GetComponent<BoxCollider2D>();
-        
+
         if (collider != null)
         {
             collider.enabled = false;
         }
 
         SpriteRenderer renderer = wall.GetComponent<SpriteRenderer>();
-        
+
         if (renderer != null)
         {
             Direction wallDirection = secretWallToDirection[wall];
@@ -839,8 +833,8 @@ public class MapGenerator : MonoBehaviour
                 renderer.sprite = secretSprite;
             }
         }
-        
-        
+
+
         if (minimapManager != null)
         {
             minimapManager.RevealSecretRoom(secretRoomPos);
@@ -856,14 +850,14 @@ public class MapGenerator : MonoBehaviour
         // 비밀방 도 reveal 처리를 미니맵에 전해주려면 얘고 가져와야하고 . 
         // 잠시만 잠시만 
         // 미니맵도 연동해야하면 미리 메서드를 따로 분류시켜야함 
-        
+
         //2025/7/7 새벽 비밀방 자체는 8,8좌표에 생성이 되나 ,
         // 비밀방 미니맵상은 9,8 좌표에 생성함. 
         // 폭발위치하고 비밀방 위치 계산에 대한 오차가 있는듯 ,
-        
+
         // 또한 비밀방의 해금조건이 만족했음에도 불구하고
         // mayienterthisroom 메서드가 실행을 안함 . ( secretroom 예외조건이 너무 빡빡했나봄 ) 
-        
+
 
         // 근데 direction 어디에다가 뒀던것같은데 어디있냐 ... 
         // var 로 그냥 처리할까 근데 튜플 너무 어려웡 포기행
@@ -1028,7 +1022,7 @@ public class MapGenerator : MonoBehaviour
         GameObject door = doors[direction];
         if (door == null) return;
 
-        
+
         // 비밀방 벽인지 확인
         if (secretWallToSecretRoom.ContainsKey(door))
         {
@@ -1053,5 +1047,4 @@ public class MapGenerator : MonoBehaviour
             }
         }
     }
-    
 }

@@ -85,14 +85,14 @@ public class SoundManager : TestSingleton<SoundManager>
     [SerializeField] public AudioSource audioBgm;
     [SerializeField] public AudioSource audioSfx;
 
-    // TestSingleton ÃÊ±â ¼³Á¤
+    // TestSingleton ì´ˆê¸° ì„¤ì •
     private void Awake() => Init();
 
     private void Init()
     {
         base.SingletonInit();
     }
-    // ÇÕÄ¥ ¶§ ÀÌºÎºĞ¸¸ Áö¿öÁÖ½Ã¸é µË´Ï´Ù.
+    // í•©ì¹  ë•Œ ì´ë¶€ë¶„ë§Œ ì§€ì›Œì£¼ì‹œë©´ ë©ë‹ˆë‹¤.
 
     public void PlayBGM(EBgm bgm)
     {

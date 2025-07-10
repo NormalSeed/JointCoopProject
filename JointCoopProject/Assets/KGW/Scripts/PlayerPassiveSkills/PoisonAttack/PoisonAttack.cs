@@ -5,18 +5,18 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Skills/Player Passive/Poison Attack")]
 public class PoisonAttack : SkillDataSO
 {
-    // ½ºÅ³ ÀÌ¸§ : µ¶ °ø°İ
-    // ´ÜÀÏ Å¸°Ù
-    // ±âº» °ø°İ ½Ã µ¶ ´ë¹ÌÁö ºÎ¿©
-    // 20% È®·ü·Î ºÎ¿© (Level +1 == +20%)
-    // 1.5ÃÊ ¸¶´Ù 5ÀÇ ´ë¹ÌÁö 3È¸ (Level +1 == +2%)
+    // ìŠ¤í‚¬ ì´ë¦„ : ë… ê³µê²©
+    // ë‹¨ì¼ íƒ€ê²Ÿ
+    // ê¸°ë³¸ ê³µê²© ì‹œ ë… ëŒ€ë¯¸ì§€ ë¶€ì—¬
+    // 20% í™•ë¥ ë¡œ ë¶€ì—¬ (Level +1 == +20%)
+    // 1.5ì´ˆ ë§ˆë‹¤ 5ì˜ ëŒ€ë¯¸ì§€ 3íšŒ (Level +1 == +2%)
     public int _skillLevel = 1;
     public int _skillDamage = 3;
 
     public override void UseSkill(Transform caster, Vector3 dir)
     {
         int _totalDamage;
-        // Level +1 == È®·ü +20%
+        // Level +1 == í™•ë¥  +20%
         float finalSkillPossibility = skillPossibility *= _skillLevel;
 
         int _randomValue = Random.Range(0, 100);
@@ -24,7 +24,7 @@ public class PoisonAttack : SkillDataSO
         {
             return;
         }
-        // µ¶ ´ë¹ÌÁö (½ºÅ³·¹º§ +1 == ´ë¹ÌÁö +2)
+        // ë… ëŒ€ë¯¸ì§€ (ìŠ¤í‚¬ë ˆë²¨ +1 == ëŒ€ë¯¸ì§€ +2)
         _totalDamage = _skillDamage + (_skillLevel * 2);
         Vector3 poisonSpawnPos = caster.position + dir;
         GameObject poison = Instantiate(skillPrefab, poisonSpawnPos, Quaternion.identity);

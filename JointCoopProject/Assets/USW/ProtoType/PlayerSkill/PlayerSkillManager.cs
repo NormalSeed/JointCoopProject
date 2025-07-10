@@ -85,6 +85,7 @@ public class PlayerSkillManager : MonoBehaviour
         // 획득한 스킬이 기본 공격 강화 스킬이면 리스트에 추가
         if (newSkill._isSwordAttack)
         {
+            
             SwordUpgradeSkill swordUpgradeSkill = new SwordUpgradeSkill()
             {
                 swordSkill = newSkill

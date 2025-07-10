@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class PoisonAttackMultiDamage : MonoBehaviour
 {
-    IDamagable _target; // °ø°İ ¹ŞÀ» Å¸°Ù
-    int _poisonDamage;  // µ¶ ´ë¹ÌÁö
-    float _poisonTime = 1.5f;   // ´Ù´Ü È÷Æ® ½Ã°£
-    int _poisonAttackCount = 3; // ´Ù´Ü È÷Æ® È½¼ö
+    IDamagable _target; // ê³µê²© ë°›ì„ íƒ€ê²Ÿ
+    int _poisonDamage;  // ë… ëŒ€ë¯¸ì§€
+    float _poisonTime = 1.5f;   // ë‹¤ë‹¨ íˆíŠ¸ ì‹œê°„
+    int _poisonAttackCount = 3; // ë‹¤ë‹¨ íˆíŠ¸ íšŸìˆ˜
     Coroutine _poisonRoutine;
     
     public void Apply(IDamagable target, int damage)
     {
         _target = target;
         _poisonDamage = damage;
-        // ÄÚ·çÆ¾ÀÌ NullÀÌ ¾Æ´Ï¸é Null·Î ¼¼ÆÃ
+        // ì½”ë£¨í‹´ì´ Nullì´ ì•„ë‹ˆë©´ Nullë¡œ ì„¸íŒ…
         if (_poisonRoutine != null )
         {
             StopCoroutine(_poisonRoutine);
@@ -23,21 +23,21 @@ public class PoisonAttackMultiDamage : MonoBehaviour
         _poisonRoutine = StartCoroutine(ApplyPoison());
     }
 
-    // µ¶ °ø°İ ´Ù´Ü È÷Æ® ½ÇÇà
+    // ë… ê³µê²© ë‹¤ë‹¨ íˆíŠ¸ ì‹¤í–‰
     private IEnumerator ApplyPoison()
     {
         int count = 0;
         while (count < _poisonAttackCount)
         {
             _target.TakeDamage(_poisonDamage, transform.position);
-            Debug.Log($"[µ¶ ´ë¹ÌÁö] {_poisonDamage} ÇÇÇØ Àû¿ëµÊ.");
+            Debug.Log($"[ë… ëŒ€ë¯¸ì§€] {_poisonDamage} í”¼í•´ ì ìš©ë¨.");
 
             count++;
             yield return new WaitForSeconds(_poisonTime);
         }
         _poisonRoutine = null;
 
-        // ´Ù½Ã Àû¿ëÇÏ±â À§ÇØ¼­ Component »èÁ¦
+        // ë‹¤ì‹œ ì ìš©í•˜ê¸° ìœ„í•´ì„œ Component ì‚­ì œ
         Destroy(this);
     }
 }
