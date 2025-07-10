@@ -15,6 +15,7 @@ public class OptionUIController : MonoBehaviour
     [SerializeField] Slider _soundEffectSlider;
 
     Resolution[] _resolution = new Resolution[] { };
+    bool _isFullScreen = true;
 
     private void Start()
     {
@@ -33,7 +34,7 @@ public class OptionUIController : MonoBehaviour
     private void InitDisplayMode()
     {
         _disPlayDropdown.ClearOptions();    // Clear
-        _disPlayDropdown.AddOptions(new System.Collections.Generic.List<string>
+        _disPlayDropdown.AddOptions(new List<string>
         {
             "Full Screen", "Windowed"
         });
@@ -45,12 +46,15 @@ public class OptionUIController : MonoBehaviour
         {
             case FullScreenMode.FullScreenWindow:   // 전체화면
                 _disPlayDropdown.value = 0;
+                _isFullScreen = true;
                 break;
             case FullScreenMode.Windowed:           // 창 화면
                 _disPlayDropdown.value = 1;
+                _isFullScreen = false;
                 break;
             default:
                 _disPlayDropdown.value = 0;         // 기본은 전체화면
+                _isFullScreen = true;
                 break;
         }
     }
@@ -78,18 +82,23 @@ public class OptionUIController : MonoBehaviour
         _resolutionDropdown.ClearOptions();
         _resolution = Screen.resolutions;
 
-        var option = new System.Collections.Generic.List<string>();
-
+        var option = new List<string>();
+        var _resolutionSet = new HashSet<string>();
         int currentIndex = 0;
 
         for (int i = 0; i < _resolution.Length; i++)
         {
             string resolusionString = $"{_resolution[i].width} x {_resolution[i].height}";
-            option.Add(resolusionString);
+            
 
-            if ((_resolution[i].width == Screen.currentResolution.width) && (_resolution[i].height == Screen.currentResolution.height))
+            if (_resolutionSet.Add(resolusionString))   // 중복 제거
             {
-                currentIndex = i;
+                option.Add(resolusionString);
+
+                if ((_resolution[i].width == Screen.currentResolution.width) && (_resolution[i].height == Screen.currentResolution.height))
+                {
+                    currentIndex = option.Count - 1;
+                }
             }
         }
 
@@ -103,7 +112,7 @@ public class OptionUIController : MonoBehaviour
     private void SetResolusion(int index)
     {
         Resolution resolution = _resolution[index];
-        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreenMode);
+        Screen.SetResolution(resolution.width, resolution.height, _isFullScreen ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed);
     }
 
     // BGM, SFX Sound 초기화
