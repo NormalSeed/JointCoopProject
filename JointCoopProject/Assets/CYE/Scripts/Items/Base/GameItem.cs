@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -11,17 +12,11 @@ public class GameItem : Item, IPickable
     {
         Init();
     }
-    // void OnCollisionEnter2D(Collision2D collision)
-    // {
-    //     if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-    //     {
-    //         PickUp(collision.transform);
-    //     }
-    // }
     #endregion
+
     private void UpgradePassiveSkill(Transform pickupPos)
     {
-        int currentGrade = TempManager.inventory.GetItemSkillGrade(_itemData);
+        int currentGrade = ItemManager.inventory.GetItemSkillGrade(_itemData);
         PlayerSkillManager playerSkillManager = pickupPos.gameObject.GetComponentInChildren<PlayerSkillManager>();
         if (currentGrade > 1)
         {
@@ -36,14 +31,28 @@ public class GameItem : Item, IPickable
     #region // IPickable
     public void PickUp(Transform pickupPos)
     {
-        bool insertResult = TempManager.inventory.TryGetItem(this, transform);
-        Debug.Log($"{insertResult}");
+        bool insertResult = ItemManager.inventory.TryGetItem(this, transform);
         if (insertResult)
         {
             if (_itemData._itemType == ItemType.PassiveAttack || _itemData._itemType == ItemType.PassiveAuto)
             {
-
                 UpgradePassiveSkill(pickupPos);
+            }
+            else if (_itemData._itemType == ItemType.Active)
+            {
+                UIManager.Instance.SetActiveItemImage(_itemData._itemIcon);   // 획득한 액티브 아이템의 이미지 저장
+                UIManager.Instance._itemGuageController.SetCoolTime(_itemSkill[0].skillCooldown);    // 액비트 아이템 쿨타임 저장
+                UIManager.Instance._itemGuageController._canUseItem = true;
+
+                // 획득한 액티브 아이템 정보 UI 출력
+                ItemManager.inventory._timer = ItemManager.inventory._skillTitleTextTime;   // UI 오픈마다 타이머 초기화
+                ItemManager.inventory._isSkillTitleOpen = true;
+
+                GameObject getActiveItem = UIManager.Instance.GetUI(UIKeyList.itemInfo);
+                TMP_Text[] activeItemText = getActiveItem.GetComponentsInChildren<TMP_Text>(true);
+                UIManager.Instance.OpenUi(UIKeyList.itemInfo);
+                activeItemText[0].text = _itemData._itemName;
+                activeItemText[1].text = _itemData._itemDesc;
             }
             Destroy(gameObject);
         }

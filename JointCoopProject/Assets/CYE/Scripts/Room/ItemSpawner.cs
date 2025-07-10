@@ -25,7 +25,7 @@ public class ItemSpawner : MonoBehaviour
     void Awake()
     {
         _mapGenerator = FindObjectOfType<MapGenerator>();
-        _randomInstance = new System.Random((int)ItemUtil.GetUnixTimeStamp());
+        _randomInstance = new System.Random();
     }
     void Start()
     {
@@ -70,7 +70,6 @@ public class ItemSpawner : MonoBehaviour
     {
         Dictionary<Transform, GameItem> returnDict = new();
         int maxRepeat = (isSecret) ? 3 : GetSpawnCount();
-        Debug.Log($"maxRepeat: {maxRepeat}");
         int repeatCount = 0;
 
         Transform[] allRooms = searchRoom.Find("Grid").transform.GetComponentsInChildren<Transform>();

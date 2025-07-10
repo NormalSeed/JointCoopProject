@@ -33,6 +33,11 @@ public class InfectedGoblinController : MonsterBase
         }
     }
 
+    protected override void StateMachineInit()
+    {
+        base.StateMachineInit();
+    }
+
     private void GetAttack1Dir()
     {
         _attack1Dir1 = (_player.transform.position - transform.position).normalized;

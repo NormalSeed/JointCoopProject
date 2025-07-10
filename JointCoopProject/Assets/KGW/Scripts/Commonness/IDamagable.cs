@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IDamagable
 {
-    // µ¥¹ÌÁö¿Í À§Ä¡¸¦ ¹Ş´Â ¸Ş¼­µå
+    // ë°ë¯¸ì§€ì™€ ìœ„ì¹˜ë¥¼ ë°›ëŠ” ë©”ì„œë“œ
     public void TakeDamage(int damage, Vector2 targetPos);
 }
 

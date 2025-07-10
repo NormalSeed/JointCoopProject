@@ -24,13 +24,6 @@ public class ShopItem : Item, IPickable
         Init();
         _priceTag = GetComponentInChildren<TMP_Text>();
     }
-    // void OnCollisionEnter2D(Collision2D collision)
-    // {
-    //     if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-    //     {
-    //         PickUp(collision.transform);
-    //     }
-    // }
     void OnEnable()
     { 
         _priceTag.text = (_showPrice)?$"{_itemData._itemPrice}C":"";   
@@ -40,15 +33,33 @@ public class ShopItem : Item, IPickable
     #region // IPickable
     public void PickUp(Transform pickupPos)
     {
-        bool buyResult = TempManager.shop.TrySellItem(this._itemData);
-        bool insertResult = TempManager.inventory.TryBuyItem(this);
-        if (buyResult&&insertResult)
+        bool buyResult = ItemManager.shop.TrySellItem(this._itemData);
+        if (buyResult)
         {
-            TempManager.inventory.UseCoin(_itemData._itemPrice);
-            if (_itemData._itemPrice == 0)
+            bool insertResult = ItemManager.inventory.TryBuyItem(this);
+            if (insertResult)
             {
-                Destroy(gameObject);
-            }
+                ItemManager.inventory.UseCoin(_itemData._itemPrice);
+
+                UIManager.Instance.SetActiveItemImage(_itemData._itemIcon);   // 획득한 액티브 아이템의 이미지 저장
+                UIManager.Instance._itemGuageController.SetCoolTime(_itemSkill[0].skillCooldown);    // 액비트 아이템 쿨타임 저장
+                UIManager.Instance._itemGuageController._canUseItem = true;
+
+                // 획득한 액티브 아이템 정보 UI 출력
+                ItemManager.inventory._timer = ItemManager.inventory._skillTitleTextTime;   // UI 오픈마다 타이머 초기화
+                ItemManager.inventory._isSkillTitleOpen = true;
+
+                GameObject getActiveItem = UIManager.Instance.GetUI(UIKeyList.itemInfo);
+                TMP_Text[] activeItemText = getActiveItem.GetComponentsInChildren<TMP_Text>(true);
+                UIManager.Instance.OpenUi(UIKeyList.itemInfo);
+                activeItemText[0].text = _itemData._itemName;
+                activeItemText[1].text = _itemData._itemDesc;
+                
+                if (_itemData._itemPrice == 0)
+                {
+                    Destroy(gameObject);
+                }
+            }    
         }
     }
     public void Drop(Transform dropPos)

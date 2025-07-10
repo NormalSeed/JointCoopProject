@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     [Header("skill Manager Reference")]
     [SerializeField] PlayerSkillManager _skillManager;
 
-    SpriteRenderer _PlayerSprite;
+    public SpriteRenderer _PlayerSprite;
     Rigidbody2D _playerRigid;
     Animator _playerAnimator;
     CapsuleCollider2D _capsuleCollider;
@@ -160,7 +160,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
             _isDash = false;
             _PlayerSprite.color = new Color(1, 1, 1, 1);
             
-            TempManager.inventory._activeSkillData.ReleaseSkill(transform);
+            ItemManager.inventory._activeSkillData.ReleaseSkill(transform);
         }
     }
 
@@ -305,6 +305,11 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     // Player Death
     public void PlayerDeath()
     {
+        ItemManager.inventory.StopCountActiveCooldown();
+        ItemManager.inventory.StopCountActiveDuration();
+        _isDamaged = false;
+        _PlayerSprite.color = new Color(1, 1, 1, 1);
+
         _playerAnimator.SetBool("IsDeath", true);
         Invoke("OnDeathUI", 3f);
 
@@ -321,7 +326,13 @@ public class PlayerMovement : MonoBehaviour, IDamagable
     // Player KnockBack
     public void PlayerKnockBack(Vector2 targetPos)
     {
+        
+        if (_isKnockBack) return;
+        
         _isKnockBack = true;
+        
+        CancelInvoke("StopKnockBack"); 
+        
         Vector2 hitDirection = ((Vector2)transform.position - targetPos).normalized;
         _playerRigid.velocity = Vector2.zero;
         _playerRigid.AddForce(hitDirection * _knockBackForce, ForceMode2D.Impulse);
@@ -347,7 +358,7 @@ public class PlayerMovement : MonoBehaviour, IDamagable
             {
                 leftover = Mathf.Abs(PlayerStatManager.Instance._shield);
                 PlayerStatManager.Instance._shield = 0;
-                TempManager.inventory._activeSkillData.ReleaseSkill(transform);
+                ItemManager.inventory._activeSkillData.ReleaseSkill(transform);
             }
         }
         else

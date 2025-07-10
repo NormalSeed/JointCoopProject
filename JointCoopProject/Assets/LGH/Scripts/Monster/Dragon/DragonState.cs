@@ -18,7 +18,10 @@ public class DragonState : BaseState
 
     public override void Update()
     {
-
+        if (_controller._isDead)
+        {
+            _controller._stateMachine.ChangeState(_controller._stateMachine._stateDic[EState.Dead]);
+        }
     }
 
     public override void Exit()

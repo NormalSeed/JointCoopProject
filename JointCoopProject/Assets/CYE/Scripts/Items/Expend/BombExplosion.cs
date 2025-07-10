@@ -11,15 +11,10 @@ public class BombExploion : MonoBehaviour
     }
     void OnEnable()
     {
-       
-        
         Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, new Vector2(3, 3), 0f);
         
-        
-        
         foreach (Collider2D collider in colliders)
-        {
-           
+        {           
             int realDamage = (collider.gameObject.layer == LayerMask.NameToLayer("Player")) ? 2 : _parent._explosiveDamage;
             collider.GetComponent<IDamagable>()?.TakeDamage(realDamage, transform.position);
 

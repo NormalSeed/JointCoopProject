@@ -6,7 +6,7 @@ public class InfectedGoblinFireController : MonoBehaviour
 {
     private ObjectPool _firePool;
     [SerializeField] private PooledObject _fire;
-    private float _fireSpd = 10f;
+    private float _fireSpd = 5f;
 
     private void Awake() => Init();
 

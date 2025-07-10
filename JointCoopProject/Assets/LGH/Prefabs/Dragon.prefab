@@ -192,13 +192,16 @@ MonoBehaviour:
   _movement: {fileID: 3640172888567004688}
   _model: {fileID: 3379433759028259424}
   _view: {fileID: 4015632970832370900}
+  _collider: {fileID: 0}
   _player: {fileID: 0}
   _moneyDropSkill: {fileID: 0}
+  _allStatUp: {fileID: 5158637658419192246, guid: 386b08c05453df04999cb5bbdda8152f, type: 3}
   _isAttack1: 0
   _isAttack2: 0
   _isAttack3: 0
   _isDamaged: 0
   _isDead: 0
+  _isParalyzed: 0
   isBoss: 1
   _halfHeart: {fileID: 3563366269529705748, guid: fd4d03d72cd307d4681153e4ff63511a, type: 3}
   _fullHeart: {fileID: 8856065638226913574, guid: 05ed2d4abbda99a41be1fdb9f27e26b5, type: 3}
@@ -244,6 +247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isPatrol: 0
   _isTrace: 0
+  _rb: {fileID: 0}
   checkDist: 1
   rayCount: 16
   maxAvoidAngle: 90

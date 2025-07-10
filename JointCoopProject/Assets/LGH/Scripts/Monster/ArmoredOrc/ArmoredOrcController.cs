@@ -14,7 +14,7 @@ public class ArmoredOrcController : MonsterBase
     protected override void Init()
     {
         base.Init();
-        _monsterID = 10304;
+        _monsterID = 10204;
     }
 
     protected override void StateMachineInit()

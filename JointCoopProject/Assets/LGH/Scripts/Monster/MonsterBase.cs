@@ -26,11 +26,12 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     public Dictionary<int, MonsterData> _dataDic = new();
     public MonsterView _view;
     public StateMachine _stateMachine;
+    public Collider2D _collider;
 
     public GameObject _player;
     private PlayerSkillManager _skillManager;
     public MoneyDropSkillSO _moneyDropSkill;
-
+    [SerializeField] public GameObject _allStatUp;
 
     public bool _isAttack1;
     public bool _isAttack2;
@@ -38,8 +39,6 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
     public bool _isDamaged;
     public bool _isDead;
     public bool _isParalyzed;
-    private Coroutine _coOffDamage;
-    private WaitForSeconds _damageDelay = new WaitForSeconds(1f);
     public bool isBoss = false;
     public Action OnBossDied;
 
@@ -70,6 +69,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         _model = GetComponent<MonsterModel>();
         _movement = GetComponent<MonsterMovement>();
         _view = GetComponent<MonsterView>();
+        _collider = GetComponent<Collider2D>();
 
         roomMonsterManager = FindObjectOfType<RoomMonsterManager>();
 
@@ -203,7 +203,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player") && _collider.enabled)
         {
             IDamagable damagable = collision.gameObject.GetComponent<IDamagable>();
             if (damagable != null)
@@ -223,31 +223,33 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
 
     public void TakeDamage(int damage, Vector2 targetPos)
     {
-        if (_isDamaged) return;
 
-        _movement._isTrace = false;
-        _isAttack1 = false;
-        _isDamaged = true;
-        _model._curHP.Value -= damage;
+        if (isBoss)
+        {
+            _model._curHP.Value -= damage;
+        }
+        else
+        {
+            _movement._isTrace = false;
+            _isAttack1 = false;
+            _isAttack2 = false;
+            _isDamaged = true;
+            _model._curHP.Value -= damage;
+        }
+
+        Debug.Log($"몬스터 현재 체력 : {_model._curHP.Value}");
 
         if (_model._curHP.Value <= 0)
         {
             Die();
         }
-
-        _coOffDamage = StartCoroutine(CoOffDamage());
-    }
-
-    private IEnumerator CoOffDamage()
-    {
-        yield return _damageDelay;
-        _movement._isTrace = true;
-        _isDamaged = false;
     }
 
     public virtual void Die()
     {
         _isDead = true;
+
+        _collider.enabled = false;
 
         if (roomMonsterManager != null)
         {
@@ -257,8 +259,6 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
         {
             OnBossDied?.Invoke();
         }
-        
-      
     }
 
     public void UnactivateSelf()
@@ -332,6 +332,11 @@ public abstract class MonsterBase : MonoBehaviour, IDamagable
                 Instantiate(_coin, transform.position + new Vector3(0.2f, 0.3f, 0), Quaternion.identity);
                 Instantiate(_coin, transform.position + new Vector3(-0.2f, 0.3f, 0), Quaternion.identity);
                 Instantiate(_coin, transform.position + new Vector3(0, -0.3f, 0), Quaternion.identity);
+            }
+
+            if (_allStatUp != null)
+            {
+                Instantiate(_allStatUp, transform.position, Quaternion.identity);
             }
         }
 

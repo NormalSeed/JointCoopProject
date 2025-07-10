@@ -65,7 +65,7 @@ public class Monster_Idle : MonsterState
 
     public override void Enter()
     {
-        // TODO: view¿¡¼­ Idle ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı
+        // TODO: viewì—ì„œ Idle ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ
         _controller._view.PlayAnimation(_controller.IDLE_HASH);
     }
 
@@ -93,7 +93,7 @@ public class Monster_Patrol : MonsterState
 
     public override void Enter()
     {
-        // TODO: view¿¡¼­ Walk ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı
+        // TODO: viewì—ì„œ Walk ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ
         _controller._view.PlayAnimation(_controller.MOVE_HASH);
     }
 
@@ -117,7 +117,7 @@ public class Monster_Trace : MonsterState
 
     public override void Enter()
     {
-        // TODO : view¿¡¼­ Move ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı
+        // TODO : viewì—ì„œ Move ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ
         _controller._view.PlayAnimation(_controller.MOVE_HASH);
     }
 
@@ -165,6 +165,7 @@ public class Monster_Damaged : MonsterState
     public override void Exit()
     {
         _controller._isDamaged = false;
+        _controller._movement._isTrace = true;
     }
 }
 
@@ -177,6 +178,7 @@ public class Monster_Dead : MonsterState
 
     public override void Enter()
     {
+        _controller._movement._rb.velocity = Vector2.zero;
         _controller._view.PlayAnimation(_controller.DEAD_HASH);
     }
 
@@ -196,7 +198,7 @@ public class Monster_Paralyze : MonsterState
 
     public override void Enter()
     {
-        Debug.Log("½ºÅÏ »óÅÂ ÁøÀÔ");
+        Debug.Log("ìŠ¤í„´ ìƒíƒœ ì§„ì…");
         _controller._view.PlayAnimation(_controller.IDLE_HASH);
         _paralyzeTimer = 3f;
         _controller._movement._rb.velocity = Vector2.zero;

@@ -68,7 +68,7 @@ public class Bomb : Item, IPickable, IInstallable
     {
         if (!_isSetUp)
         {
-            TempManager.inventory.GetBomb(1);
+            ItemManager.inventory.GetBomb(1);
             Destroy(gameObject);
         }
     }
