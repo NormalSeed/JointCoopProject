@@ -5,8 +5,8 @@ using UnityEngine;
 
 public abstract class MonsterMovement : MonoBehaviour
 {
-    // �����¿�� �ڵ����� �����̴� ������ AI ���� �ʿ�
-    // �������� �ʴ� ���͵� ���� �� �����Ƿ� canMove bool������ �¿��� ����
+    // 몬스터 이동을 담당하는 추상 클래스
+    // 이동 가능 여부를 제어하는 bool값들
     public bool _isPatrol;
     public bool _isTrace;
     private SpriteRenderer _sprRend;
@@ -16,17 +16,19 @@ public abstract class MonsterMovement : MonoBehaviour
     private float _changeInterval = 1.5f;
 
     public float checkDist = 1f;
-    public int rayCount = 16;           // ���� �� 8���� �˻� �� �� 16����
-    public float maxAvoidAngle = 90f;   // ������ �� ��90�� ������ ȸ��
+    public int rayCount = 16;           // 장애물 탐지를 위한 CircleCast 회전 횟수(16방향)
+    public float maxAvoidAngle = 90f;   // 최대 회피 각도(왼쪽 90도 ~ 오른쪽 90도)
+    private Vector2 _steeringDir = Vector2.zero;
+    private float _steeringCooldown = 0f;
+    [SerializeField] private float _steeringUpdateDelay = 1f; // 방향 재탐색 간격
     private LayerMask obstacleMask;
 
     private Vector2 _prevMoveDir = Vector2.zero;
     private Vector2 _velSmooth = Vector2.zero;
 
     [Header("Steering Smoothing")]
-    [SerializeField] private float smoothTime = 0.12f;     // Ŭ���� �� �ε巴��
-    [SerializeField] private float avoidWeight = 1f;       // rawDir�� toTarget�� �󸶳� ����ġ�� �ݿ��Ǵ���
-
+    [SerializeField] private float smoothTime = 0.12f;
+    [SerializeField] private float avoidWeight = 1f;
 
     private void Awake() => Init();
 
@@ -52,28 +54,32 @@ public abstract class MonsterMovement : MonoBehaviour
         Vector2 currentPos = _rb.position;
         Vector2 toTarget = (player.transform.position - transform.position).normalized;
 
-        // 1) �ﰢ ȸ�� �������� rawDir ���
-        Vector2 rawDir = FindFreeDirection(currentPos, toTarget);
+        // 일정 시간마다만 회피 방향 재탐색
+        if (_steeringCooldown <= 0f)
+        {
+            _steeringDir = FindFreeDirection(currentPos, toTarget);
+            _steeringCooldown = _steeringUpdateDelay;
+        }
+        else
+        {
+            _steeringCooldown -= Time.deltaTime;
+        }
 
-        // 2) �ε巯�� ����: ���� ���� �� rawDir
-        //    _velSmooth�� ���������� ���Ǵ� ref �Ķ����
-        Vector2 moveDir = Vector2.SmoothDamp(_prevMoveDir, rawDir, ref _velSmooth, smoothTime);
+        // 부드러운 이동 처리
+        Vector2 moveDir = Vector2.SmoothDamp(_prevMoveDir, _steeringDir, ref _velSmooth, smoothTime);
+        _prevMoveDir = moveDir;
 
-        _prevMoveDir = moveDir;  // ���� ������ ������ ���
-
-        // 3) ���� �̵�
+        // 실제 위치 이동
         Vector2 newPos = currentPos + moveDir * moveSpd * Time.fixedDeltaTime;
         _rb.MovePosition(newPos);
 
-        // 4) ��������Ʈ ���� ���� (x������)
+        // 좌우 반전
         if (moveDir.x < 0) _sprRend.flipX = true;
         else if (moveDir.x > 0) _sprRend.flipX = false;
     }
 
-    // ��ǥ ������ �������� �˻��ϰ�, �ո� ���� ����
     private Vector2 FindFreeDirection(Vector2 origin, Vector2 toTarget)
     {
-        // ������ �շ����� toTarget �״��
         if (!Physics2D.CircleCast(origin, 0.2f, toTarget, checkDist, obstacleMask))
             return toTarget;
 
@@ -81,19 +87,20 @@ public abstract class MonsterMovement : MonoBehaviour
         for (int i = 1; i <= rayCount / 2; i++)
         {
             Vector2 dirL = Rotate(toTarget, step * i);
-            if (!Physics2D.CircleCast(origin, 0.2f, dirL, checkDist, obstacleMask))
+            if (!Physics2D.CircleCast(origin, 0.5f, dirL, checkDist, obstacleMask))
                 return Vector2.Lerp(toTarget, dirL, avoidWeight).normalized;
 
             Vector2 dirR = Rotate(toTarget, -step * i);
-            if (!Physics2D.CircleCast(origin, 0.2f, dirR, checkDist, obstacleMask))
+            if (!Physics2D.CircleCast(origin, 0.5f, dirR, checkDist, obstacleMask))
                 return Vector2.Lerp(toTarget, dirR, avoidWeight).normalized;
         }
 
-        // ���� ��쿣 ������ �ε巴��
-        return -toTarget;
+        // 이전 방향 유지
+        return _prevMoveDir == Vector2.zero ? toTarget : _prevMoveDir;
     }
 
-    // 2D ���� ���� ȸ�� ����
+
+    // 2D 회전 방향 반환 함수
     private Vector2 Rotate(Vector2 v, float deg)
     {
         float rad = deg * Mathf.Deg2Rad;
